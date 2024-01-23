@@ -10,5 +10,15 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     volumes:
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      - ./.env:/docker-entrypoint-initdb.d/.env:ro
+      - ./back/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./back/.env:/docker-entrypoint-initdb.d/.env:ro
+  back:
+    build:
+      context: ./back
+    container_name: expressjs
+    restart: always
+  front:
+    build:
+      context: ./front
+    container_name: nextjs
+    restart: always

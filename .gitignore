@@ -4,3 +4,4 @@
 .next
 .env
 /dist/*
+/github-key

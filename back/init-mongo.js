@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 db.createUser({
   user: process.env.MONGODB_USER,
   pwd: process.env.MONGODB_USER_PASSWORD,

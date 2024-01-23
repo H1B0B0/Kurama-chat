@@ -1,0 +1,30 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGODB_USER=${MONGODB_USER}
+      - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
+    volumes:
+      - ./back/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./back/.env:/docker-entrypoint-initdb.d/.env:ro
+  back:
+    build:
+      context: ./back
+    container_name: expressjs
+    restart: always
+    ports:
+      - 3001:3001
+  front:
+    build:
+      context: ./front
+    container_name: nextjs
+    restart: always
+    ports:
+      - 3000:3000

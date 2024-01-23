@@ -1,12 +1,29 @@
 "use client"
-import Image from "next/image";
+import React, {useState, useEffect} from 'react'
 import Link from "next/link";
+import Loading from './component/loading'
 
-export default function Home() {
+const Home = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+  
+    setTimeout(() => {
+      setLoading(true);
+    }, 3000); 
+  }, []);
+
   return (
     <main>
-      <Link href="/">home</Link>
-      
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+         
+        </>
+      )}
     </main>
   );
-}
+};
+
+export default Home;

@@ -1,10 +1,14 @@
-'use client'
-import React from 'react'
+// components/Loading.tsx
+import React from 'react';
+import styles from './Loading.module.css'; 
 
-const loading = () => {
+const Loading = () => {
   return (
-    <div>loading</div>
-  )
-}
+    <div className={styles.loadingContainer}>
+      <img className='logo' src="/logo_noir.png" alt="Logo" />
+      <p className={styles.customParagraph}>Chargement en cours...</p>
+    </div>
+  );
+};
 
-export default loading
+export default Loading;

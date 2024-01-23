@@ -1,7 +1,8 @@
 FROM node:21
-WORKDIR /front/src/
-COPY package*.json ./ 
+WORKDIR /app/src
+COPY package*.json ./
 RUN npm install 
-COPY . . 
+COPY . .
 EXPOSE 3000
-CMD [ "npm", "run", "build", "&&", "npm", "start" ]
+RUN npm run build
+CMD ["npm", "start" ]

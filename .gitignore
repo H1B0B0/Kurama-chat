@@ -1,7 +1,11 @@
-/back/node_modules/
+/back/node_modules
 /front/node_modules
-.DS_Store
+/back/dist/*
+/github-key
 .next
 .env
 /dist/*
 /github-key
+/front/.DS_Store
+/front/src/.DS_Store
+.DS_Store

@@ -1,9 +1,14 @@
 resource "aws_instance" "app_server" {
-  ami           = "ami-0c03e02984f6a0b41"
+  ami           = var.ami
   instance_type = "t2.micro"
-
   tags = {
     Name = "project-JSF"
+  }
+  root_block_device {
+    encrypted = true
+  }
+  metadata_options {
+    http_tokens = "required"
   }
 
 }

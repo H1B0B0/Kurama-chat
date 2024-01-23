@@ -5,5 +5,10 @@ variable "region" {
 
 variable "bucket" {
   type    = string
-  default = "stg-16-state"
+  default = "stg16statebucket"
+}
+
+variable "ami" {
+  type    = string
+  default = "ami-0c03e02984f6a0b41"
 }

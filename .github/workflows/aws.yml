@@ -74,8 +74,9 @@ jobs:
           ansible-galaxy collection install community.docker
           ansible-playbook -i hosts playbook.yml
 
-  workflow_dispatch:
+  destroy:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

@@ -1,9 +1,9 @@
-// init-mongo.js
+require("dotenv").config();
 
 db.createUser({
   user: process.env.MONGODB_USER,
   pwd: process.env.MONGODB_USER_PASSWORD,
-  roles: [{ role: "readWrite", db: "votre_base_de_donnees" }],
+  roles: [{ role: "readWrite", db: process.env.MONGO_INITDB_DATABASE }],
 });
 
 db.createCollection("messages", {

@@ -27,6 +27,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Navigate to terraform directory
+        run: cd terraform
+
       - name: Initialize Terraform
         run: terraform init
 
@@ -37,6 +40,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Navigate to terraform directory
+        run: cd terraform
+
       - name: Validate Terraform files
         run: terraform validate
 
@@ -46,6 +52,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Navigate to terraform directory
+        run: cd terraform
 
       - name: Apply Terraform configuration
         run: |
@@ -80,6 +89,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Navigate to terraform directory
+        run: cd terraform
 
       - name: Destroy Infrastructure (Manual Trigger)
         run: terraform destroy -auto-approve

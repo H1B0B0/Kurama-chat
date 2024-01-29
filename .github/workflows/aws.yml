@@ -68,6 +68,7 @@ jobs:
           chmod 700 ~/.ssh
           python3 -m pip install docker
           ansible-galaxy collection install community.docker
+          cat ./terraform/hosts
           echo "[all]" > inventory.ini
           echo "my_instance ansible_host=$(cat ./terraform/hosts) ansible_user=ubuntu" >> inventory.ini
           cat inventory.ini

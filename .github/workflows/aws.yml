@@ -16,7 +16,7 @@ jobs:
         working-directory: ./terraform
         run: terraform fmt
 
-  init:
+  init_and_validate:
     needs: format
     runs-on: ubuntu-latest
     steps:
@@ -30,13 +30,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
-  validate:
-    needs: init
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Validate Terraform files
         working-directory: ./terraform
         run: terraform validate
@@ -45,7 +38,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
   apply:
-    needs: validate
+    needs: init_and_validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

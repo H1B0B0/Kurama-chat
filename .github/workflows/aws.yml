@@ -5,11 +5,6 @@ on:
     branches:
       - main
 
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
 jobs:
   format:
     runs-on: ubuntu-latest
@@ -61,9 +56,8 @@ jobs:
           terraform apply -auto-approve
           echo "hosts" > ./hosts
         env:
-          TF_VAR_db_user: ${{ env.DB_USER }}
-          TF_VAR_db_password: ${{ env.DB_PASSWORD }}
-          TF_VAR_db_name: ${{ env.DB_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
   configure_and_deploy:
     needs: apply
@@ -81,7 +75,9 @@ jobs:
           chmod 700 ~/.ssh
           python3 -m pip install docker
           ansible-galaxy collection install community.docker
-          ansible-playbook -i hosts playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD}"
+          ansible-playbook -i hosts playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD} SITE_ADRESS=(cat ./hosts)"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   destroy:
     runs-on: ubuntu-latest

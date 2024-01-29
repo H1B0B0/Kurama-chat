@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket  = var.bucket
+    bucket  = "stg16statebucket"
     key     = "state/terraform.tfstate"
-    region  = var.region
+    region  = "eu-west-3"
     encrypt = true
   }
   required_providers {

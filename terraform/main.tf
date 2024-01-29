@@ -1,21 +1,27 @@
 resource "aws_instance" "app_server" {
-  ami           = "ami-0c03e02984f6a0b41"
+  ami           = var.ami
   instance_type = "t2.micro"
-
   tags = {
-    Name = "project"
+    Name = "project-JSF"
+  }
+  root_block_device {
+    encrypted = true
+  }
+  metadata_options {
+    http_tokens = "required"
   }
 
+  key_name        = aws_key_pair.terraform-demo.key_name
+  security_groups = ["allow_ssh_http_sg"]
 }
 
 resource "null_resource" "hosts" {
-  depends_on = [aws_instance.web]
+  depends_on = [aws_instance.app_server]
   triggers = {
     time = "${timestamp()}"
   }
-  count = length(aws_instance.web)
   provisioner "local-exec" {
-    command = "echo ${element(aws_instance.web[*].public_ip, count.index)} >> ./hosts"
+    command = "echo ${aws_instance.app_server.public_ip} >> ./hosts"
     when    = create
   }
   provisioner "local-exec" {

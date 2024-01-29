@@ -3,7 +3,7 @@ variable "region" {
   default = "eu-west-3"
 }
 
-variable "bucket" {
+variable "ami" {
   type    = string
-  default = "stg-16-state"
+  default = "ami-0c03e02984f6a0b41"
 }

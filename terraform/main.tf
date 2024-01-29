@@ -11,7 +11,8 @@ resource "aws_instance" "app_server" {
     http_tokens = "required"
   }
 
-  key_name = aws_key_pair.terraform-demo.key_name
+  key_name        = aws_key_pair.terraform-demo.key_name
+  security_groups = ["allow_ssh_http_sg"]
 }
 
 resource "null_resource" "hosts" {

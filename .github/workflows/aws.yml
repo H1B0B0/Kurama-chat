@@ -51,12 +51,13 @@ jobs:
           eval $(ssh-agent -s)
           chmod 400 private_key
           ssh-add private_key
+          cat private_key
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           python3 -m pip install docker
           ansible-galaxy collection install community.docker
           echo "[all]" > inventory.ini
-          echo "my_instance ansible_host=$(cat ./terraform/hosts) ansible_user=ubuntu" >> inventory.ini
+          echo "my_instance ansible_host=$(cat ./terraform/hosts) ansible_user=ubuntu ansible_ssh_private_key_file=${{ secrets.SSH_PRIVATE_KEY}}" >> inventory.ini
           cat inventory.ini
           ansible-playbook -i inventory.ini playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD} SITE_ADRESS=$(cat ./terraform/hosts)"
         env:

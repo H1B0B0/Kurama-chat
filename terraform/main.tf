@@ -11,6 +11,7 @@ resource "aws_instance" "app_server" {
     http_tokens = "required"
   }
 
+  key_name = aws_key_pair.terraform-demo.key_name
 }
 
 resource "null_resource" "hosts" {

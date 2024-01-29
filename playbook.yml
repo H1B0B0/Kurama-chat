@@ -1,0 +1,58 @@
+- hosts: all
+  become: true
+  remote_user: ec2-user
+  tasks:
+    - name: Update instance
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install docker
+      yum:
+        name: docker
+        state: latest
+
+    - name: Install pip
+      yum:
+        name: python-pip
+        state: latest
+
+    - name: add ec2-user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: start docker
+      service:
+        name: docker
+        state: started
+
+    - name: copy file
+      copy:
+        src: ./
+        dest: /tmp/deployement/
+
+    - name: Install docker-compose
+      pip:
+        name: docker-compose
+        extra_args: --ignore-installed
+
+    - name: Install docker-py
+      pip:
+        name: docker
+        extra_args: --ignore-installed
+
+    - name: Create .env file with SITE_ADDRESS
+      copy:
+        dest: /tmp/deployement/.env
+        content: |
+          MONGO_INITDB_ROOT_USERNAME={{ MONGO_INITDB_ROOT_USERNAME }}
+          MONGO_INITDB_ROOT_PASSWORD={{ MONGO_INITDB_ROOT_PASSWORD }}
+          MONGO_INITDB_DATABASE={{ MONGO_INITDB_DATABASE }}
+          MONGODB_USER={{ MONGODB_USER }}
+          MONGODB_USER_PASSWORD={{ MONGODB_USER_PASSWORD }}
+
+    - name: Execute docker-compose for WordPress
+      docker_compose:
+        project_src: /tmp/deployement/

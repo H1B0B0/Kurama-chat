@@ -16,7 +16,7 @@ jobs:
         working-directory: ./terraform
         run: terraform fmt
 
-  terraform:
+  Terraform_and_Ansible:
     needs: format
     runs-on: ubuntu-latest
     steps:
@@ -46,16 +46,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
-      - name: Cache hosts file
-        uses: actions/cache@v2
-        with:
-          path: ./terraform/hosts
-          key: hosts
-
-  configure_and_deploy:
-    needs: terraform
-    runs-on: ubuntu-latest
-    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -66,7 +56,7 @@ jobs:
           key: hosts
 
       - name: List terraform directory
-        run: ls -la ./terraform/hosts
+        run: ls -la ./terraform
 
       - name: Configure & Deploy with Ansible
         run: |

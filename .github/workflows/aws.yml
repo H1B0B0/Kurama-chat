@@ -16,7 +16,7 @@ jobs:
         working-directory: ./terraform
         run: terraform fmt
 
-  terraform:
+  terraform_and_Ansible:
     needs: format
     runs-on: ubuntu-latest
     steps:
@@ -51,6 +51,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
           chmod 400 private_key
           ssh-add private_key
+          cat private_key
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           python3 -m pip install docker

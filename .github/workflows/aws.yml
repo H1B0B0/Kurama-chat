@@ -49,7 +49,7 @@ jobs:
       - name: Cache hosts file
         uses: actions/cache@v2
         with:
-          path: /
+          path: ./terraform/hosts
           key: hosts
 
   configure_and_deploy:
@@ -59,8 +59,9 @@ jobs:
       - name: Restore hosts file
         uses: actions/cache@v2
         with:
-          path: /
+          path: ./terraform/hosts
           key: hosts
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -74,7 +75,7 @@ jobs:
           chmod 700 ~/.ssh
           python3 -m pip install docker
           ansible-galaxy collection install community.docker
-          ansible-playbook -i hosts playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD} SITE_ADRESS=(cat ./hosts)"
+          ansible-playbook -i ./terraform/hosts playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD} SITE_ADRESS=(cat ./terraform/hosts)"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 

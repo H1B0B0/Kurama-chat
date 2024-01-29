@@ -15,13 +15,13 @@ resource "aws_instance" "app_server" {
 }
 
 resource "null_resource" "hosts" {
-  depends_on = [aws_instance.web]
+  depends_on = [aws_instance.app_server]
   triggers = {
     time = "${timestamp()}"
   }
-  count = length(aws_instance.web)
+  count = length(aws_instance.app_server)
   provisioner "local-exec" {
-    command = "echo ${element(aws_instance.web[*].public_ip, count.index)} >> ./hosts"
+    command = "echo ${element(aws_instance.app_server[*].public_ip, count.index)} >> ./hosts"
     when    = create
   }
   provisioner "local-exec" {

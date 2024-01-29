@@ -16,7 +16,7 @@ jobs:
         working-directory: ./terraform
         run: terraform fmt
 
-  Terraform_and_Ansible:
+  terraform:
     needs: format
     runs-on: ubuntu-latest
     steps:
@@ -45,6 +45,19 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
+  configure_and_deploy:
+    needs: terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Restore hosts file
+        uses: actions/cache@v2
+        with:
+          path: ./terraform/hosts
+          key: hosts
+
       - name: Configure & Deploy with Ansible
         run: |
           eval $(ssh-agent -s)
@@ -56,11 +69,10 @@ jobs:
           python3 -m pip install docker
           ansible-galaxy collection install community.docker
           echo "my_inventory ansible_host=$(cat ./terraform/hosts) ansible_user=ubuntu" > inventory.ini
-          cat ./terraform/hosts
-          cat ./inventory.ini
           ansible-playbook -i inventory.ini playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD} SITE_ADRESS=$(cat ./terraform/hosts)"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ANSIBLE_HOST_KEY_CHECKING: False
 
   destroy:
     runs-on: ubuntu-latest

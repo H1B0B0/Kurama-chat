@@ -19,9 +19,8 @@ resource "null_resource" "hosts" {
   triggers = {
     time = "${timestamp()}"
   }
-  count = length(aws_instance.app_server)
   provisioner "local-exec" {
-    command = "echo ${element(aws_instance.app_server.public_ip, count.index)} >> ./hosts"
+    command = "echo ${aws_instance.app_server.public_ip} >> ./hosts"
     when    = create
   }
   provisioner "local-exec" {

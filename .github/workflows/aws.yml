@@ -46,10 +46,21 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
+      - name: Cache hosts file
+        uses: actions/cache@v2
+        with:
+          path: /
+          key: hosts
+
   configure_and_deploy:
     needs: terraform
     runs-on: ubuntu-latest
     steps:
+      - name: Restore hosts file
+        uses: actions/cache@v2
+        with:
+          path: /
+          key: hosts
       - name: Checkout code
         uses: actions/checkout@v2
 

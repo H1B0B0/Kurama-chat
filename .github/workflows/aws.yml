@@ -56,8 +56,9 @@ jobs:
       - name: Configure & Deploy with Ansible
         run: |
           eval $(ssh-agent -s)
-          chmod 400 "${SSH_PRIVATE_KEY}"
-          ssh-add "${SSH_PRIVATE_KEY}"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 400 private_key
+          ssh-add private_key
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           python3 -m pip install docker

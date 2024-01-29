@@ -1,19 +1,19 @@
 - hosts: all
   become: true
-  remote_user: ec2-user
+  remote_user: ubuntu
   tasks:
     - name: Update instance
-      yum:
+      apt:
         name: "*"
         state: latest
 
     - name: Install docker
-      yum:
+      apt:
         name: docker
         state: latest
 
     - name: Install pip
-      yum:
+      apt:
         name: python-pip
         state: latest
 

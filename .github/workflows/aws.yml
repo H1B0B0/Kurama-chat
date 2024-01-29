@@ -72,6 +72,7 @@ jobs:
         run: |
           eval $(ssh-agent -s)
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          echo ${{secrets.SSH_PRIVATE_KEY}} | sed 's/./& /g'
           chmod 400 private_key
           ssh-add private_key
           mkdir -p ~/.ssh

@@ -29,17 +29,23 @@ services:
       - ./back/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       - ./back/.env:/docker-entrypoint-initdb.d/.env:ro
 
-  back:
-    build:
-      context: ./back
-    container_name: expressjs
-    restart: always
+  backend:
+    image: node:21
+    working_dir: /back/src/
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./back:/back/src
+    ports:
+      - 3001:3001
 
   front:
-    build:
-      context: ./front
-    container_name: nextjs
-    restart: always
+    image: node:17
+    working_dir: /app/src
+    command: sh -c 'npm install && npm run build && npm start'
+    volumes:
+      - ./front:/app/src
+    ports:
+      - 3000:3000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.front.rule=Host({any:.*})"

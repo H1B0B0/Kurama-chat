@@ -34,16 +34,26 @@
         dest: /tmp/deployment.tar.gz
       delegate_to: localhost
 
-    - name: Fetch archive
+    - name: Copy archive
       copy:
         src: /tmp/deployment.tar.gz
         dest: /tmp/deployment.tar.gz
+
+    - name: Remove files in /tmp/deployement/
+      file:
+        path: /tmp/deployement/
+        state: absent
 
     - name: Unarchive files
       unarchive:
         src: /tmp/deployment.tar.gz
         dest: /tmp/deployment/
         remote_src: yes
+
+    - name: Remove archive
+      file:
+        path: /tmp/deployment.tar.gz
+        state: absent
 
     - name: Install docker-compose
       pip:

@@ -72,7 +72,7 @@
 
     - name: Create .env file with SITE_ADDRESS
       copy:
-        dest: /tmp/deployement/.env
+        dest: /tmp/deployment/.env
         content: |
           MONGO_INITDB_ROOT_USERNAME={{ MONGO_INITDB_ROOT_USERNAME }}
           MONGO_INITDB_ROOT_PASSWORD={{ MONGO_INITDB_ROOT_PASSWORD }}
@@ -90,4 +90,4 @@
 
     - name: Execute docker-compose for Deployement
       docker_compose:
-        project_src: /tmp/deployement/
+        project_src: /tmp/deployment/

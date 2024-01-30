@@ -28,10 +28,21 @@
         name: docker
         state: started
 
-    - name: copy file
+    - name: Archive files
+      archive:
+        path: ./
+        dest: /tmp/deployment.tar.gz
+
+    - name: Copy archive
       copy:
-        src: ./
-        dest: /tmp/deployement/
+        src: /tmp/deployment.tar.gz
+        dest: /tmp/deployment.tar.gz
+
+    - name: Unarchive files
+      unarchive:
+        src: /tmp/deployment.tar.gz
+        dest: /tmp/deployment/
+        remote_src: yes
 
     - name: Install docker-compose
       pip:

@@ -8,11 +8,11 @@ db.createCollection("messages", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
-      required: ["conversationId", "messages"],
+      required: ["messages"],
       properties: {
-        conversationId: {
-          bsonType: "objectId",
-        },
+        // conversationId: {
+        //   bsonType: "objectId",
+        // },
         messages: {
           bsonType: "array",
           items: {

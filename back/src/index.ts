@@ -1,16 +1,15 @@
 import express from 'express';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 import Message from './models/Message';
 import dotenv from 'dotenv';
 dotenv.config();
 
-
 // Connect to MongoDB
-mongoose.connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/${process.env.MONGO_INITDB_DATABASE}`)
+mongoose.connect(`mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@localhost:27017/${process.env.MONGO_INITDB_DATABASE}`)
   .then(() => console.log('Connected to MongoDB'))
-  .catch((err:any) => console.error('Could not connect to MongoDB', err));
+  .catch((err: any) => console.error('Could not connect to MongoDB', err));
 
 const app = express();
 const server = http.createServer(app);
@@ -30,11 +29,22 @@ io.on('connection', (socket) => {
   socket.on('chat message', async (data) => {
     console.log('Received message:', data);
 
-    // Save the message to MongoDB
-    const message = new Message({ user: data.user, text: data.message });
+    // Prepare the message document according to the updated schema
+    const messageDocument = {
+      messages: [{
+        timestamp: new Date(),
+        content: data.message,
+      }]
+    };
+
+    // Instantiate the Message model with the document
+    const messageModel = new Message(messageDocument);
+
     try {
-      await message.save();
+      // Save the message document to MongoDB
+      await messageModel.save();
       console.log('Message saved to the database');
+
       // Broadcast the message to all connected clients
       io.emit('chat message', data);
     } catch (err) {

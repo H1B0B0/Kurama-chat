@@ -1,12 +1,24 @@
-// Message.js becomes Message.ts
-const mongoose = require('mongoose');
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
-const messageSchema = new mongoose.Schema({
-  user: String,
-  text: String,
-  timestamp: { type: Date, default: Date.now },
+interface IMessageItem {
+  timestamp: Date;
+  content: string;
+}
+
+// Interface for the document structure
+interface IMessageDocument extends Document {
+  messages: IMessageItem[];
+}
+
+const messageItemSchema = new Schema<IMessageItem>({
+  timestamp: { type: Date, required: true },
+  content: { type: String, required: true }
 });
 
-const Message = mongoose.model('Message', messageSchema);
+const messageSchema = new Schema<IMessageDocument>({
+  messages: [messageItemSchema]
+});
 
-export default Message;
+const MessageModel: Model<IMessageDocument> = mongoose.model('Message', messageSchema);
+
+export default MessageModel;

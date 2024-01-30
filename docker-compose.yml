@@ -39,7 +39,7 @@ services:
       - 3001:3001
 
   front:
-    image: node:17
+    image: node:21
     working_dir: /app/src
     command: sh -c 'npm install && npm run build && npm start'
     volumes:

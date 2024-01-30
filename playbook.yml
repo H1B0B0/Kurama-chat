@@ -53,6 +53,14 @@
           MONGODB_USER={{ MONGODB_USER }}
           MONGODB_USER_PASSWORD={{ MONGODB_USER_PASSWORD }}
 
-    - name: Execute docker-compose for WordPress
+    - name: Check if network web exists
+      command: docker network ls --filter name=^web$ --format={{'.Name'}}
+      register: web_network
+
+    - name: Create network web
+      shell: docker network create web
+      when: web_network.stdout == ""
+
+    - name: Execute docker-compose for Deployement
       docker_compose:
         project_src: /tmp/deployement/

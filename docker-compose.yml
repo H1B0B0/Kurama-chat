@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   traefik:
     image: traefik
@@ -14,9 +14,9 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=etienne.mentrel@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
     ports:
-      - 80:80
-      - 443:443
-      - 8080:8080
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./acme.json:/acme.json
@@ -27,7 +27,7 @@ services:
     image: mongo
     container_name: mongodb
     ports:
-      - 27017:27017
+      - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}

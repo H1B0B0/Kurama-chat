@@ -68,6 +68,7 @@
     - name: Install docker-py
       pip:
         name: docker
+        state: latest
         extra_args: --ignore-installed
 
     - name: Create .env file with SITE_ADDRESS

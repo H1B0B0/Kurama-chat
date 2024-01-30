@@ -75,6 +75,7 @@
           MONGO_INITDB_DATABASE={{ MONGO_INITDB_DATABASE }}
           MONGODB_USER={{ MONGODB_USER }}
           MONGODB_USER_PASSWORD={{ MONGODB_USER_PASSWORD }}
+          SITE_ADDRESS={{ SITE_ADDRESS }}
 
     - name: Check if network web exists
       command: docker network ls --filter name=^web$ --format={{'.Name'}}

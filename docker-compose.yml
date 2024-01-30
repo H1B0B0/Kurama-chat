@@ -9,10 +9,9 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=etienne.mentrel@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
     ports:
       - "80:80"
       - "443:443"
@@ -50,15 +49,19 @@ services:
       - web
 
   front:
+    depends_on:
+      - traefik
     image: node:21
     working_dir: /app/src
     command: sh -c 'npm install && npm run build && npm start'
     volumes:
       - ./front:/app/src
+    ports:
+      - "3000:3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.front.rule=Host(`{any:.*}`)"
-      - "traefik.http.routers.front.entrypoints=web,websecure"
+      - "traefik.http.routers.front.rule=Host(`${{ SITE}}`)"
+      - "traefik.http.routers.front.entrypoints=websecure"
       - "traefik.http.services.front.loadbalancer.server.port=3000"
     networks:
       - web

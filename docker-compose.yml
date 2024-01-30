@@ -60,7 +60,7 @@ services:
       - "3000:3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.front.rule=Host(`${{ SITE}}`)"
+      - "traefik.http.routers.front.rule=Host(`${{ SITE_ADDRESS }}`)"
       - "traefik.http.routers.front.entrypoints=websecure"
       - "traefik.http.services.front.loadbalancer.server.port=3000"
     networks:

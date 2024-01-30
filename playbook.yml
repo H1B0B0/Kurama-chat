@@ -65,10 +65,10 @@
         name: docker-compose
         extra_args: --ignore-installed
 
-    - name: Install docker-py
+    - name: Install docker
       pip:
         name: docker
-        state: latest
+        version: 7.0.0
         extra_args: --ignore-installed
 
     - name: Create .env file with SITE_ADDRESS

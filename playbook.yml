@@ -59,7 +59,6 @@
       file:
         path: /tmp/deployment.tar.gz
         state: absent
-        remote_src: yes
 
     - name: Install docker-compose
       pip:

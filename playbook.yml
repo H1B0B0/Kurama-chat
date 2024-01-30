@@ -60,6 +60,11 @@
         path: /tmp/deployment.tar.gz
         state: absent
 
+    - name: Upgrade requests
+      pip:
+        name: "requests"
+        state: latest
+
     - name: Install Docker SDK for Python
       pip:
         name:

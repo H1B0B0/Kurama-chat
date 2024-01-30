@@ -39,14 +39,14 @@
         src: /tmp/deployment.tar.gz
         dest: /tmp/deployment.tar.gz
 
-    - name: Remove files in /tmp/deployement/
+    - name: Remove files in /tmp/deployment/
       file:
-        path: /tmp/deployement/
+        path: /tmp/deployment/
         state: absent
 
-    - name: Create directory /tmp/deployement/
+    - name: Create directory /tmp/deployment/
       file:
-        path: /tmp/deployement/
+        path: /tmp/deployment/
         state: directory
 
     - name: Unarchive files
@@ -59,6 +59,7 @@
       file:
         path: /tmp/deployment.tar.gz
         state: absent
+        remote_src: yes
 
     - name: Install docker-compose
       pip:

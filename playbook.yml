@@ -35,10 +35,9 @@
       delegate_to: localhost
 
     - name: Fetch archive
-      fetch:
+      copy:
         src: /tmp/deployment.tar.gz
         dest: /tmp/deployment.tar.gz
-        flat: yes
 
     - name: Unarchive files
       unarchive:

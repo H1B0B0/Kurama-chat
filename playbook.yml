@@ -32,11 +32,13 @@
       archive:
         path: ./
         dest: /tmp/deployment.tar.gz
+      delegate_to: localhost
 
-    - name: Copy archive
-      copy:
+    - name: Fetch archive
+      fetch:
         src: /tmp/deployment.tar.gz
         dest: /tmp/deployment.tar.gz
+        flat: yes
 
     - name: Unarchive files
       unarchive:

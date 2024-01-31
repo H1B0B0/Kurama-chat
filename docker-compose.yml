@@ -1,24 +1,19 @@
 version: "2"
 services:
   traefik:
-    image: traefik
+    restart: unless-stopped
     container_name: traefik
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--providers.file.filename=/etc/traefik/certificates.yml"
+    image: traefik:v2.0.2
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+    labels:
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/tls.yml:/etc/traefik/tls.yml
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./certificates.yml:/etc/traefik/certificates.yml
-      - ./key.pem:/certs/key.pem
-      - ./cert.pem:/certs/cert.pem
+      - certs:/etc/ssl/traefik
     networks:
       - web
 
@@ -57,13 +52,24 @@ services:
     volumes:
       - ./front:/app/src
     labels:
-      - "traefik.enable=true"
       - "traefik.http.routers.front.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.front.entrypoints=websecure"
       - "traefik.http.routers.front.tls=true"
       - "traefik.http.services.front.loadbalancer.server.port=3000"
     networks:
       - web
 
+  reverse-proxy-https-helper:
+    image: alpine
+    command: sh -c "cd /etc/ssl/traefik
+      && wget traefik.me/cert.pem -O cert.pem
+      && wget traefik.me/privkey.pem -O privkey.pem"
+    volumes:
+      - certs:/etc/ssl/traefik
+    networks:
+      - web
+
 networks:
   web:
+
+volumes:
+  certs:

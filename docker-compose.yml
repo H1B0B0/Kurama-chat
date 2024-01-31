@@ -9,8 +9,6 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--providers.file.filename=/etc/traefik/certificates.yml"
     ports:
       - "80:80"
@@ -64,6 +62,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.front.rule=HostRegexp(`{any:.*}`)"
       - "traefik.http.routers.front.entrypoints=websecure"
+      - "traefik.http.routers.front.tls=true"
       - "traefik.http.services.front.loadbalancer.server.port=3000"
     networks:
       - web

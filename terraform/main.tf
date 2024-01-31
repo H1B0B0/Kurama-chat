@@ -1,6 +1,6 @@
 resource "aws_instance" "app_server" {
   ami           = var.ami
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   tags = {
     Name = "project-JSF"
   }

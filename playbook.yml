@@ -92,6 +92,11 @@
       shell: docker network create web
       when: web_network.stdout == ""
 
+    - name: Set permissions for acme.json
+      file:
+        path: /tmp/deployment/acme.json
+        mode: "0600"
+
     - name: Execute docker-compose for Deployement
       docker_compose:
         project_src: /tmp/deployment/

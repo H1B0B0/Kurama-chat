@@ -52,7 +52,9 @@ services:
     volumes:
       - ./front:/app/src
     labels:
-      - "traefik.http.routers.front.rule=HostRegexp(`{any:.*}`)"
+      - "traefik.http.routers.front.rule=Host(`instantchat.${ SITE_ADDRESS }.traekif.me`)"
+      - "traefik.http.routers.app2-tls.tls.domains[0].main=instantchat.traefik.me"
+      - "traefik.http.routers.app2-tls.tls.domains[0].sans=app2-*.traefik.me"
       - "traefik.http.routers.front.tls=true"
       - "traefik.http.services.front.loadbalancer.server.port=3000"
     networks:

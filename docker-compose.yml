@@ -12,6 +12,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--providers.file.filename=/etc/traefik/certificates.yml"
     ports:
       - "80:80"
       - "443:443"
@@ -19,6 +20,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./acme.json:/acme.json
+      - ./certificates.yml:/etc/traefik/certificates.yml
+      - ./key.pem:/certs/key.pem
+      - ./cert.pem:/certs/cert.pem
     networks:
       - web
 
@@ -60,7 +64,7 @@ services:
       - "3000:3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.front.rule=Host(`${SITE_ADDRESS}`)"
+      - "traefik.http.routers.front.rule=HostRegexp(`{any:.*}`)"
       - "traefik.http.routers.front.entrypoints=websecure"
       - "traefik.http.services.front.loadbalancer.server.port=3000"
     networks:

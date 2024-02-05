@@ -22,7 +22,7 @@ const server = http.createServer(app);
 const io = new SocketIOServer(server);
 
 // Configure Express to serve static files from the public folder
-app.use(express.static("./public/index.html"));
+app.use(express.static("./src/public"));
 app.use(express.json());
 app.use(messageRouters);
 

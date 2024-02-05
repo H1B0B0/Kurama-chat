@@ -53,6 +53,8 @@ services:
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
       - MONGODB_USER=${MONGODB_USER}
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
+    ports:
+      - 3001:3001
 
   front:
     depends_on:
@@ -76,6 +78,8 @@ services:
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
       - MONGODB_USER=${MONGODB_USER}
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
+    ports:
+      - 3000:3000
 
 networks:
   web:

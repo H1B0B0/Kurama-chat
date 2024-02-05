@@ -1,7 +1,10 @@
+import Conversation from "./Conversation"
 
 const ChatWrapper = () => {
   return (
-    <div>ChatWrapper</div>
+    <div className="relative">
+        <Conversation/>
+    </div>
   )
 }
 

@@ -12,7 +12,7 @@ dotenv.config();
 // Connect to MongoDB
 mongoose
   .connect(
-    `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@localhost:27017/${process.env.MONGO_INITDB_DATABASE}`
+    `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@mongodb:27017/${process.env.MONGO_INITDB_DATABASE}`
   )
   .then(() => console.log("Connected to MongoDB"))
   .catch((err: any) => console.error("Could not connect to MongoDB", err));
@@ -22,7 +22,7 @@ const server = http.createServer(app);
 const io = new SocketIOServer(server);
 
 // Configure Express to serve static files from the public folder
-app.use(express.static("../front/public/"));
+app.use(express.static("./public/index.html"));
 app.use(express.json());
 app.use(messageRouters);
 

@@ -47,6 +47,12 @@ services:
       - ./back:/back/src
     networks:
       - web
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGODB_USER=${MONGODB_USER}
+      - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
 
   front:
     depends_on:
@@ -64,6 +70,12 @@ services:
       - "traefik.http.services.front.loadbalancer.server.port=3000"
     networks:
       - web
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGODB_USER=${MONGODB_USER}
+      - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
 
 networks:
   web:

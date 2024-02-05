@@ -41,13 +41,13 @@ io.on('connection', (socket) => {
         try {
             yield message.save();
             console.log('Message saved to the database');
-            // Broadcast the message to all connected clients
             io.emit('chat message', data);
         }
         catch (err) {
             console.error('Error saving message to database:', err);
         }
     }));
+    
     // Listen for user disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);

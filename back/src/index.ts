@@ -4,7 +4,11 @@ import { Server as SocketIOServer } from 'socket.io';
 import mongoose from 'mongoose';
 import Message from './models/Message';
 import dotenv from 'dotenv';
+import messageRouters from '../dist/routes/messageRoutes';
+
+// Load environment variables from .env file
 dotenv.config();
+
 
 // Connect to MongoDB
 mongoose.connect(`mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@localhost:27017/${process.env.MONGO_INITDB_DATABASE}`)
@@ -14,6 +18,11 @@ mongoose.connect(`mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_US
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
+
+// Configure Express to serve static files from the public folder
+app.use(express.static('../front/public/'));
+app.use(express.json());
+app.use(messageRouters);
 
 const PORT = 3001;
 
@@ -58,4 +67,3 @@ io.on('connection', (socket) => {
   });
 });
 
-app.use(express.static('../front/public/'));

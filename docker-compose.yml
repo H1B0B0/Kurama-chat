@@ -61,7 +61,7 @@ services:
       - traefik
     image: node:21
     working_dir: /app/src
-    command: sh -c 'npm install && npm run build && npm start'
+    command: sh -c 'npm install && npm run dev'
     volumes:
       - ./front:/app/src
     labels:

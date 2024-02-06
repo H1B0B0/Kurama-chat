@@ -16,10 +16,12 @@ export const Container = styled.div`
     flex-direction: column;
     background-color:
 
-    p {
+    h2 {
       align-self: center;
+      color: #222;
       color: #C70039;
-      margin: 10px;
+      font-size: 30px;
+      padding: 0.5rem;
     }
 
     h2 {
@@ -27,7 +29,7 @@ export const Container = styled.div`
       color: #222;
       color: #C70039;
       font-size: 30px;
-      padding: 1rem;
+      padding: 0.2rem;
     }
 
     input {
@@ -37,7 +39,7 @@ export const Container = styled.div`
       height: 48px;
       padding: 0 20px;
       font-size: 16px;
-      color: #666;
+      color: #66
       border-radius: 12px;
 
       & + input {
@@ -45,7 +47,13 @@ export const Container = styled.div`
         
       }
     }
-
+    
+    p {
+      align-self: center;
+      color: #474749;
+      margin: 10px;
+    }
+    
     button {
       margin-top: 10px;
       border: 0;
@@ -67,9 +75,18 @@ export const Container = styled.div`
     margin-top: 5px;
     text-decoration: none;
     color: #222;
+    padding: 1rem;
+       
+    span{
+      color: #C70039;
+      text-decoration: underline;
+
+    }
+
 
     &:hover {
       color: ${lighten(0.08, '#222')};
     }
   }
+  
 `;

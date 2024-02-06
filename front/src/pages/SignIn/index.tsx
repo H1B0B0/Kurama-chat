@@ -31,15 +31,16 @@ const SignIn: React.FC = () => {
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
+      
         <input
           type='password'
           placeholder='Taper votre mot de passe'
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button type='submit'>Entrer</button>
+        <button type='submit'>Connexion</button>
       </form>
-      <Link to='/signup'>Inscrivez-vous</Link>
+      <Link to='/signup'>Vous n’avez pas de compte ? <span> Créer un compte</span></Link>
     </Container>
   );
 };

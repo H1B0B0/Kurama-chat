@@ -34,17 +34,17 @@ services:
       - MONGODB_USER=${MONGODB_USER}
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
     volumes:
-      - ./back/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./backend/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     networks:
       - web
 
   backend:
     container_name: backend
     image: node:21
-    working_dir: /back/src/
+    working_dir: /backend/src/
     command: sh -c "npm install && npm run dev:server"
     volumes:
-      - ./back:/back/src
+      - ./backend:/backend/src
     networks:
       - web
     environment:
@@ -56,21 +56,21 @@ services:
     ports:
       - 3333:3333
 
-  front:
+  frontend:
     container_name: frontend
     depends_on:
       - traefik
     image: node:16
-    working_dir: /app/src
+    working_dir: /frontend/src
     command: sh -c 'npm install && npm run start'
     volumes:
-      - ./front:/app/src
+      - ./frontend:/frontend/src
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.front.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.front.entrypoints=websecure"
-      - "traefik.http.routers.front.tls=true"
-      - "traefik.http.services.front.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend.rule=HostRegexp(`{any:.*}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
     networks:
       - web
     environment:

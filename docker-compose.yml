@@ -42,7 +42,7 @@ services:
   backend:
     image: node:21
     working_dir: /back/src/
-    command: sh -c "npm install && npm start"
+    command: sh -c "npm install && npm run dev:server"
     volumes:
       - ./back:/back/src
     networks:
@@ -54,14 +54,14 @@ services:
       - MONGODB_USER=${MONGODB_USER}
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
     ports:
-      - 3001:3001
+      - 3333:3333
 
   front:
     depends_on:
       - traefik
-    image: node:21
+    image: node:16
     working_dir: /app/src
-    command: sh -c 'npm install && npm run dev'
+    command: sh -c 'npm install && npm run start'
     volumes:
       - ./front:/app/src
     labels:

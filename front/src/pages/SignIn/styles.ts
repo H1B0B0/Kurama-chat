@@ -15,13 +15,22 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     background-color:
+    
 
+    
     h2 {
       align-self: center;
       color: #222;
       color: #C70039;
       font-size: 30px;
       padding: 0.5rem;
+      
+    }
+
+     p {
+      align-self: center;
+      color: #474749;
+      margin: 10px;
     }
 
     h2 {
@@ -33,14 +42,13 @@ export const Container = styled.div`
     }
 
     input {
-      margin-top: 20px;
+      margin-top: 10px;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 14px;
       height: 48px;
       padding: 0 20px;
       font-size: 16px;
       color: #66
-      border-radius: 12px;
 
       & + input {
         margin-top: 5px;
@@ -48,11 +56,11 @@ export const Container = styled.div`
       }
     }
     
-    p {
-      align-self: center;
-      color: #474749;
-      margin: 10px;
+    h4{
+      color: red;
+      margin-top: ;
     }
+
     
     button {
       margin-top: 10px;

@@ -25,6 +25,7 @@ const SignIn: React.FC = () => {
       <form data-testid='login-form' onSubmit={handleSubmit}>
         <h2>Connectez-vous</h2>
         <p> Connectez-vous pour accéder à votre espace </p>
+        
         <input
           type='text'
           placeholder="Entrez votre nom d'utilisateur "

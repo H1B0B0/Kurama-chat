@@ -30,28 +30,28 @@ const SignUp: React.FC = () => {
   return (
     <Container>
       <form data-testid='login-form' onSubmit={handleSubmit}>
-        <h2>Faça seu cadastro</h2>
+        <h2>Inscription</h2>
         <input
           type='text'
-          placeholder='Digite seu nome'
+          placeholder='Votre nom'
           value={name}
           onChange={(event) => setName(event.target.value)}
         />
         <input
           type='text'
-          placeholder='Digite seu nome de usuário'
+          placeholder="Votre nom d'utilisateur"
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
         <input
           type='password'
-          placeholder='Digite sua senha'
+          placeholder='Tapez votre mot de passe'
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button type='submit'>Entrar</button>
+        <button type='submit'>Entrer</button>
       </form>
-      <Link to='/'>Já possuo uma conta</Link>
+      <Link to='/'>J'ai déja un compte</Link>
     </Container>
   );
 };

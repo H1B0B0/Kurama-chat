@@ -23,22 +23,22 @@ const SignIn: React.FC = () => {
   return (
     <Container>
       <form data-testid='login-form' onSubmit={handleSubmit}>
-        <h2>Faça seu login</h2>
+        <h2>Se connecter</h2>
         <input
           type='text'
-          placeholder='Digite seu nome de usuário'
+          placeholder="Entrez votre nom d'utilisateur "
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
         <input
           type='password'
-          placeholder='Digite sua senha'
+          placeholder='Taper votre mot de passe'
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button type='submit'>Entrar</button>
+        <button type='submit'>Entrer</button>
       </form>
-      <Link to='/signup'>Me cadastrar</Link>
+      <Link to='/signup'>Inscrivez-vous</Link>
     </Container>
   );
 };

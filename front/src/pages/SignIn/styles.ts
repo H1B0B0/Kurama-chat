@@ -18,6 +18,8 @@ export const Container = styled.div`
     h2 {
       align-self: center;
       color: #222;
+      color: #C70039;
+      font-size: 30px;
     }
 
     input {
@@ -28,9 +30,11 @@ export const Container = styled.div`
       padding: 0 20px;
       font-size: 16px;
       color: #666;
+      border-radius: 12px;
 
       & + input {
         margin-top: 5px;
+        
       }
     }
 
@@ -40,12 +44,13 @@ export const Container = styled.div`
       border-radius: 4px;
       height: 48px;
       font-size: 16px;
-      background: #3bafda;
+      background: #C70039;
       font-weight: bold;
       color: #fff;
+      border-radius: 30px;
 
       &:hover {
-        background-color: ${darken(0.08, '#3bafda')};
+        background-color: ${darken(0.08, '#C70039')};
       }
     }
   }

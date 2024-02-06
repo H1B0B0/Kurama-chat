@@ -8,7 +8,7 @@ interface IRequest {
 const Socket = ({ user_id }: IRequest) => {
   const socket = useMemo(
     () =>
-      socketio("http://backend:3333", {
+      socketio("http://localhost:3333", {
         query: { user_id },
       }),
     [user_id]

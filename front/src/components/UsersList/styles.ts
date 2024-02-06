@@ -10,7 +10,7 @@ export const Container = styled.div`
   max-height: calc(100vh - 60px);
   width: 200px;
 
-  background-color: #222;
+  background-color: #ffff;
 
   overflow-y: scroll;
   ::-webkit-scrollbar {

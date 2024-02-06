@@ -55,7 +55,7 @@ const UsersList: React.FC = () => {
 
   return (
     <Container>
-      <Title>Usuários</Title>
+      <Title>Bienvenue</Title>
       <Separator />
       {users.map((user) => (
         <UserContent

@@ -50,7 +50,7 @@ const SignUp: React.FC = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button type='submit'>Entrer</button>
+        <button type='submit'>Validé</button>
       </form>
       <Link to='/'>Vous avez déja un compte ? <span>Cliquer ici !</span></Link>
     </Container>

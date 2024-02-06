@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import socketio from 'socket.io-client';
+import { useMemo } from "react";
+import socketio from "socket.io-client";
 
 interface IRequest {
   user_id: string;
@@ -8,7 +8,7 @@ interface IRequest {
 const Socket = ({ user_id }: IRequest) => {
   const socket = useMemo(
     () =>
-      socketio('http://localhost:3333', {
+      socketio("http://backend:3333", {
         query: { user_id },
       }),
     [user_id]
@@ -16,5 +16,4 @@ const Socket = ({ user_id }: IRequest) => {
 
   return socket;
 };
-
 export default Socket;

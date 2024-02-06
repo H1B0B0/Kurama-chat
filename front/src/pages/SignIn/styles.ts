@@ -11,15 +11,23 @@ export const Container = styled.div`
 
   form {
     width: 100%;
-    max-width: 250px;
+    max-width: 350px;
     display: flex;
     flex-direction: column;
+    background-color:
+
+    p {
+      align-self: center;
+      color: #C70039;
+      margin: 10px;
+    }
 
     h2 {
       align-self: center;
       color: #222;
       color: #C70039;
       font-size: 30px;
+      padding: 1rem;
     }
 
     input {

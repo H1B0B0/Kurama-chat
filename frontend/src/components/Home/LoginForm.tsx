@@ -17,11 +17,10 @@ function LoginForm() {
   const onStart = (e: any) => {
     e.preventDefault();
     setIsLoading(true);
-    if(name) {
+    if (name) {
       localStorage.setItem("name", name);
       setUsername(name);
     } else {
-      
     }
     router.push("/chat");
   };
@@ -50,7 +49,7 @@ function LoginForm() {
           {isLoading ? (
             <ClipLoader color="white" size={20} />
           ) : (
-            "Start Kurakani"
+            "Start pedagochat"
           )}
         </button>
       </div>

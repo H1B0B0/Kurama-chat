@@ -2,7 +2,7 @@ import UserProvider from "@/contexts/UserContext";
 import "./globals.css";
 import localFont from "next/font/local";
 import { Metadata } from "next";
-import 'react-tooltip/dist/react-tooltip.css'
+import "react-tooltip/dist/react-tooltip.css";
 
 const calibre = localFont({
   src: [
@@ -15,9 +15,9 @@ const calibre = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Kurakani",
-  description: "kurakani - the best way to chat",
-  icons: "/images/logo.png"
+  title: "pedagochat",
+  description: "pedagochat - the best way to chat",
+  icons: "/images/logo.png",
 };
 
 export default function RootLayout({

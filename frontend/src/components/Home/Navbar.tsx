@@ -4,12 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { FaGithub } from "react-icons/fa";
-import { Tooltip } from 'react-tooltip'
+import { Tooltip } from "react-tooltip";
 
 const NAV_LINKS = [
-  { icon: FaGithub, label: "Github", title: "Star on GitHub", link: "https://github.com/diwash007/kurakani", externalPage: true },
+  {
+    icon: FaGithub,
+    label: "Github",
+    title: "Star on GitHub",
+    link: "https://github.com/diwash007/pedagochat",
+    externalPage: true,
+  },
 ];
-
 
 function Navbar() {
   const [navbarActive, setNavbarActive] = useState(false);
@@ -33,15 +38,16 @@ function Navbar() {
                     {React.createElement(icon, { className: "w-10 h-10" })}
                     {label}
                   </Link>
-                  {
-                    title &&
-                    <Tooltip delayShow={200} anchorSelect={`#${label}${index}`} place="left">
+                  {title && (
+                    <Tooltip
+                      delayShow={200}
+                      anchorSelect={`#${label}${index}`}
+                      place="left"
+                    >
                       {title}
                     </Tooltip>
-                  }
-
+                  )}
                 </>
-
               ) : (
                 <Link
                   id={`${label}${index}`}
@@ -53,8 +59,6 @@ function Navbar() {
                 </Link>
               )}
             </>
-
-
           );
         })}
       </div>
@@ -70,10 +74,11 @@ function Navbar() {
       </div>
       {navbarActive && (
         <div className="text-white absolute top-[80px] bg-gradient-to-r from-purple-500 to-pink-500 right-6 rounded-full font-medium text-xl py-2 px-4">
-          {NAV_LINKS.map(({ label, title, link, icon, externalPage }, index) => {
-            return (
-              <>
-                {icon ? (
+          {NAV_LINKS.map(
+            ({ label, title, link, icon, externalPage }, index) => {
+              return (
+                <>
+                  {icon ? (
                     <Link
                       id={`${label}${index}`}
                       className="flex gap-5 items-center justify-center"
@@ -84,21 +89,20 @@ function Navbar() {
                       {React.createElement(icon, { className: "w-6 h-6" })}
                       <span className="pt-1">{label}</span>
                     </Link>
-                ) : (
-                  <Link
-                    id={`${label}${index}`}
-                    href={link}
-                    key={index}
-                    target={externalPage ? "_blank" : "_self"}
-                  >
-                    {label}
-                  </Link>
-                )}
-              </>
-
-
-            );
-          })}
+                  ) : (
+                    <Link
+                      id={`${label}${index}`}
+                      href={link}
+                      key={index}
+                      target={externalPage ? "_blank" : "_self"}
+                    >
+                      {label}
+                    </Link>
+                  )}
+                </>
+              );
+            }
+          )}
         </div>
       )}
     </div>

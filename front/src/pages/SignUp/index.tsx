@@ -31,6 +31,7 @@ const SignUp: React.FC = () => {
     <Container>
       <form data-testid='login-form' onSubmit={handleSubmit}>
         <h2>Inscription</h2>
+        <p>Inscrivez-vous pour accéder à votre espace</p>
         <input
           type='text'
           placeholder='Votre nom'
@@ -51,7 +52,7 @@ const SignUp: React.FC = () => {
         />
         <button type='submit'>Entrer</button>
       </form>
-      <Link to='/'>J'ai déja un compte</Link>
+      <Link to='/'>Vous avez déja un compte ? <span>Cliquer ici !</span></Link>
     </Container>
   );
 };

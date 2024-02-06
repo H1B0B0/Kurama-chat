@@ -3,11 +3,12 @@ import { darken, lighten } from 'polished';
 
 export const Container = styled.div`
   height: 100%;
-  background-color: #f5f5f5;
+  background-image: url("bg.png");
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+ 
 
   form {
     width: 100%;
@@ -21,7 +22,7 @@ export const Container = styled.div`
     h2 {
       align-self: center;
       color: #222;
-      color: #C70039;
+      color: #E20000;
       font-size: 30px;
       padding: 0.5rem;
       
@@ -36,7 +37,7 @@ export const Container = styled.div`
     h2 {
       align-self: center;
       color: #222;
-      color: #C70039;
+      color: #E20000;
       font-size: 30px;
       padding: 0.2rem;
     }
@@ -56,10 +57,7 @@ export const Container = styled.div`
       }
     }
     
-    h4{
-      color: red;
-      margin-top: ;
-    }
+   
 
     
     button {
@@ -86,7 +84,7 @@ export const Container = styled.div`
     padding: 1rem;
        
     span{
-      color: #C70039;
+      color: #E20000;
       text-decoration: underline;
 
     }

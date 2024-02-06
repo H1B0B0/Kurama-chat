@@ -35,11 +35,11 @@ services:
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
     volumes:
       - ./back/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      - ./back/.env:/docker-entrypoint-initdb.d/.env:ro
     networks:
       - web
 
   backend:
+    container_name: backend
     image: node:21
     working_dir: /back/src/
     command: sh -c "npm install && npm run dev:server"
@@ -57,6 +57,7 @@ services:
       - 3333:3333
 
   front:
+    container_name: frontend
     depends_on:
       - traefik
     image: node:16
@@ -78,6 +79,7 @@ services:
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
       - MONGODB_USER=${MONGODB_USER}
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
+      - BROWSER=none
     ports:
       - 3000:3000
 

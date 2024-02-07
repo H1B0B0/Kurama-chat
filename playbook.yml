@@ -39,11 +39,6 @@
         src: /tmp/deployment.tar.gz
         dest: /tmp/deployment.tar.gz
 
-    - name: Remove files in /tmp/deployment/
-      file:
-        path: /tmp/deployment/
-        state: absent
-
     - name: Create directory /tmp/deployment/
       file:
         path: /tmp/deployment/

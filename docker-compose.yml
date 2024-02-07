@@ -60,7 +60,7 @@ services:
       - 4000:4000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=PathPrefix(`/socket.io`)"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls=true"
       - "traefik.http.services.backend.loadbalancer.server.port=4000"

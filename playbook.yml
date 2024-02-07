@@ -56,8 +56,8 @@
         state: absent
 
     - name: Upgrade requests
-      pip:
-        name: "requests"
+      yum:
+        name: "python-requests"
         state: latest
 
     - name: Install Docker SDK for Python

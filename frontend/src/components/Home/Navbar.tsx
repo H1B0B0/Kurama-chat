@@ -11,7 +11,7 @@ const NAV_LINKS = [
     icon: FaGithub,
     label: "Github",
     title: "Star on GitHub",
-    link: "https://github.com/diwash007/pedagochat",
+    link: "",
     externalPage: true,
   },
 ];

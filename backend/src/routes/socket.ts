@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import http from "http";
 import { log } from "../utils/log.js";
 import mongoose from "mongoose";
-import { Room, Message } from "../models/models";
+import { Room, Message } from "../models/models.js";
 import express from "express";
 import dotenv from "dotenv";
 
@@ -16,15 +16,15 @@ export const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.ORIGIN_URL,
-    methods: ["GET", "POST"],
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
   },
   maxHttpBufferSize: 2e7,
 });
 
 mongoose
   .connect(
-    `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@localhost:27017/${process.env.MONGO_INITDB_DATABASE}`
+    `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@mongodb:27017/${process.env.MONGO_INITDB_DATABASE}`
   )
   .then(() => console.log("Connected to MongoDB"))
   .catch((err: any) => console.error("Could not connect to MongoDB", err));

@@ -56,12 +56,6 @@ services:
       - PORT=${PORT}
       - DEBUG=${DEBUG}
       - ORIGIN_URL=${ORIGIN_URL}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls=true"
-      - "traefik.http.services.frontend.loadbalancer.server.port=4000"
     ports:
       - 4000:4000
 

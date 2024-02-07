@@ -47,6 +47,15 @@ resource "aws_security_group" "allow_ssh_http_sg" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
+  ingress {
+    description      = "Allow Socket.io"
+    from_port        = 4000
+    to_port          = 4000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
   egress {
     description      = "Egress allow"
     from_port        = 0

@@ -59,7 +59,6 @@
       pip:
         name: "requests"
         state: latest
-        extra_args: --ignore-installed
 
     - name: Install Docker SDK for Python
       pip:

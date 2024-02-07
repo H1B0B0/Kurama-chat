@@ -57,7 +57,7 @@ jobs:
           ansible-galaxy collection install community.docker
           echo "[all]" > inventory.ini
           echo "my_instance ansible_host=$(cat ./terraform/hosts) ansible_user=ec2-user ansible_ssh_private_key_file=./private_key" >> inventory.ini
-          ansible-playbook -i inventory.ini playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD} SITE_ADDRESS=$(cat ./terraform/hosts) NEXT_PUBLIC_BASE_URL={NEXT_PUBLIC_BASE} PORT={PORT} DEBUG={DEBUG}"
+          ansible-playbook -i inventory.ini playbook.yml --extra-vars "MONGO_INITDB_ROOT_USERNAME={MONGO_INITDB_ROOT_USERNAME} MONGO_INITDB_ROOT_PASSWORD={MONGO_INITDB_ROOT_PASSWORD} MONGO_INITDB_DATABASE={MONGO_INITDB_DATABASE} MONGODB_USER={MONGODB_USER} MONGODB_USER_PASSWORD={MONGODB_USER_PASSWORD} SITE_ADDRESS=$(cat ./terraform/hosts) NEXT_PUBLIC_BASE_URL={NEXT_PUBLIC_BASE_URL} PORT={PORT} DEBUG={DEBUG}"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ANSIBLE_HOST_KEY_CHECKING: False

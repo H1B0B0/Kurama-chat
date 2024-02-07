@@ -8,17 +8,11 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--providers.file.filename=/etc/traefik/certificates.yml"
     ports:
       - "80:80"
-      - "443:443"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./certificates.yml:/etc/traefik/certificates.yml
-      - ./key.pem:/certs/key.pem
-      - ./cert.pem:/certs/cert.pem
     networks:
       - web
 
@@ -71,8 +65,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
     networks:
       - web

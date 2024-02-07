@@ -1,5 +1,4 @@
-import fs from "fs";
-import https from "https";
+import http from "http";
 import cors from "cors";
 import { Server } from "socket.io";
 import { log } from "../utils/log.js";
@@ -7,30 +6,12 @@ import mongoose from "mongoose";
 import { Room, Message } from "../models/models.js";
 import express from "express";
 import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export const app = express();
 app.use(cors());
 dotenv.config();
 
-// Load your SSL certificate and private key
-const privateKey = fs.readFileSync(
-  path.resolve(__dirname, "../../keys/key.pem"),
-  "utf8"
-);
-const certificate = fs.readFileSync(
-  path.resolve(__dirname, "../../keys/cert.pem"),
-  "utf8"
-);
-
-const credentials = { key: privateKey, cert: certificate };
-
-// Create an HTTPS server instead of an HTTP server
-export const server = https.createServer(credentials, app);
+export const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {

@@ -62,9 +62,12 @@
 
     - name: Install Docker SDK for Python
       pip:
-        name:
-          - "docker==6.1.3"
-          - "docker-compose"
+        name: docker==6.1.3
+        state: present
+
+    - name: Install Docker Compose
+      pip:
+        name: docker-compose
         state: present
 
     - name: Create .env file with SITE_ADDRESS

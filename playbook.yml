@@ -78,7 +78,7 @@
           MONGODB_USER={{ MONGODB_USER }}
           MONGODB_USER_PASSWORD={{ MONGODB_USER_PASSWORD }}
           SITE_ADDRESS={{ SITE_ADDRESS }}
-          NEXT_PUBLIC_BASE_URL=https://{{ SITE_ADDRESS }}:{{ PORT }}
+          NEXT_PUBLIC_BASE_URL=https://{{ SITE_ADDRESS }}:{{ PORT }}/
           PORT={{ PORT }}
           DEBUG={{ DEBUG }}
 

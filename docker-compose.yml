@@ -58,10 +58,6 @@ services:
       - ORIGIN_URL=${ORIGIN_URL}
     ports:
       - 4000:4000
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=PathPrefix(`/socket.io`)"
-      - "traefik.http.services.backend.loadbalancer.server.port=4000"
 
   frontend:
     container_name: frontend

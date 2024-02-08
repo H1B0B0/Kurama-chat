@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
     // Save room to MongoDB
     let room = await Room.findById(roomId);
     if (!room) {
-      room = new Room({ _id: roomId });
+      room = new Room({ _id: roomId, userId: socket.id });
       await room.save();
     }
 

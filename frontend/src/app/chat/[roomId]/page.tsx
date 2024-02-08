@@ -5,13 +5,12 @@ import ChatHeader from "@/components/Chat/ChatHeader";
 import { useSocket } from "@/contexts/SocketContext";
 import { useUser } from "@/contexts/UserContext";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 function Page() {
   const { roomId } = useParams();
   const { socket, roomUsers } = useSocket();
   const { username } = useUser();
-  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     if (roomUsers[roomId]?.includes(socket?.id)) return;
@@ -23,17 +22,10 @@ function Page() {
     socket?.emit("join_room", roomId);
   }, []);
 
-  useEffect(() => {
-    fetch(`/api/messages/${roomId}`)
-      .then((response) => response.json())
-      .then((data) => setMessages(data))
-      .catch((error) => console.error(error));
-  }, [roomId]);
-
   return (
     <div className="flex relative flex-col w-full h-screen">
       <ChatHeader roomId={roomId} />
-      <ChatBody roomId={roomId} messages={messages} />
+      <ChatBody roomId={roomId} />
       <ChatFooter roomId={roomId} />
     </div>
   );

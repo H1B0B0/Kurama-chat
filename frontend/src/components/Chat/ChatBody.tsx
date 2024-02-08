@@ -4,10 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 import Avatar from "react-avatar";
 import ChatImage from "./ChatImage";
 
-function ChatBody({ roomId, messages }: { roomId: string; messages: any[] }) {
+function ChatBody({ roomId }: { roomId: string }) {
   const [typing, setTyping] = useState<string>("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { socket } = useSocket();
+  const { messages, socket } = useSocket();
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -20,7 +20,7 @@ function ChatBody({ roomId, messages }: { roomId: string; messages: any[] }) {
   }, []);
 
   return (
-    <div className="basis_[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">
+    <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">
       {messages[roomId]?.map((message: any, index: number) =>
         message.socketId === "pedagochat" ? (
           <div className="flex self-center" key={index}>

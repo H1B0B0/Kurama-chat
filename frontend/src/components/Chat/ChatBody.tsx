@@ -32,12 +32,12 @@ function ChatBody({ roomId }: { roomId: string }) {
     });
   }, []);
 
-  useEffect(() => {
-    fetch(`/messages/${roomId}/${socket?.id}`)
-      .then((response) => response.json())
-      .then((data) => setMessages(data))
-      .catch((error) => console.error("Error:", error));
-  }, [roomId, socket?.id]);
+  // useEffect(() => {
+  //   fetch(`/messages/${roomId}/${socket?.id}`)
+  //     .then((response) => response.json())
+  //     .then((data) => setMessages(data))
+  //     .catch((error) => console.error("Error:", error));
+  // }, [roomId, socket?.id]);
 
   return (
     <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">

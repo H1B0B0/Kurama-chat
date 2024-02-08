@@ -46,6 +46,7 @@ io.on("connection", (socket) => {
     if (!room) {
       room = new Room({ _id: roomId, userId: socket.id });
       await room.save();
+      console.log("Room created: ", room);
     }
 
     io.emit("users_response", roomUsers);
@@ -62,6 +63,7 @@ io.on("connection", (socket) => {
       userId: socket.id,
     });
     await message.save();
+    console.log("Message saved: ", message);
   });
 
   socket.on("typing", (data) => {

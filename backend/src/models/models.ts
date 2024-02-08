@@ -11,9 +11,8 @@ const roomSchema = new mongoose.Schema({
 
 const messageSchema = new mongoose.Schema({
   text: String,
-  roomId: { type: String, ref: "Room" },
-  userId: { type: String, ref: "User" },
-  timestamp: { type: Date, default: Date.now },
+  roomId: { type: String, ref: "Room" }, // Reference to Room
+  userId: { type: String, ref: "User" }, // Reference to User
 });
 
 export const User = mongoose.model("User", userSchema);

@@ -4,10 +4,23 @@ import React, { useEffect, useRef, useState } from "react";
 import Avatar from "react-avatar";
 import ChatImage from "./ChatImage";
 
+type Message = {
+  socketId: string;
+  text: string;
+  image?: string;
+  name?: string;
+  time?: string;
+};
+
+type Messages = {
+  [roomId: string]: Message[];
+};
+
 function ChatBody({ roomId }: { roomId: string }) {
   const [typing, setTyping] = useState<string>("");
+  const [messages, setMessages] = useState<Messages>({});
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { messages, socket } = useSocket();
+  const { socket } = useSocket();
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -18,6 +31,13 @@ function ChatBody({ roomId }: { roomId: string }) {
       setTyping(data);
     });
   }, []);
+
+  useEffect(() => {
+    fetch(`/messages/${roomId}/${socket?.id}`)
+      .then((response) => response.json())
+      .then((data) => setMessages(data))
+      .catch((error) => console.error("Error:", error));
+  }, [roomId, socket?.id]);
 
   return (
     <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">

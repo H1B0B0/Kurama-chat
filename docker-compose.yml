@@ -17,7 +17,7 @@ services:
       - web
 
   mongodb:
-    image: mongo
+    image: mongo:4.4
     container_name: mongodb
     ports:
       - "27017:27017"

@@ -23,7 +23,7 @@
         - lsb-release
 
     - name: Add Docker's official GPG key
-      shell: yes | curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      shell: sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
     - name: Set up the Docker stable repository
       apt_repository:

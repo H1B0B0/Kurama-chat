@@ -81,19 +81,11 @@
         path: /var/deployment.tar.gz
         state: absent
 
-    - name: Install Python venv
-      apt:
-        name: python3-venv
-        state: latest
-
-    - name: Create a virtual environment
-      command: python3 -m venv /var/pythonenv
-
-    - name: Install Docker SDK for Python
-      command: /var/pythonenv/bin/pip install docker
-
     - name: Install Docker Compose
-      command: /var/pythonenv/bin/pip install "--only-binary :all:" docker-compose
+      apt:
+        name: docker-compose
+        state: latest
+        update_cache: yes
 
     - name: Create .env file with SITE_ADDRESS
       copy:

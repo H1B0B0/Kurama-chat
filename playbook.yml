@@ -93,7 +93,7 @@
       command: /var/pythonenv/bin/pip install docker
 
     - name: Install Docker Compose
-      command: /var/pythonenv/bin/pip install --only-binary :all: docker-compose
+      command: /var/pythonenv/bin/pip install "--only-binary :all:" docker-compose
 
     - name: Create .env file with SITE_ADDRESS
       copy:

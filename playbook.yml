@@ -1,29 +1,52 @@
 - hosts: all
   become: true
-  remote_user: ec2-user
+  remote_user: hibo
+
   tasks:
     - name: Update instance
-      yum:
-        name: "*"
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install Docker dependencies
+      apt:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+
+    - name: Add Docker's official GPG key
+      shell: curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+    - name: Set up the Docker stable repository
+      apt_repository:
+        repo: deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
+
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
         state: latest
 
-    - name: Install docker
-      yum:
-        name: docker
+    - name: Install Python pip
+      apt:
+        name: python3-pip
         state: latest
 
-    - name: Install pip
-      yum:
-        name: python-pip
-        state: latest
-
-    - name: add ec2-user to docker group
+    - name: Add hibo to Docker group
       user:
-        name: ec2-user
+        name: hibo
         groups: docker
         append: yes
 
-    - name: start docker
+    - name: Start Docker service
       service:
         name: docker
         state: started
@@ -61,8 +84,8 @@
       changed_when: False
 
     - name: Upgrade requests
-      yum:
-        name: "python-requests"
+      apt:
+        name: python3-requests
         state: latest
       when: "'2.31.0' not in requests_version.stdout"
 
@@ -86,7 +109,7 @@
     - name: Install Docker Compose
       pip:
         name: docker-compose
-        state: present
+        state: latest
       when: "'1.2.3' not in docker_compose_version.stdout"
 
     - name: Create .env file with SITE_ADDRESS
@@ -111,6 +134,6 @@
       shell: docker network create web
       when: web_network.stdout == ""
 
-    - name: Execute docker-compose for Deployement
+    - name: Execute docker-compose for Deployment
       docker_compose:
         project_src: /var/deployment/

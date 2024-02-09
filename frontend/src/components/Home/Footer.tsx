@@ -5,7 +5,7 @@ function Footer() {
     <footer className="flex justify-center items-center px-5 mt-5 mb-2 lg:px-36">
       <div className="w-full">
         <span className="font-semibold">
-          © pedagochat {new Date().getFullYear()}.{" "}
+          © Kurama-chat {new Date().getFullYear()}.{" "}
         </span>
         <span className="font-light">
           Made with ❤️ and JS by{" "}

@@ -16,7 +16,7 @@ function Page() {
     if (roomUsers[roomId]?.includes(socket?.id)) return;
     socket?.emit("send_message", {
       text: username + " joined the room.",
-      socketId: "pedagochat",
+      socketId: "Kurama-chat",
       roomId: roomId,
     });
     socket?.emit("join_room", roomId);

@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
         roomUsers[roomId] = [...users.filter((id) => id !== socket.id)];
         io.emit("receive_message", {
           text: "A user left the room.",
-          socketId: "pedagochat",
+          socketId: "Kurama-chat",
           roomId: roomId,
         });
       }

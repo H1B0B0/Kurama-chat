@@ -22,7 +22,7 @@ function ChatBody({ roomId }: { roomId: string }) {
   return (
     <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">
       {messages[roomId]?.map((message: any, index: number) =>
-        message.socketId === "pedagochat" ? (
+        message.socketId === "Kurama-chat" ? (
           <div className="flex self-center" key={index}>
             <div className="flex justify-center items-center">
               <p>{message.text}</p>
@@ -51,9 +51,8 @@ function ChatBody({ roomId }: { roomId: string }) {
               <p className="pl-2 text-sm align-bottom">{message.name}</p>
               {message.text && (
                 <div
-                  className={`px-3 py-1 bg-gray-200 rounded-full ${
-                    message.image ? "rounded-bl-none" : "rounded-tl-none"
-                  } w-fit`}
+                  className={`px-3 py-1 bg-gray-200 rounded-full ${message.image ? "rounded-bl-none" : "rounded-tl-none"
+                    } w-fit`}
                 >
                   <p className="font-sans">{message.text}</p>
                 </div>

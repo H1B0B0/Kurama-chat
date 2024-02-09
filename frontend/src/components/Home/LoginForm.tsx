@@ -49,7 +49,7 @@ function LoginForm() {
           {isLoading ? (
             <ClipLoader color="white" size={20} />
           ) : (
-            "Start pedagochat"
+            "Start Kurama-chat"
           )}
         </button>
       </div>

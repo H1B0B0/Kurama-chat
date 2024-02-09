@@ -15,8 +15,8 @@ const calibre = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "pedagochat",
-  description: "pedagochat - the best way to chat",
+  title: "Kurama-chat",
+  description: "Kurama-chat - the best way to chat",
   icons: "/images/logo.png",
 };
 

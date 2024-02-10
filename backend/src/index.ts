@@ -4,6 +4,7 @@ import { router as roomRoutes } from "./routes/roomRoutes.js";
 import { router as messageRoutes } from "./routes/messageRoutes.js";
 import { app, server } from "./routes/socket.js";
 import { log } from "./utils/log.js";
+import cors from 'cors';
 
 mongoose
   .connect(
@@ -12,6 +13,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err: any) => console.error("Could not connect to MongoDB", err));
 
+app.use(cors());
 app.use("/rooms", roomRoutes);
 app.use("/messages", messageRoutes);
 

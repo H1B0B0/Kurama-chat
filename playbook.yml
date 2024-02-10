@@ -3,56 +3,76 @@
   remote_user: hibo
 
   tasks:
-    - name: Run the equivalent of "apt-get update" as a separate step
-      apt:
-        update_cache: true
-        cache_valid_time: 3600
-    - name: Update all packages to the latest version
-      apt:
-        upgrade: dist
+    - name: Check if Docker is installed
+      shell: docker --version
+      register: docker_installed
+      ignore_errors: true
 
-    - name: Install Docker dependencies
-      apt:
-        name: "{{ item }}"
-        state: latest
-      loop:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg
-        - lsb-release
+    - block:
+      - name: Run the equivalent of "apt-get update" as a separate step
+        apt:
+          update_cache: true
+          cache_valid_time: 3600
+      - name: Update all packages to the latest version
+        apt:
+          upgrade: dist
+      - name: Install Docker dependencies
+        apt:
+          name: "{{ item }}"
+          state: latest
+        loop:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+      - name: Add Docker's official GPG key
+        shell: sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      - name: Set up the Docker stable repository
+        apt_repository:
+          repo: deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
+      - name: Update apt packages
+        apt:
+          update_cache: yes
+      - name: Install Docker
+        apt:
+          name: docker-ce
+          state: latest
+      when: docker_installed.rc != 0
 
-    - name: Add Docker's official GPG key
-      shell: sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-    - name: Set up the Docker stable repository
-      apt_repository:
-        repo: deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
-
-    - name: Update apt packages
-      apt:
-        update_cache: yes
-
-    - name: Install Docker
-      apt:
-        name: docker-ce
-        state: latest
+    - name: Check if Python pip is installed
+      shell: pip3 --version
+      register: pip_installed
+      ignore_errors: true
 
     - name: Install Python pip
       apt:
         name: python3-pip
         state: latest
+      when: pip_installed.rc != 0
+
+    - name: Check if hibo is in Docker group
+      shell: id -nG hibo | grep -qw docker && echo true || echo false
+      register: hibo_in_docker_group
+      changed_when: false
 
     - name: Add hibo to Docker group
       user:
         name: hibo
         groups: docker
         append: yes
+      when: hibo_in_docker_group.stdout == "false"
+
+    - name: Check if Docker service is running
+      shell: systemctl is-active docker
+      register: docker_service
+      changed_when: false
 
     - name: Start Docker service
       service:
         name: docker
         state: started
+      when: docker_service.stdout != "active"
 
     - name: Archive files
       archive:

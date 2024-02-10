@@ -101,11 +101,17 @@
         path: /var/deployment.tar.gz
         state: absent
 
+    - name: Check if Docker Compose is installed
+      shell: docker-compose --version
+      register: docker_compose_installed
+      ignore_errors: true
+
     - name: Install Docker Compose
       apt:
         name: docker-compose
         state: latest
         update_cache: yes
+      when: docker_compose_installed.rc != 0
 
     - name: Create .env file with SITE_ADDRESS
       copy:

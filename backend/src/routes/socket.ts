@@ -3,7 +3,8 @@ import cors from "cors";
 import { Server } from "socket.io";
 import { log } from "../utils/log.js";
 import mongoose from "mongoose";
-import { Room, Message } from "../models/models.js";
+import { Room } from "../models/models.js";
+import { Message } from "../models/messages.js";
 import express from "express";
 import dotenv from "dotenv";
 

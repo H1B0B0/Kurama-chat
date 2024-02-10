@@ -7,11 +7,26 @@ import ChatImage from "./ChatImage";
 function ChatBody({ roomId }: { roomId: string }) {
   const [typing, setTyping] = useState<string>("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { messages, socket } = useSocket();
+  const { messages, socket, setMessages } = useSocket();
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    if (socket) {
+      fetchMessagesFromServer(roomId);
+    }
+  }, [socket, roomId]);
+
+  async function fetchMessagesFromServer(roomId: string) {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_BASE_URL + `messages/${roomId}`
+    );
+    const data = await response.json();
+    console.log(data);
+    setMessages((prev: any) => ({ ...prev, [roomId]: data }));
+  }
 
   useEffect(() => {
     socket?.on("typing_response", (data) => {
@@ -51,8 +66,9 @@ function ChatBody({ roomId }: { roomId: string }) {
               <p className="pl-2 text-sm align-bottom">{message.name}</p>
               {message.text && (
                 <div
-                  className={`px-3 py-1 bg-gray-200 rounded-full ${message.image ? "rounded-bl-none" : "rounded-tl-none"
-                    } w-fit`}
+                  className={`px-3 py-1 bg-gray-200 rounded-full ${
+                    message.image ? "rounded-bl-none" : "rounded-tl-none"
+                  } w-fit`}
                 >
                   <p className="font-sans">{message.text}</p>
                 </div>

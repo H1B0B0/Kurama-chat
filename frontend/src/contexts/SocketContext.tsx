@@ -10,6 +10,13 @@ const intialData: ISocketContext = {
   socket: undefined,
   roomUsers: {},
   messages: {},
+  setMessages: function (
+    value: (prevMessages: { [key: string]: IMessage[] }) => {
+      [key: string]: IMessage[];
+    }
+  ): void {
+    throw new Error("Function not implemented.");
+  },
 };
 
 const SocketContext = createContext<ISocketContext>(intialData);
@@ -47,8 +54,24 @@ export default function SocketProvider({
     setSocket(socket);
   }, []);
 
+  useEffect(() => {
+    if (socket) {
+      fetchMessagesFromServer(socket.id ?? "");
+    }
+  }, [socket]);
+
+  async function fetchMessagesFromServer(roomId: string) {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_BASE_URL + `messages/${roomId}`
+    );
+    const data = await response.json();
+    setMessages((prev) => ({ ...prev, [roomId]: data }));
+  }
+
   return (
-    <SocketContext.Provider value={{ socket, roomUsers, messages }}>
+    <SocketContext.Provider
+      value={{ socket, roomUsers, messages, setMessages }}
+    >
       {children}
     </SocketContext.Provider>
   );

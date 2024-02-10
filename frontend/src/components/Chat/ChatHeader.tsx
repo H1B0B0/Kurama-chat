@@ -14,8 +14,12 @@ function ChatHeader({ roomId }: { roomId: string }) {
         type="submit"
         className="btn"
         onClick={() => {
-          navigator.clipboard.writeText(roomId);
-          setIsCopied(true);
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(roomId);
+            setIsCopied(true);
+          } else {
+            console.error('Clipboard API not available');
+          }
         }}
       >
         Copy Room ID

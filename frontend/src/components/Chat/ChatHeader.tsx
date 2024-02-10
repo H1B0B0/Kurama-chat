@@ -1,26 +1,36 @@
 "use client";
 import { useRoom } from "@/contexts/RoomContext";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Popup from "../shared/Popup";
+import ClipboardJS from 'clipboard';
 
 function ChatHeader({ roomId }: { roomId: string }) {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const { rooms, myRooms } = useRoom();
   const room = rooms.concat(myRooms).find((room) => room.id === roomId);
+
+  useEffect(() => {
+    const clipboard = new ClipboardJS('.btn', {
+      text: function () {
+        return roomId;
+      }
+    });
+
+    clipboard.on('success', function () {
+      setIsCopied(true);
+    });
+
+    return () => {
+      clipboard.destroy();
+    };
+  }, [roomId]);
+
   return (
     <div className="basis-[7%] border-b-2 flex items-center justify-between p-3 font-medium">
       <p className="text-xl">{room?.title}</p>
       <button
         type="submit"
         className="btn"
-        onClick={() => {
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(roomId);
-            setIsCopied(true);
-          } else {
-            console.error('Clipboard API not available');
-          }
-        }}
       >
         Copy Room ID
       </button>

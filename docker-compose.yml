@@ -35,10 +35,10 @@ services:
   backend:
     container_name: backend
     image: node:21
-    working_dir: /backend/src
-    command: sh -c "npm install && npm run start"
+    working_dir: /backend
+    command: sh -c "npm install && npm rebuild bcrypt --build-from-source && npx nodemon"
     volumes:
-      - ./backend:/backend/src
+      - ./backend:/backend
     networks:
       - web
     environment:

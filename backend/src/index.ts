@@ -2,9 +2,11 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import { router as roomRoutes } from "./routes/roomRoutes.js";
 import { router as messageRoutes } from "./routes/messageRoutes.js";
+import { router as userRoutes } from "./routes/userRoutes.js";
 import { app, server } from "./routes/socket.js";
 import { log } from "./utils/log.js";
-import cors from 'cors';
+import cors from "cors";
+import bodyParser from "body-parser";
 
 mongoose
   .connect(
@@ -14,8 +16,11 @@ mongoose
   .catch((err: any) => console.error("Could not connect to MongoDB", err));
 
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use("/rooms", roomRoutes);
 app.use("/messages", messageRoutes);
+app.use("/user", userRoutes);
 
 server.listen(process.env.PORT || 4000, () => {
   log("SERVER RUNNING");

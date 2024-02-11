@@ -7,6 +7,7 @@ import { Room } from "../models/models.js";
 import { Message } from "../models/messages.js";
 import express from "express";
 import dotenv from "dotenv";
+import { User } from "../models/user.js";
 
 export const app = express();
 app.use(cors());
@@ -32,6 +33,38 @@ mongoose
 let roomUsers: Record<string, string[]> = {};
 
 io.on("connection", (socket) => {
+
+  io.on("connection", (socket) => {
+    // changer de nom
+    socket.on("change_name", (newName: string) => {
+      console.log("User changed name: ", newName);
+      let users: { [key: string]: string } = {};
+      users[socket.id] = newName;
+      socket.emit("name_changed", newName);
+    }); 
+
+    // Clear les messages du chat
+    socket.on("clear", async (roomId) => {
+      try {
+        await Message.deleteMany({ roomId: roomId });
+        io.in(roomId).emit('chat_cleared');
+      } catch (error) {
+        console.log("Failed to clear chat: ", error);
+        socket.emit("error", "Failed to clear chat.");
+      }
+    });
+  
+    // Commande pour lister les canaux disponibles
+    socket.on("rooms", async () => {
+      try {
+        const rooms = await Room.find();
+        socket.emit("rooms_response", rooms);
+      } catch (error) {
+        socket.emit("error", "Failed to retrieve rooms.");
+      }
+    });
+  });
+
   io.emit("users_response", roomUsers);
   log(`User Connected: ${socket.id}`);
 

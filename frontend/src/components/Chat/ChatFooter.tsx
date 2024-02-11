@@ -24,21 +24,51 @@ function ChatFooter({ roomId }: { roomId: string }) {
     setShowEmojiPicker(false);
   };
 
-  const handleSendMessage = (e: any, message: string) => {
+  function handleCommand(commandString: string, socket: any) {
+    const parts = commandString.substr(1).split(' ');
+    const command = parts[0].toLowerCase();
+    const args = parts.slice(1);
+  
+    switch (command) {
+      case 'list':
+        socket.emit('list_rooms', args.join(' '));
+        break;
+      case 'change_name':
+        const newName = args.join(' ');
+        socket.emit('change_name', newName);
+        break;
+      //clear messages
+      case 'clear':
+        socket.emit('clear' , roomId);
+        break;
+      
+      default:
+        console.error('Unknown command.');
+        break;
+    }
+  }
+
+  const handleSendMessage = (e: React.FormEvent, message: string) => {
     e.preventDefault();
     if (message.trim() || image) {
-      socket?.emit("send_message", {
-        text: message,
-        name: username,
-        userId: localStorage.getItem("userId"),
-        date: new Date(),
-        socketId: socket.id,
-        roomId: roomId,
-        image,
-      });
+      if (message.startsWith('/')) {
+        // This is a command, handle it
+        handleCommand(message, socket);
+      } else {
+        // This is a normal message, send it
+        socket?.emit("send_message", {
+          text: message,
+          name: username,
+          userId: localStorage.getItem("userId"),
+          date: new Date(),
+          socketId: socket?.id,
+          roomId: roomId,
+          image,
+        });
+      }
+      setMessage("");
+      setImage(null);
     }
-    setMessage("");
-    setImage(null);
   };
 
   const handleTyping = () => {
@@ -155,3 +185,5 @@ function ChatFooter({ roomId }: { roomId: string }) {
 }
 
 export default ChatFooter;
+
+

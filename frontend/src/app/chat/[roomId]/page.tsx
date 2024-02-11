@@ -14,9 +14,8 @@ function Page() {
 
   useEffect(() => {
     if (roomUsers[roomId]?.includes(socket?.id)) return;
-    socket?.emit("send_message", {
-      text: username + " joined the room.",
-      socketId: "Kurama-chat",
+    socket?.emit("user_joined", {
+      username: username,
       roomId: roomId,
     });
     socket?.emit("join_room", roomId);

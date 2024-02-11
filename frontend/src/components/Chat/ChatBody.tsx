@@ -24,9 +24,13 @@ function ChatBody({ roomId }: { roomId: string }) {
       process.env.NEXT_PUBLIC_BASE_URL + `messages/${roomId}`
     );
     const data = await response.json();
-    console.log(data);
+    console.log(data.userId);
     setMessages((prev: any) => ({ ...prev, [roomId]: data }));
   }
+
+  const currentUserId = localStorage.getItem("userId");
+
+  console.log(currentUserId);
 
   useEffect(() => {
     socket?.on("typing_response", (data) => {
@@ -37,21 +41,24 @@ function ChatBody({ roomId }: { roomId: string }) {
   return (
     <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">
       {messages[roomId]?.map((message: any, index: number) =>
-        message.socketId === "Kurama-chat" ? (
+        message.systemMessage ? (
           <div className="flex self-center" key={index}>
             <div className="flex justify-center items-center">
               <p>{message.text}</p>
             </div>
           </div>
-        ) : message.socketId === socket?.id ? (
-          <div className="flex self-end flex-col items-end" key={index}>
-            {message.text && (
-              <div className="flex justify-center items-center px-3 py-1 text-white rounded-full rounded-br-none bg-primary">
-                <p className="font-sans">{message.text}</p>
-              </div>
-            )}
-            {message.image && <ChatImage imgURL={message.image} />}
-          </div>
+        ) : message.userId === currentUserId ? ( // Compare the message user ID with the current user ID
+          (console.log(socket?.id),
+          (
+            <div className="flex self-end flex-col items-end" key={index}>
+              {message.text && (
+                <div className="flex justify-center items-center px-3 py-1 text-white rounded-full rounded-br-none bg-primary">
+                  <p className="font-sans">{message.text}</p>
+                </div>
+              )}
+              {message.image && <ChatImage imgURL={message.image} />}
+            </div>
+          ))
         ) : (
           <div className="flex gap-2 self-start" key={index}>
             <div className="self-center">
@@ -75,10 +82,12 @@ function ChatBody({ roomId }: { roomId: string }) {
               )}
               {message.image && <ChatImage imgURL={message.image} />}
               <p className="py-2 pl-2 text-xs font-light">
-                {new Date(message.time).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                {message.date
+                  ? new Date(message.date).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "En direct"}
               </p>
             </div>
           </div>

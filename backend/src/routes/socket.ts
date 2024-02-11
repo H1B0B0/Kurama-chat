@@ -60,8 +60,14 @@ io.on("connection", (socket) => {
     // Save message to MongoDB
     const message = new Message({
       text: data.text,
+      name: data.name,
+      id: data.id,
+      socketId: socket.id,
       roomId: data.roomId,
-      userId: socket.id,
+      image: data.image,
+      userId: data.userId,
+      date: data.date,
+      systemMessage: data.systemMessage,
     });
     await message.save();
     console.log("Message saved: ", message);
@@ -69,6 +75,15 @@ io.on("connection", (socket) => {
 
   socket.on("typing", (data) => {
     socket.broadcast.emit("typing_response", data);
+  });
+
+  socket.on("user_joined", ({ username, roomId }) => {
+    socket.to(roomId).emit("receive_message", {
+      text: username + " joined the room.",
+      socketId: "Kurama-chat",
+      roomId: roomId,
+      systemMessage: true,
+    });
   });
 
   socket.on("disconnect", () => {
@@ -80,6 +95,7 @@ io.on("connection", (socket) => {
           text: "A user left the room.",
           socketId: "Kurama-chat",
           roomId: roomId,
+          systemMessage: true,
         });
       }
     }

@@ -18,6 +18,16 @@ function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
     if (name) {
+      // Check if the user ID already exists in local storage
+      let userId = localStorage.getItem("userId");
+
+      // If the user ID does not exist, generate a new one and save it in local storage
+      if (!userId) {
+        userId =
+          Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("userId", userId);
+      }
+
       localStorage.setItem("name", name);
       setUsername(name);
     } else {
@@ -37,7 +47,10 @@ function LoginForm() {
           required={true}
         />
         <div className="flex gap-2 p-2">
-          <input type="checkbox" className="w-4 h-4 text-white accent-primary" />
+          <input
+            type="checkbox"
+            className="w-4 h-4 text-white accent-primary"
+          />
           <p className="font-light">Keep me signed in</p>
         </div>
       </div>

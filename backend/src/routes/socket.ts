@@ -55,13 +55,14 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Commande pour lister les canaux disponibles
-  socket.on("rooms", async () => {
+  socket.on("list", async () => {
     try {
-      const rooms = await Room.find();
-      socket.emit("rooms_response", rooms);
+      const rooms = await Room.find({});
+      socket.emit("roomsList", rooms);
+      console.log("Rooms listed: ", rooms);
     } catch (error) {
-      socket.emit("error", "Failed to retrieve rooms.");
+      console.log("Failed to list rooms: ", error);
+      socket.emit("error", "Failed to list rooms.");
     }
   });
 

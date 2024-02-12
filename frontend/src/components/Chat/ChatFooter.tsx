@@ -1,13 +1,16 @@
 import { useSocket } from "@/contexts/SocketContext";
 import { useUser } from "@/contexts/UserContext";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { AiFillPlusCircle, AiFillLike } from "react-icons/ai";
 import { BsImage, BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend, IoMdCloseCircle } from "react-icons/io";
 import Picker from "emoji-picker-react";
 import Toast from "../shared/Toast";
+import toastr from 'toastr'
 
 function ChatFooter({ roomId }: { roomId: string }) {
+  const [showListPopup, setShowListPopup] = useState(false);
+  const [roomList, setRoomList] = useState([]);
   const [message, setMessage] = useState<string>("");
   const { socket } = useSocket();
   const { username } = useUser();
@@ -17,42 +20,85 @@ function ChatFooter({ roomId }: { roomId: string }) {
   const [image, setImage] = useState<string | null>(null);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>("");
-
   const onEmojiPick = (emojiObj: any) => {
     setMessage((prevInput) => prevInput + emojiObj.emoji);
     inputRef.current.focus();
     setShowEmojiPicker(false);
   };
+  
+  useEffect(() => {
+    if (!socket) return;
+  
+    const roomsListed = (data:any) => {
+      setRoomList(data.rooms);
+      setShowListPopup(true);
+    };
+  
+    const roomsList = (rooms: any[]) => {
+      let roomsList = rooms.map((room: any) => room._id).join(', '); 
+      toastr.info(roomsList, 'List of Rooms');
+    };
+  
+    socket.on('rooms_listed', roomsListed);
+    socket.on('roomsList', roomsList);
+  
+    return () => {
+      socket.off('rooms_listed', roomsListed);
+      socket.off('roomsList', roomsList);
+    };
+  }, [socket]);
+  
 
-  function handleCommand(commandString: string) {
-    const parts = commandString.substr(1).split(" ");
+  function handleCommand(commandString: string, socket: any) {
+    const parts = commandString.substr(1).split(' ');
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
-
+  
     switch (command) {
-      case "list":
-        socket?.emit("list_rooms", args.join(" "));
-        break;
-      case "change_name":
-        const newName = args.join(" ");
-        socket?.emit("change_name", newName);
-        break;
-      case "clear":
-        socket?.emit("clear", roomId);
-        break;
-
-      default:
-        console.error("Unknown command.");
-        break;
+    case "nick":
+      const newName = args.join(" ");
+      socket?.emit("nick", newName);
+      break;
+    case 'list':
+      socket.emit('list', args.join(" "));  
+      break;
+    case "create":
+      const createParam = args.join(" ");
+      socket?.emit("create", createParam);
+      break;
+    case "delete":
+      socket?.emit("delete", roomId);
+      break;
+    case "join":
+      const joinParam = args.join(" ");
+      socket?.emit("join", joinParam);
+      break;
+    case "quit":
+      const quitParam = args.join(" ");
+      socket?.emit("quit", quitParam);
+      break;
+    case "users":
+      socket?.emit("users");
+      break;
+    case "msg":
+      const msgParam = args.join(" ");
+      socket?.emit("msg", msgParam);
+      break;
+    case 'clear':
+      socket.emit('clear' , roomId);
+      break;
+    default:
+      console.error("Unknown command.");
+      break;
     }
   }
 
   const handleSendMessage = (e: React.FormEvent, message: string) => {
     e.preventDefault();
     if (message.trim() || image) {
-      if (message.startsWith("/")) {
+      if (message.startsWith('/')) {
         // This is a command, handle it
-        handleCommand(message);
+        handleCommand(message, socket);
       } else {
         // This is a normal message, send it
         socket?.emit("send_message", {
@@ -71,7 +117,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
   };
 
   const handleTyping = () => {
-    socket?.emit("typing", message ? username + " is typing ..." : "", roomId);
+    socket?.emit("typing", message ? username + " is typing ..." : "");
   };
 
   const handleImageErrors = (e: any) => {
@@ -184,3 +230,5 @@ function ChatFooter({ roomId }: { roomId: string }) {
 }
 
 export default ChatFooter;
+
+

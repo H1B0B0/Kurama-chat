@@ -2,7 +2,7 @@
 import { useRoom } from "@/contexts/RoomContext";
 import React, { useEffect, useState } from "react";
 import Popup from "../shared/Popup";
-import ClipboardJS from 'clipboard';
+import ClipboardJS from "clipboard";
 
 function ChatHeader({ roomId }: { roomId: string }) {
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -10,13 +10,13 @@ function ChatHeader({ roomId }: { roomId: string }) {
   const room = rooms.concat(myRooms).find((room) => room.id === roomId);
 
   useEffect(() => {
-    const clipboard = new ClipboardJS('.btn', {
+    const clipboard = new ClipboardJS(".btn", {
       text: function () {
         return roomId;
-      }
+      },
     });
 
-    clipboard.on('success', function () {
+    clipboard.on("success", function () {
       setIsCopied(true);
     });
 
@@ -27,11 +27,8 @@ function ChatHeader({ roomId }: { roomId: string }) {
 
   return (
     <div className="basis-[7%] border-b-2 flex items-center justify-between p-3 font-medium">
-      <p className="text-xl">{room?.title}</p>
-      <button
-        type="submit"
-        className="btn"
-      >
+      <p className="text-xl dark:text-white">{room?.title}</p>
+      <button type="submit" className="btn">
         Copy Room ID
       </button>
       <Popup

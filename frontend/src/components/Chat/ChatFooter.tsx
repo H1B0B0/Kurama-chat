@@ -6,7 +6,7 @@ import { BsImage, BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend, IoMdCloseCircle } from "react-icons/io";
 import Picker from "emoji-picker-react";
 import Toast from "../shared/Toast";
-import toastr from 'toastr'
+import toastr from "toastr";
 
 function ChatFooter({ roomId }: { roomId: string }) {
   const [showListPopup, setShowListPopup] = useState(false);
@@ -25,78 +25,77 @@ function ChatFooter({ roomId }: { roomId: string }) {
     inputRef.current.focus();
     setShowEmojiPicker(false);
   };
-  
+
   useEffect(() => {
     if (!socket) return;
-  
-    const roomsListed = (data:any) => {
+
+    const roomsListed = (data: any) => {
       setRoomList(data.rooms);
       setShowListPopup(true);
     };
-  
+
     const roomsList = (rooms: any[]) => {
-      let roomsList = rooms.map((room: any) => room._id).join(', '); 
-      toastr.info(roomsList, 'List of Rooms');
+      let roomsList = rooms.map((room: any) => room._id).join(", ");
+      toastr.info(roomsList, "List of Rooms");
     };
-  
-    socket.on('rooms_listed', roomsListed);
-    socket.on('roomsList', roomsList);
-  
+
+    socket.on("rooms_listed", roomsListed);
+    socket.on("roomsList", roomsList);
+
     return () => {
-      socket.off('rooms_listed', roomsListed);
-      socket.off('roomsList', roomsList);
+      socket.off("rooms_listed", roomsListed);
+      socket.off("roomsList", roomsList);
     };
   }, [socket]);
-  
 
   function handleCommand(commandString: string, socket: any) {
-    const parts = commandString.substr(1).split(' ');
+    const parts = commandString.substr(1).split(" ");
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
-  
+
     switch (command) {
-    case "nick":
-      const newName = args.join(" ");
-      socket?.emit("nick", newName);
-      break;
-    case 'list':
-      socket.emit('list', args.join(" "));  
-      break;
-    case "create":
-      const createParam = args.join(" ");
-      socket?.emit("create", createParam);
-      break;
-    case "delete":
-      socket?.emit("delete", roomId);
-      break;
-    case "join":
-      const joinParam = args.join(" ");
-      socket?.emit("join", joinParam);
-      break;
-    case "quit":
-      const quitParam = args.join(" ");
-      socket?.emit("quit", quitParam);
-      break;
-    case "users":
-      socket?.emit("users");
-      break;
-    case "msg":
-      const msgParam = args.join(" ");
-      socket?.emit("msg", msgParam);
-      break;
-    case 'clear':
-      socket.emit('clear' , roomId);
-      break;
-    default:
-      console.error("Unknown command.");
-      break;
+      case "nick":
+        const newName = args.join(" ");
+        socket?.emit("nick", newName);
+        break;
+      case "list":
+        socket.emit("list", args.join(" "));
+        break;
+      case "create":
+        const createParam = args.join(" ");
+        socket?.emit("create", createParam);
+        break;
+      case "delete":
+        socket?.emit("delete", roomId);
+        break;
+      case "join":
+        const joinParam = args.join(" ");
+        socket?.emit("join", joinParam);
+        break;
+      case "quit":
+        const quitParam = args.join(" ");
+        socket?.emit("quit", quitParam);
+        break;
+      case "users":
+        socket?.emit("users");
+        break;
+      case "msg":
+        const msgParam = args.join(" ");
+        socket?.emit("msg", msgParam);
+        break;
+      case "clear":
+        socket.emit("clear", roomId);
+        break;
+      default:
+        console.error("Unknown command.");
+        break;
     }
   }
 
   const handleSendMessage = (e: React.FormEvent, message: string) => {
     e.preventDefault();
     if (message.trim() || image) {
-      if (message.startsWith('/')) {
+      if (message.startsWith("/")) {
         // This is a command, handle it
         handleCommand(message, socket);
       } else {
@@ -202,7 +201,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
               ref={inputRef}
               type="text"
               value={message}
-              className="w-full h-8 p-2 transition-all bg-gray-100 rounded-full focus:outline-none"
+              className="w-full h-8 p-2 transition-all bg-gray-100 dark:text-gray-600 rounded-full focus:outline-none"
               placeholder="Aa"
               onKeyUp={handleTyping}
               onChange={(e) => {
@@ -230,5 +229,3 @@ function ChatFooter({ roomId }: { roomId: string }) {
 }
 
 export default ChatFooter;
-
-

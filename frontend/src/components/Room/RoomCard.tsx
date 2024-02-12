@@ -14,7 +14,7 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
     <Link
       href={`chat/${room.id}`}
       className={`flex group relative gap-3 items-center p-2 flex-col sm:flex-row ${
-        room.id === roomId ? "bg-gray-100" : ""
+        room.id === roomId ? "bg-gray- dark:bg-gray-700" : ""
       }`}
     >
       <div>
@@ -23,7 +23,7 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
             src="/images/globe.png"
             height={50}
             width={50}
-            className="rounded-full bg-gray-800"
+            className="rounded-full bg-gray-800 dark:bg-gray-200"
             alt="profile"
           />
         ) : (
@@ -36,8 +36,10 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
         )}
       </div>
       <div className="hidden sm:block">
-        <p className="font-medium line-clamp-1">{room.title}</p>
-        <p className="text-sm text-slate-400">
+        <p className="font-medium line-clamp-1  text-gray-900 dark:text-gray-100">
+          {room.title}
+        </p>
+        <p className="text-sm text-gray-900 dark:text-gray-100">
           <span className="text-xs">🌐</span> {users.length} online
         </p>
       </div>

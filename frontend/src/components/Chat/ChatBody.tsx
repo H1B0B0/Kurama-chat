@@ -3,7 +3,6 @@ import { useSocket } from "@/contexts/SocketContext";
 import React, { useEffect, useRef, useState } from "react";
 import Avatar from "react-avatar";
 import ChatImage from "./ChatImage";
-import RoomCard from "../Room/RoomCard";
 
 function ChatBody({ roomId }: { roomId: string }) {
   const [typing, setTyping] = useState<string>("");
@@ -79,14 +78,14 @@ function ChatBody({ roomId }: { roomId: string }) {
         ) : message.userId === currentUserId ? ( // Compare the message user ID with the current user ID
           <div className="flex self-end flex-col items-end" key={index}>
             {message.text && (
-              <div className="flex justify-center items-center px-3 py-1 text-white rounded-full rounded-br-none bg-primary">
+              <div className="flex justify-center items-center px-3 py-1 text-white rounded-full rounded-br-none bg-primary dark:bg-purple-900">
                 <p className="font-sans">{message.text}</p>
               </div>
             )}
             {message.image && <ChatImage imgURL={message.image} />}
           </div>
         ) : (
-          <div className="flex gap-2 self-start" key={index}>
+          <div className="flex gap-2 self-start dark:text-gray-200" key={index}>
             <div className="self-center">
               <Avatar
                 name={message.name}
@@ -99,7 +98,7 @@ function ChatBody({ roomId }: { roomId: string }) {
               <p className="pl-2 text-sm align-bottom">{message.name}</p>
               {message.text && (
                 <div
-                  className={`px-3 py-1 bg-gray-200 rounded-full ${
+                  className={`px-3 py-1 bg-gray-200 rounded-full dark:bg-blue-950 ${
                     message.image ? "rounded-bl-none" : "rounded-tl-none"
                   } w-fit`}
                 >
@@ -107,7 +106,7 @@ function ChatBody({ roomId }: { roomId: string }) {
                 </div>
               )}
               {message.image && <ChatImage imgURL={message.image} />}
-              <p className="py-2 pl-2 text-xs font-light">
+              <p className="py-2 pl-2 text-xs font-light dark:text-white">
                 {message.date
                   ? new Date(message.date).toLocaleTimeString([], {
                       hour: "2-digit",

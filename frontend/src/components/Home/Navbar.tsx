@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaMoon, FaSun } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 
 const NAV_LINKS = [
@@ -11,7 +11,7 @@ const NAV_LINKS = [
     icon: FaGithub,
     label: "Github",
     title: "Star on GitHub",
-    link: "",
+    link: "https://github.com/H1B0B0/Projet-JSF-STG16",
     externalPage: true,
   },
 ];
@@ -20,7 +20,7 @@ function Navbar() {
   const [navbarActive, setNavbarActive] = useState(false);
 
   return (
-    <div className="flex justify-between items-center px-5 lg:px-36 h-[100px] bg-white">
+    <div className="flex justify-between items-center px-5 lg:px-36 h-[100px] bg-white dark:bg-custom-gray">
       <Image src="/images/logo.png" alt="logo" height={60} width={80} />
       <div className="hidden gap-10 font-medium lg:flex">
         {NAV_LINKS.map(({ label, title, link, icon, externalPage }, index) => {

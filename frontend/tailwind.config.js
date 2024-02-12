@@ -5,11 +5,13 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
         primary: "#6C63FF",
         secondary: "rgb(139 132 245)",
+        "custom-gray": "#222222",
       },
       backgroundImage: {
         gradient:

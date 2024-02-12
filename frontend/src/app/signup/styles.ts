@@ -2,15 +2,13 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 
 export const Container = styled.div`
-  height: 56rem;
-  width: 1%
+  height: 100%;
   background-color: #f5f5f5;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-image: url("../../images/bg.png");
-  
+  background-image: url("bg.png");
  
 
   form {
@@ -18,7 +16,10 @@ export const Container = styled.div`
     max-width: 350px;
     display: flex;
     flex-direction: column;
-  
+    background-color:
+    
+
+    
     h2 {
       align-self: center;
       color: #222;
@@ -50,7 +51,6 @@ export const Container = styled.div`
       padding: 0 20px;
       font-size: 16px;
       color: #66
-      
 
       & + input {
         margin-top: 5px;
@@ -74,7 +74,6 @@ export const Container = styled.div`
       font-weight: bold;
       color: #fff;
       border-radius: 30px;
-      margin-bottom: 15px;
 
       &:hover {
         background-color: ${darken(0.08, '#C70039')};

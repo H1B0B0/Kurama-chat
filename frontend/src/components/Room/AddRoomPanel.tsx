@@ -64,11 +64,11 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
 
   return (
     <div
-      className="flex absolute top-0 left-0 z-20 flex-col justify-center items-center px-6 py-8 mx-auto w-full h-screen backdrop-blur-sm lg:py-0"
+      className="flex absolute top-0 left-0 z-20 flex-col justify-center items-center px-6 py-8 mx-auto w-full h-screen backdrop-blur-sm lg:py-0 "
       onClick={() => hideAddRoomPanel(true)}
     >
       <div
-        className="relative w-full bg-white rounded-lg shadow-lg md:mt-0 sm:max-w-md xl:p-0"
+        className="relative w-full bg-white rounded-lg shadow-lg md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-900"
         onClick={(e) => e.stopPropagation()}
       >
         <AiFillCloseCircle
@@ -77,7 +77,7 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
           onClick={() => hideAddRoomPanel(true)}
         />
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-bold tracking-tight leading-tight text-gray-900 md:text-2xl">
+          <h1 className="text-xl font-bold tracking-tight leading-tight text-gray-900 md:text-2xl dark:text-gray-300">
             Create or join room
           </h1>
           <div className="flex space-x-4">
@@ -85,7 +85,7 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
               <div>
                 <label
                   htmlFor="roomId"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Room ID
                 </label>
@@ -107,7 +107,7 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
               <div>
                 <label
                   htmlFor="title"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Room Title
                 </label>
@@ -123,7 +123,7 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
               <div>
                 <label
                   htmlFor="roomId"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Room ID
                 </label>

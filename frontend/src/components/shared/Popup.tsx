@@ -14,11 +14,11 @@ function Popup({
   }, [showPopup]);
   return (
     <div
-      className={`absolute bottom-20 left-1/2 z-30 -translate-x-1/2 opacity-0 ${
+      className={`absolute bottom-20 left-1/2 z-30 -translate-x-1/2 opacity-0  ${
         showPopup && "animate-popup"
       }`}
     >
-      {text}
+      <p className="dark:text-gray-300">{text}</p>
     </div>
   );
 }

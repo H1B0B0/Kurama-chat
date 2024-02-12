@@ -69,7 +69,7 @@ function ChatBody({ roomId }: { roomId: string }) {
   return (
     <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">
       {messages[roomId]?.map((message: any, index: number) =>
-        message.systemMessage ? (
+        message.bg - primary ? (
           <div className="flex self-center" key={index}>
             <div className="flex justify-center items-center dark:text-gray-300">
               <p>{message.text}</p>

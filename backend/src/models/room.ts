@@ -1,13 +1,13 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface IRooms extends Document {
-  _id: String;
+  _id: { type: String; default: "1" };
   name: String;
   userId: { type: String; ref: "User" };
 }
 
 const roomSchema = new mongoose.Schema({
-  _id: String,
+  _id: { type: String, default: "1" },
   name: String,
   userId: { type: String, ref: "User" },
 });

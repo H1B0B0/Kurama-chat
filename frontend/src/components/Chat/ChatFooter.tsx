@@ -116,7 +116,10 @@ function ChatFooter({ roomId }: { roomId: string }) {
   };
 
   const handleTyping = () => {
-    socket?.emit("typing", message ? username + " is typing ..." : "");
+    socket?.emit("typing", {
+      data: message ? username + " is typing ..." : "",
+      roomId: roomId,
+    });
   };
 
   const handleImageErrors = (e: any) => {

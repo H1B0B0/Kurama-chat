@@ -107,7 +107,7 @@ io.on("connection", (socket) => {
     console.log("Message saved: ", message);
   });
 
-  socket.on("typing", (data, roomId) => {
+  socket.on("typing", ({ data, roomId }) => {
     socket.to(roomId).emit("typing_response", {
       data: data,
       roomId: roomId,
@@ -125,7 +125,9 @@ io.on("connection", (socket) => {
 
   socket.on("leave_room", (roomId) => {
     socket.leave(roomId);
-    roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
+    if (roomUsers[roomId]) {
+      roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
+    }
 
     io.emit("receive_message", {
       text: "A user left the room.",

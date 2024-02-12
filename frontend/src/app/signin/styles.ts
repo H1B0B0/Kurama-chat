@@ -2,14 +2,14 @@ import styled from 'styled-components';
 import { darken, lighten } from 'polished';
 
 export const Container = styled.div`
-  height: 100%;
-   
+  height: 56rem;
+  width: 1%
   background-color: #f5f5f5;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-image: url("../public/images/bg.png");
+  background-image: url("../../images/bg.png");
   
  
 

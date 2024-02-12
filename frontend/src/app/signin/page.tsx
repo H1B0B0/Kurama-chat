@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Container } from './styles';
+import Layout from '../layout';
 
 
 export const SignIn: React.FC = () => {
@@ -25,7 +26,8 @@ export const SignIn: React.FC = () => {
     }
   }
 
-  return (
+  return (  
+    <Layout>
     <Container>
     <div className='container' >
       <form data-testid='login-form' onSubmit={handleSubmit}>
@@ -56,7 +58,7 @@ export const SignIn: React.FC = () => {
       </Link>
     </div>
     </Container>
-
+    </Layout>
   
   );
 }

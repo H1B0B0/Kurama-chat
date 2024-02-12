@@ -38,11 +38,13 @@ function RoomSideBar() {
       </p>
       <div className="py-1">
         {myRooms.map((room: IRoom, index) => {
-          return (
-            <div onClick={() => handleRoomClick(room.id)} key={index}>
-              <RoomCard room={room} users={roomUsers[room.id] ?? []} />
-            </div>
-          );
+          if (room.id != "1") {
+            return (
+              <div onClick={() => handleRoomClick(room.id)} key={index}>
+                <RoomCard room={room} users={roomUsers[room.id] ?? []} />
+              </div>
+            );
+          }
         })}
       </div>
       <div

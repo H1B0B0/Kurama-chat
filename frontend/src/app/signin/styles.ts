@@ -3,12 +3,14 @@ import { darken, lighten } from 'polished';
 
 export const Container = styled.div`
   height: 100%;
+   
   background-color: #f5f5f5;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-image: url("bg.png");
+  background-image: url("../public/images/bg.png");
+  
  
 
   form {
@@ -16,10 +18,7 @@ export const Container = styled.div`
     max-width: 350px;
     display: flex;
     flex-direction: column;
-    background-color:
-    
-
-    
+  
     h2 {
       align-self: center;
       color: #222;

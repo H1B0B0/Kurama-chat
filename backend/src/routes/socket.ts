@@ -33,36 +33,36 @@ mongoose
 let roomUsers: Record<string, string[]> = {};
 
 io.on("connection", (socket) => {
+  // changer de nom
+  socket.on("change_name", (newName: string) => {
+    console.log("User changed name: ", newName);
+    let users: { [key: string]: string } = {};
+    users[socket.id] = newName;
+    socket.emit("name_changed", newName);
+  });
 
-  io.on("connection", (socket) => {
-    // changer de nom
-    socket.on("change_name", (newName: string) => {
-      console.log("User changed name: ", newName);
-      let users: { [key: string]: string } = {};
-      users[socket.id] = newName;
-      socket.emit("name_changed", newName);
-    }); 
+  // Clear les messages du chat
+  socket.on("clear", async (roomId) => {
+    try {
+      await Message.deleteMany({ roomId: roomId });
+      io.to(roomId).emit("chat_cleared", {
+        roomId: roomId,
+      });
+      console.log("Chat cleared for room: ", roomId);
+    } catch (error) {
+      console.log("Failed to clear chat: ", error);
+      socket.emit("error", "Failed to clear chat.");
+    }
+  });
 
-    // Clear les messages du chat
-    socket.on("clear", async (roomId) => {
-      try {
-        await Message.deleteMany({ roomId: roomId });
-        io.in(roomId).emit('chat_cleared');
-      } catch (error) {
-        console.log("Failed to clear chat: ", error);
-        socket.emit("error", "Failed to clear chat.");
-      }
-    });
-  
-    // Commande pour lister les canaux disponibles
-    socket.on("rooms", async () => {
-      try {
-        const rooms = await Room.find();
-        socket.emit("rooms_response", rooms);
-      } catch (error) {
-        socket.emit("error", "Failed to retrieve rooms.");
-      }
-    });
+  // Commande pour lister les canaux disponibles
+  socket.on("rooms", async () => {
+    try {
+      const rooms = await Room.find();
+      socket.emit("rooms_response", rooms);
+    } catch (error) {
+      socket.emit("error", "Failed to retrieve rooms.");
+    }
   });
 
   io.emit("users_response", roomUsers);
@@ -106,8 +106,11 @@ io.on("connection", (socket) => {
     console.log("Message saved: ", message);
   });
 
-  socket.on("typing", (data) => {
-    socket.broadcast.emit("typing_response", data);
+  socket.on("typing", (data, roomId) => {
+    socket.to(roomId).emit("typing_response", {
+      data: data,
+      roomId: roomId,
+    });
   });
 
   socket.on("user_joined", ({ username, roomId }) => {

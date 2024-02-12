@@ -3,6 +3,7 @@ import { useSocket } from "@/contexts/SocketContext";
 import React, { useEffect, useRef, useState } from "react";
 import Avatar from "react-avatar";
 import ChatImage from "./ChatImage";
+import RoomCard from "../Room/RoomCard";
 
 function ChatBody({ roomId }: { roomId: string }) {
   const [typing, setTyping] = useState<string>("");
@@ -19,24 +20,52 @@ function ChatBody({ roomId }: { roomId: string }) {
     }
   }, [socket, roomId]);
 
+  const currentUserId = localStorage.getItem("userId");
+
   async function fetchMessagesFromServer(roomId: string) {
     const response = await fetch(
       process.env.NEXT_PUBLIC_BASE_URL + `messages/${roomId}`
     );
     const data = await response.json();
-    console.log(data.userId);
     setMessages((prev: any) => ({ ...prev, [roomId]: data }));
   }
 
-  const currentUserId = localStorage.getItem("userId");
+  interface ChatClearedEvent {
+    roomId: string;
+  }
 
-  console.log(currentUserId);
+  interface TypingResponseEvent {
+    data: any; // Remplacez `any` par le type réel de `data`
+    roomId: string;
+  }
 
   useEffect(() => {
-    socket?.on("typing_response", (data) => {
-      setTyping(data);
-    });
-  }, []);
+    const chatClearedHandler = ({
+      roomId: responseRoomId,
+    }: ChatClearedEvent) => {
+      if (responseRoomId === roomId) {
+        setMessages((prev: any) => ({ ...prev, [roomId]: [] }));
+      }
+    };
+
+    const typingResponseHandler = ({
+      data,
+      roomId: responseRoomId,
+    }: TypingResponseEvent) => {
+      if (responseRoomId === roomId) {
+        setTyping(data);
+      }
+    };
+
+    socket?.on("chat_cleared", chatClearedHandler);
+    socket?.on("typing_response", typingResponseHandler);
+
+    // Cleanup function
+    return () => {
+      socket?.off("chat_cleared", chatClearedHandler);
+      socket?.off("typing_response", typingResponseHandler);
+    };
+  }, [socket, roomId]);
 
   return (
     <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">
@@ -48,17 +77,14 @@ function ChatBody({ roomId }: { roomId: string }) {
             </div>
           </div>
         ) : message.userId === currentUserId ? ( // Compare the message user ID with the current user ID
-          (console.log(socket?.id),
-          (
-            <div className="flex self-end flex-col items-end" key={index}>
-              {message.text && (
-                <div className="flex justify-center items-center px-3 py-1 text-white rounded-full rounded-br-none bg-primary">
-                  <p className="font-sans">{message.text}</p>
-                </div>
-              )}
-              {message.image && <ChatImage imgURL={message.image} />}
-            </div>
-          ))
+          <div className="flex self-end flex-col items-end" key={index}>
+            {message.text && (
+              <div className="flex justify-center items-center px-3 py-1 text-white rounded-full rounded-br-none bg-primary">
+                <p className="font-sans">{message.text}</p>
+              </div>
+            )}
+            {message.image && <ChatImage imgURL={message.image} />}
+          </div>
         ) : (
           <div className="flex gap-2 self-start" key={index}>
             <div className="self-center">

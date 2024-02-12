@@ -24,26 +24,25 @@ function ChatFooter({ roomId }: { roomId: string }) {
     setShowEmojiPicker(false);
   };
 
-  function handleCommand(commandString: string, socket: any) {
-    const parts = commandString.substr(1).split(' ');
+  function handleCommand(commandString: string) {
+    const parts = commandString.substr(1).split(" ");
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
-  
+
     switch (command) {
-      case 'list':
-        socket.emit('list_rooms', args.join(' '));
+      case "list":
+        socket?.emit("list_rooms", args.join(" "));
         break;
-      case 'change_name':
-        const newName = args.join(' ');
-        socket.emit('change_name', newName);
+      case "change_name":
+        const newName = args.join(" ");
+        socket?.emit("change_name", newName);
         break;
-      //clear messages
-      case 'clear':
-        socket.emit('clear' , roomId);
+      case "clear":
+        socket?.emit("clear", roomId);
         break;
-      
+
       default:
-        console.error('Unknown command.');
+        console.error("Unknown command.");
         break;
     }
   }
@@ -51,9 +50,9 @@ function ChatFooter({ roomId }: { roomId: string }) {
   const handleSendMessage = (e: React.FormEvent, message: string) => {
     e.preventDefault();
     if (message.trim() || image) {
-      if (message.startsWith('/')) {
+      if (message.startsWith("/")) {
         // This is a command, handle it
-        handleCommand(message, socket);
+        handleCommand(message);
       } else {
         // This is a normal message, send it
         socket?.emit("send_message", {
@@ -72,7 +71,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
   };
 
   const handleTyping = () => {
-    socket?.emit("typing", message ? username + " is typing ..." : "");
+    socket?.emit("typing", message ? username + " is typing ..." : "", roomId);
   };
 
   const handleImageErrors = (e: any) => {
@@ -185,5 +184,3 @@ function ChatFooter({ roomId }: { roomId: string }) {
 }
 
 export default ChatFooter;
-
-

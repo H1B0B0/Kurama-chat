@@ -4,28 +4,62 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { v4 as uuidv4 } from "uuid";
+import { useSocket } from "@/contexts/SocketContext";
 
 function AddRoomPanel({ hideAddRoomPanel }: any) {
   const [title, setTitle] = useState<string>("");
   const [id, setId] = useState<string>("");
+  const [joinId, setJoinId] = useState<string>("");
   const { myRooms, setMyRooms } = useRoom();
   const router = useRouter();
+  const { socket } = useSocket();
 
   useEffect(() => {
     setId(uuidv4());
   }, []);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmitJoin = async (e: any) => {
     e.preventDefault();
-    setMyRooms([
-      ...myRooms,
-      {
-        title,
-        id,
-      },
-    ]);
+    if (joinId.trim() === "") {
+      alert("Please enter a room ID to join.");
+      return;
+    }
+
+    // Fetch room data from server
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_BASE_URL + `rooms/${joinId}`
+    );
+    if (!response.ok) {
+      alert("Failed to join room. Please check the room ID and try again.");
+      return;
+    }
+
+    const room = await response.json();
+    const newRoom = {
+      title: room.name,
+      id: joinId,
+    };
+
+    setMyRooms([...myRooms, newRoom]);
     hideAddRoomPanel(true);
-    router.replace("/chat/" + id);
+    router.replace(`/chat/${joinId}`);
+    socket?.emit("join_room", joinId);
+  };
+
+  const handleSubmitCreate = (e: any) => {
+    e.preventDefault();
+    if (title.trim() === "" || id.trim() === "") {
+      alert("Please enter a room title and ID to create a room.");
+      return;
+    }
+    const newRoom = {
+      title,
+      id,
+    };
+    setMyRooms([...myRooms, newRoom]);
+    hideAddRoomPanel(true);
+    router.replace(`/chat/${id}`);
+    socket?.emit("join_room", id, title);
   };
 
   return (
@@ -46,44 +80,72 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
           <h1 className="text-xl font-bold tracking-tight leading-tight text-gray-900 md:text-2xl">
             Create or join room
           </h1>
-          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="title"
-                className="block mb-2 text-sm font-medium text-gray-900"
+          <div className="flex space-x-4">
+            <form className="space-y-4 md:space-y-6">
+              <div>
+                <label
+                  htmlFor="roomId"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Room ID
+                </label>
+                <input
+                  type="text"
+                  id="roomId"
+                  value={joinId}
+                  minLength={5}
+                  onChange={(e) => setJoinId(e.target.value)}
+                  className="bg-gray-50  focus:outline-none text-gray-900 sm:text-sm rounded-lg border focus:border-primary block w-full p-2.5 "
+                  required={true}
+                />
+              </div>
+              <button type="submit" onClick={handleSubmitJoin} className="btn">
+                Join Room
+              </button>
+            </form>
+            <form className="space-y-4 md:space-y-6">
+              <div>
+                <label
+                  htmlFor="title"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Room Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="bg-gray-50 focus:outline-none  text-gray-900 sm:text-sm rounded-lg border focus:border-primary block w-full p-2.5 "
+                  required={true}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="roomId"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Room ID
+                </label>
+                <input
+                  type="text"
+                  id="roomId"
+                  value={id}
+                  minLength={5}
+                  onChange={(e) => setId(e.target.value)}
+                  className="bg-gray-50  focus:outline-none text-gray-900 sm:text-sm rounded-lg border focus:border-primary block w-full p-2.5 "
+                  required={true}
+                />
+              </div>
+              <button
+                type="submit"
+                onClick={handleSubmitCreate}
+                className="btn"
               >
-                Room Title
-              </label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="bg-gray-50 focus:outline-none  text-gray-900 sm:text-sm rounded-lg border focus:border-primary block w-full p-2.5 "
-                required={true}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="roomId"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Room ID
-              </label>
-              <input
-                type="text"
-                id="roomId"
-                value={id}
-                minLength={5}
-                onChange={(e) => setId(e.target.value)}
-                className="bg-gray-50  focus:outline-none text-gray-900 sm:text-sm rounded-lg border focus:border-primary block w-full p-2.5 "
-                required={true}
-              />
-            </div>
-            <button type="submit" className="btn">
-              Join Room
-            </button>
-          </form>
+                Create Room
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

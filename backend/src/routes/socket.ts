@@ -3,7 +3,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import { log } from "../utils/log.js";
 import mongoose from "mongoose";
-import { Room } from "../models/models.js";
+import { Room } from "../models/room.js";
 import { Message } from "../models/messages.js";
 import express from "express";
 import dotenv from "dotenv";
@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
   io.emit("users_response", roomUsers);
   log(`User Connected: ${socket.id}`);
 
-  socket.on("join_room", async (roomId: string) => {
+  socket.on("join_room", async (roomId, roomName) => {
     socket.join(roomId);
     roomUsers = {
       ...roomUsers,
@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
     // Save room to MongoDB
     let room = await Room.findById(roomId);
     if (!room) {
-      room = new Room({ _id: roomId, userId: socket.id });
+      room = new Room({ _id: roomId, userId: socket.id, name: roomName });
       await room.save();
       console.log("Room created: ", room);
     }
@@ -120,6 +120,21 @@ io.on("connection", (socket) => {
       roomId: roomId,
       systemMessage: true,
     });
+  });
+
+  socket.on("leave_room", (roomId) => {
+    socket.leave(roomId);
+    roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
+
+    io.emit("receive_message", {
+      text: "A user left the room.",
+      socketId: "Kurama-chat",
+      roomId: roomId,
+      systemMessage: true,
+    });
+
+    io.emit("users_response", roomUsers);
+    log(`User with ID: ${socket.id} left room: ${roomId}`);
   });
 
   socket.on("disconnect", () => {

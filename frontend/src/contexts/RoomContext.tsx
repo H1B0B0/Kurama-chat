@@ -6,7 +6,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 const intialData: IRoomContext = {
   rooms: [],
   myRooms: [],
+  currentRoomId: "",
   setMyRooms: () => {},
+  setCurrentRoomId: () => {},
 };
 
 const RoomContext = createContext<IRoomContext>(intialData);
@@ -22,6 +24,7 @@ export default function RoomProvider({
 }) {
   const [rooms, setRooms] = useState<IRoom[]>([]);
   const [myRooms, setMyRooms] = useState<IRoom[]>([]);
+  const [currentRoomId, setCurrentRoomId] = useState("");
 
   useEffect(() => {
     fetchRoomsfromServer();
@@ -49,7 +52,9 @@ export default function RoomProvider({
   }
 
   return (
-    <RoomContext.Provider value={{ rooms, myRooms, setMyRooms }}>
+    <RoomContext.Provider
+      value={{ rooms, myRooms, setMyRooms, currentRoomId, setCurrentRoomId }}
+    >
       {children}
     </RoomContext.Provider>
   );

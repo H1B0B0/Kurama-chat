@@ -63,10 +63,30 @@ function ChatFooter({ roomId }: { roomId: string }) {
     }
   }, [socket, roomId]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("room_joined", (id, username) => {
+        toast.success(`Joined room: ${id.roomName}`);
+        setMyRooms((prevRooms) => [...prevRooms, { id: id.roomId, title: id.roomName }]);
+      });
+  
+      socket.on("join_error", (errorMessage) => {
+        toast.error(errorMessage);
+      });
+  
+      return () => {
+        socket.off("room_joined");
+        socket.off("join_error");
+      };
+    }
+  }, [socket]);
+
+
   function handleCommand(commandString: string, socket: any) {
     const parts = commandString.substr(1).split(" ");
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
+    
 
     switch (command) {
       case "nick":
@@ -90,7 +110,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
 
           let newRoom = {
             title: roomName,
-            id: newRoomId,  // Use the constant
+            id: newRoomId,
           };
           console.log("New room: ", newRoomId);
           setMyRooms([...myRooms, newRoom]);
@@ -102,9 +122,14 @@ function ChatFooter({ roomId }: { roomId: string }) {
         socket?.emit("delete_room", roomId);
         toast.info("Deleting room...");
       break;
-    case "join":
-      const joinParam = args.join(" ");
-      socket?.emit("join", joinParam);
+      case "join":
+      if (args.length === 0) {
+        toast.error("Please specify a room ID to join.");
+      } else {
+        const roomIdToJoin = args[0];
+        const username = localStorage.getItem("name");
+        socket.emit("join", roomIdToJoin, username);
+      }
       break;
     case "quit":
       const username = localStorage.getItem("name");

@@ -77,10 +77,7 @@ io.on("connection", (socket) => {
 
   socket.on("delete_room", async (roomId) => {
     try {
-      // Delete the room from the database
       await Room.findByIdAndDelete(roomId);
-  
-      // Notify all clients that the room has been deleted
       io.emit("room_deleted", roomId);
   
       console.log(`Room ${roomId} deleted.`);
@@ -112,6 +109,29 @@ io.on("connection", (socket) => {
     log(`User with ID: ${socket.id} joined room: ${roomId}`);
   });
 
+  socket.on("join", async (roomId, username) => {
+    // Vérifie si la salle existe
+    let room = await Room.findById(roomId);
+    if (!room) {
+      // Si la salle n'existe pas, vous pouvez choisir de la créer ou d'envoyer une erreur
+      socket.emit("join_error", `Room ${roomId} does not exist.`);
+      return;
+    }
+
+    // Rejoint la salle
+    socket.join(roomId);
+    roomUsers[roomId] = [...(roomUsers[roomId] ?? []), socket.id];
+
+    // Informe les autres utilisateurs de la salle
+    socket.to(roomId).emit("receive_message", {
+      text: `${username} has joined the room.`,
+      systemMessage: true,
+    });
+
+    // Confirme la jonction à l'utilisateur
+    socket.emit("room_joined", {roomName: room.name, roomId: roomId});
+  });
+  
   socket.on("send_message", async (data) => {
     io.emit("receive_message", data);
 

@@ -36,10 +36,19 @@ let userNames: { [key: string]: string } = {};
 
 io.on("connection", (socket) => {
   // changer de nom
-  socket.on("change_name", (newName: string) => {
+  socket.on("change_name", ({ newName, OldName, roomId }) => {
     console.log("User changed name: ", newName);
     userNames[socket.id] = newName;
     socket.emit("name_changed", newName);
+
+    if (roomId) {
+      io.emit("receive_message", {
+        text: OldName + " change is name for " + newName,
+        socketId: "Kurama-chat",
+        roomId: roomId,
+        systemMessage: true,
+      });
+    }
   });
 
   // Clear les messages du chat

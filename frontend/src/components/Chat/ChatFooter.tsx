@@ -49,7 +49,11 @@ function ChatFooter({ roomId }: { roomId: string }) {
     switch (command) {
       case "nick":
         const newName = args.join(" ");
-        socket?.emit("change_name", newName);
+        socket?.emit("change_name", {
+          OldName: localStorage.getItem("name"),
+          newName,
+          roomId,
+        });
         break;
       case "list":
         socket.emit("list", args.join(" "));

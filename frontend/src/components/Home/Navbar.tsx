@@ -21,7 +21,7 @@ function Navbar() {
 
   return (
     <div className="flex justify-between items-center px-5 lg:px-36 h-[100px] bg-white dark:bg-custom-gray">
-      <Image src="/images/logo.png" alt="logo" height={60} width={80} />
+      <Image src="/images/logostart.png" alt="logo" height={250} width={250} />
       <div className="hidden gap-10 font-medium lg:flex">
         {NAV_LINKS.map(({ label, title, link, icon, externalPage }, index) => {
           return (

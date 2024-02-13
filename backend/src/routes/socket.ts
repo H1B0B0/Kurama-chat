@@ -32,13 +32,13 @@ mongoose
   .catch((err: any) => console.error("Could not connect to MongoDB", err));
 
 let roomUsers: Record<string, string[]> = {};
+let userNames: { [key: string]: string } = {};
 
 io.on("connection", (socket) => {
   // changer de nom
   socket.on("change_name", (newName: string) => {
     console.log("User changed name: ", newName);
-    let users: { [key: string]: string } = {};
-    users[socket.id] = newName;
+    userNames[socket.id] = newName;
     socket.emit("name_changed", newName);
   });
 
@@ -125,21 +125,21 @@ io.on("connection", (socket) => {
 
   socket.on("user_joined", ({ username, roomId }) => {
     socket.to(roomId).emit("receive_message", {
-      text: username + " joined the room.",
+      text: username + " joined the room. 🗿",
       socketId: "Kurama-chat",
       roomId: roomId,
       systemMessage: true,
     });
   });
 
-  socket.on("leave_room", (roomId) => {
+  socket.on("leave_room", ({ username, roomId }) => {
     socket.leave(roomId);
     if (roomUsers[roomId]) {
       roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
     }
 
     io.emit("receive_message", {
-      text: "A user left the room.",
+      text: username + " left the room. ➡️🚪",
       socketId: "Kurama-chat",
       roomId: roomId,
       systemMessage: true,
@@ -150,16 +150,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    log("User Disconnected " + socket.id);
     for (const [roomId, users] of Object.entries(roomUsers)) {
       if (users.includes(socket.id)) {
+        let userName = userNames[socket.id];
         roomUsers[roomId] = [...users.filter((id) => id !== socket.id)];
         io.emit("receive_message", {
-          text: "A user left the room.",
+          text: userName + " disconnect. ❌",
           socketId: "Kurama-chat",
           roomId: roomId,
           systemMessage: true,
         });
+        delete userNames[socket.id];
       }
     }
     io.emit("users_response", roomUsers);

@@ -51,6 +51,7 @@ export default function SocketProvider({
       });
     });
     socket.on("users_response", (data) => setRoomUsers(data));
+    socket?.emit("change_name", username);
     setSocket(socket);
   }, []);
 

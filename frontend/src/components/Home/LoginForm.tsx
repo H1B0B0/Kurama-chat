@@ -1,4 +1,5 @@
 "use client";
+import { useSocket } from "@/contexts/SocketContext";
 import { useUser } from "@/contexts/UserContext";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,7 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setUsername } = useUser();
   const router = useRouter();
+  const { socket } = useSocket();
 
   const handleInputChange = (e: any) => {
     setName(e.target.value);

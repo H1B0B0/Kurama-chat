@@ -19,6 +19,11 @@ function Page() {
       roomId: roomId,
     });
     socket?.emit("join_room", roomId);
+    socket?.emit("change_name", {
+      newName: username,
+      OldName: username,
+      roomId: "",
+    });
   }, []);
 
   return (

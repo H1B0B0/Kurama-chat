@@ -8,12 +8,13 @@ import Avatar from "react-avatar";
 import { ImExit } from "react-icons/im";
 import { useSocket } from "@/contexts/SocketContext";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
 
 function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
   const { roomId } = useParams();
   const { myRooms, setMyRooms } = useRoom();
   const { socket } = useSocket();
-  const username = localStorage.getItem("name");
+  const { username } = useUser();
   const router = useRouter();
 
   const handleQuitRoom = () => {

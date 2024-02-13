@@ -21,7 +21,7 @@ router.get("/", (req: Request, res: Response) => {
 
 router.get("/all", async (req: Request, res: Response) => {
   try {
-    const rooms = await Room.find(); // Use Mongoose to get all rooms from the database
+    const rooms = await Room.find();
     res.json(rooms);
   } catch (err) {
     res.status(500).json({ message: err });

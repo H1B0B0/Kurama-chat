@@ -49,6 +49,20 @@ function ChatFooter({ roomId }: { roomId: string }) {
     }
   }, [socket]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("room_deleted", (deletedRoomId) => {
+        if (deletedRoomId === roomId) {
+          toast.success("Room deleted successfully.");
+          setMyRooms(myRooms.filter((room) => room.id !== roomId));
+        }
+      });
+      return () => {
+        socket.off("room_deleted");
+      };
+    }
+  }, [socket, roomId]);
+
   function handleCommand(commandString: string, socket: any) {
     const parts = commandString.substr(1).split(" ");
     const command = parts[0].toLowerCase();
@@ -72,28 +86,29 @@ function ChatFooter({ roomId }: { roomId: string }) {
           toast.error("Please specify a room name.");
         } else {
           const roomName = args.join(" ");
-          const newRoomId = uuidv4();  // Use a constant here
+          const newRoomId = uuidv4();
 
           let newRoom = {
             title: roomName,
             id: newRoomId,  // Use the constant
           };
-          console.log("New room: ", newRoomId);  // Log the constant
+          console.log("New room: ", newRoomId);
           setMyRooms([...myRooms, newRoom]);
           toast.info(`Creating room: ${roomName}`);
-          socket?.emit("join_room", newRoomId, roomName);  // Use the constant
+          socket?.emit("join_room", newRoomId, roomName);
         }
       break;
     case "delete":
-      socket?.emit("delete", roomId);
+        socket?.emit("delete_room", roomId);
+        toast.info("Deleting room...");
       break;
     case "join":
       const joinParam = args.join(" ");
       socket?.emit("join", joinParam);
       break;
     case "quit":
-      const quitParam = args.join(" ");
-      socket?.emit("quit", quitParam);
+      const username = localStorage.getItem("name");
+      socket?.emit("leave_room", username, roomId);
       break;
     case "users":
       socket?.emit("users");

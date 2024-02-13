@@ -172,7 +172,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
       <ToastContainer position="bottom-left" />
       {showToast && <Toast message={toastMessage} />}
       {image && (
-        <div className="relative border border-primary rounded-lg max-w-[6rem] h-24 ml-4 mb-1">
+        <div className="relative border text-red-600 rounded-lg max-w-[6rem] h-24 ml-4 mb-1">
           <IoMdCloseCircle
             size={20}
             className="absolute -right-2 -top-2 text-xs cursor-pointer text-red-600"
@@ -181,7 +181,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
           <img src={image} className="w-full h-full object-contain" />
         </div>
       )}
-      <div className="basis-[8%] border-t-2 p-2 flex items-center gap-4">
+      <div className="basis-[8%] p-2 flex items-center bg-neutral-800 gap-4">
         {message.length === 0 && (
           <>
             <AiFillPlusCircle
@@ -241,7 +241,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
         ) : (
           <IoMdSend
             size={28}
-            className="cursor-pointer text-primary"
+            className="cursor-pointer text-red-600"
             onClick={(e) => handleSendMessage(e, message)}
           />
         )}

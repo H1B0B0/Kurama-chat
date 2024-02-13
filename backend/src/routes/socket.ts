@@ -78,6 +78,21 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("delete_room", async (roomId) => {
+    try {
+      // Delete the room from the database
+      await Room.findByIdAndDelete(roomId);
+  
+      // Notify all clients that the room has been deleted
+      io.emit("room_deleted", roomId);
+  
+      console.log(`Room ${roomId} deleted.`);
+    } catch (error) {
+      console.error(`Error deleting room ${roomId}: `, error);
+      socket.emit("error", "Failed to delete room.");
+    }
+  });
+
   io.emit("users_response", roomUsers);
   log(`User Connected: ${socket.id}`);
 

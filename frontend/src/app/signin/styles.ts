@@ -9,7 +9,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-image: url("../../images/bg.png");
+  background-image: url("../../images/bg-2.png");
   
  
 
@@ -21,8 +21,8 @@ export const Container = styled.div`
   
     h2 {
       align-self: center;
-      color: #222;
-      color: #C70039;
+      color: #FFFFFF;
+      color: #FFFFFF;
       font-size: 30px;
       padding: 0.5rem;
       
@@ -30,7 +30,7 @@ export const Container = styled.div`
 
      p {
       align-self: center;
-      color: #474749;
+      color: #FFFFFF;
       margin: 10px;
     }
 
@@ -86,7 +86,7 @@ export const Container = styled.div`
   a {
     margin-top: 5px;
     text-decoration: none;
-    color: #222;
+    color: #FFFFFF;
     padding: 1rem;
        
     span{

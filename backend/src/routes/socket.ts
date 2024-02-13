@@ -151,6 +151,51 @@ io.on("connection", (socket) => {
     log(`User with ID: ${socket.id} left room: ${roomId}`);
   });
 
+  socket.on("quit_room", async ({ username, roomId }) => {
+    socket.leave(roomId);
+    if (roomUsers[roomId]) {
+      roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
+    }
+
+    io.emit("receive_message", {
+      text: username + " quit the room. ➡️🚪",
+      socketId: "Kurama-chat",
+      roomId: roomId,
+      systemMessage: true,
+    });
+
+    io.emit("users_response", roomUsers);
+
+    if (roomUsers[roomId] && roomUsers[roomId].length === 0) {
+      try {
+        await Room.findByIdAndDelete(roomId);
+        console.log(`Room with ID: ${roomId} was deleted`);
+      } catch (error) {
+        console.log(
+          `Failed to delete room with ID: ${roomId}. Error: ${error}`
+        );
+      }
+    }
+  });
+
+  socket.on("logout", ({ username, roomId }) => {
+    socket.leave(roomId);
+    if (roomUsers[roomId]) {
+      roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
+    }
+
+    io.emit("receive_message", {
+      text: username + " left the room. ➡️🚪",
+      socketId: "Kurama-chat",
+      roomId: roomId,
+      systemMessage: true,
+    });
+
+    io.emit("users_response", roomUsers);
+    log(`User with ID: ${socket.id} left room: ${roomId}`);
+    delete userNames[socket.id];
+  });
+
   socket.on("disconnect", () => {
     for (const [roomId, users] of Object.entries(roomUsers)) {
       if (users.includes(socket.id)) {
@@ -162,7 +207,6 @@ io.on("connection", (socket) => {
           roomId: roomId,
           systemMessage: true,
         });
-        delete userNames[socket.id];
       }
     }
     io.emit("users_response", roomUsers);

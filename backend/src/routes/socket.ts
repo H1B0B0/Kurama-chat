@@ -58,21 +58,14 @@ io.on("connection", (socket) => {
 
   socket.on("list", async () => {
     try {
-      const rooms = await Room.find({}, 'name');
-      const roomNames = rooms.map(room => room.name);
+      const rooms = await Room.find({}, "name");
+      const roomNames = rooms.map((room) => room.name);
       socket.emit("roomsList", roomNames);
       console.log("Rooms listed: ", roomNames);
     } catch (error) {
       console.log("Failed to list rooms: ", error);
       socket.emit("error", "Failed to list rooms.");
     }
-  });
-
-  //rename the user with the string enter in the input
-  socket.on('nick', (newName) => {
-    users[socket.id] = newName;
-    io.emit('user renamed', { userId: socket.id, newName: newName });
-    console.log("User renamed: ", newName);
   });
 
   io.emit("users_response", roomUsers);

@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Avatar from "react-avatar";
 import ChatImage from "./ChatImage";
 
-
 function ChatBody({ roomId }: { roomId: string }) {
   const [typing, setTyping] = useState<string>("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
@@ -38,6 +37,19 @@ function ChatBody({ roomId }: { roomId: string }) {
     data: any;
     roomId: string;
   }
+
+  useEffect(() => {
+    const nameChangedHandler = (newName: string) => {
+      localStorage.setItem("name", newName);
+    };
+
+    socket?.on("name_changed", nameChangedHandler);
+
+    // Cleanup function
+    return () => {
+      socket?.off("name_changed", nameChangedHandler);
+    };
+  }, [socket]);
 
   useEffect(() => {
     const chatClearedHandler = ({

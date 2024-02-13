@@ -6,9 +6,9 @@ import { BsImage, BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend, IoMdCloseCircle } from "react-icons/io";
 import Picker from "emoji-picker-react";
 import Toast from "../shared/Toast";
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify';
-import { v4 as uuidv4 } from 'uuid';
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 function ChatFooter({ roomId }: { roomId: string }) {
   const [showListPopup, setShowListPopup] = useState(false);
@@ -30,13 +30,13 @@ function ChatFooter({ roomId }: { roomId: string }) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('roomsList', (roomNames) => {
-        const message = roomNames.join(', ');
+      socket.on("roomsList", (roomNames) => {
+        const message = roomNames.join(", ");
         toast.info(`Rooms: ${message}`);
       });
 
       return () => {
-        socket.off('roomsList');
+        socket.off("roomsList");
       };
     }
   }, [socket]);
@@ -47,14 +47,14 @@ function ChatFooter({ roomId }: { roomId: string }) {
     const args = parts.slice(1);
 
     switch (command) {
-    case "nick":
-      const newName = args.join(" ");
-      socket?.emit("nick", newName);
-      break;
-    case 'list':
-      socket.emit('list', args.join(" "));  
-      break;
-    case "create":
+      case "nick":
+        const newName = args.join(" ");
+        socket?.emit("change_name", newName);
+        break;
+      case "list":
+        socket.emit("list", args.join(" "));
+        break;
+      case "create":
         if (args.length === 0) {
           console.error("No room name specified.");
           // Handle the error, e.g., by showing a message to the user
@@ -64,30 +64,30 @@ function ChatFooter({ roomId }: { roomId: string }) {
           socket?.emit("join_room", { roomId: newRoomId, roomName });
         }
         break;
-    case "delete":
-      socket?.emit("delete", roomId);
-      break;
-    case "join":
-      const joinParam = args.join(" ");
-      socket?.emit("join", joinParam);
-      break;
-    case "quit":
-      const quitParam = args.join(" ");
-      socket?.emit("quit", quitParam);
-      break;
-    case "users":
-      socket?.emit("users");
-      break;
-    case "msg":
-      const msgParam = args.join(" ");
-      socket?.emit("msg", msgParam);
-      break;
-    case 'clear':
-      socket.emit('clear' , roomId);
-      break;
-    default:
-      console.error("Unknown command.");
-      break;
+      case "delete":
+        socket?.emit("delete", roomId);
+        break;
+      case "join":
+        const joinParam = args.join(" ");
+        socket?.emit("join", joinParam);
+        break;
+      case "quit":
+        const quitParam = args.join(" ");
+        socket?.emit("quit", quitParam);
+        break;
+      case "users":
+        socket?.emit("users");
+        break;
+      case "msg":
+        const msgParam = args.join(" ");
+        socket?.emit("msg", msgParam);
+        break;
+      case "clear":
+        socket.emit("clear", roomId);
+        break;
+      default:
+        console.error("Unknown command.");
+        break;
     }
   }
 
@@ -149,7 +149,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
 
   return (
     <>
-    <ToastContainer position="bottom-left" />
+      <ToastContainer position="bottom-left" />
       {showToast && <Toast message={toastMessage} />}
       {image && (
         <div className="relative border border-primary rounded-lg max-w-[6rem] h-24 ml-4 mb-1">

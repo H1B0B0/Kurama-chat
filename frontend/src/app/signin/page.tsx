@@ -27,9 +27,9 @@ export const SignIn: React.FC = () => {
   }
 
   return (  
-    <Layout>
+    
     <Container>
-    <div className='container' >
+    <div  >
       <form data-testid='login-form' onSubmit={handleSubmit}>
         <h2>Connectez-vous</h2>
         <p> Connectez-vous pour accéder à votre espace </p>
@@ -58,8 +58,7 @@ export const SignIn: React.FC = () => {
       </Link>
     </div>
     </Container>
-    </Layout>
-  
+
   );
 }
 

@@ -38,7 +38,7 @@ function LoginForm() {
         <div className="flex flex-col gap-3">
           <input
             type="text"
-            className="px-6 py-6 text-lg text-gray-600 w-80 h-10 bg-gray-100 border-gray-[rgba(0,0,0,.2)] rounded-full focus:outline-none border focus:border-primary focus:bg-gray-50 focus:placeholder-gray-400/60 placeholder:text-base dark:bg-gray-700 dark:text-gray-300"
+            className="px-6 py-6 text-lg text-gray-600 w-80 h-10 bg-gray-100 border-gray-[rgba(0,0,0,.2)] rounded-full focus:outline-none border from-red-600 focus:bg-gray-50 focus:placeholder-gray-400/60 placeholder:text-base dark:bg-gray-700 dark:text-gray-300"
             placeholder="Display Name"
             onChange={handleInputChange}
             minLength={3}
@@ -48,7 +48,7 @@ function LoginForm() {
           <div className="flex gap-2 p-2">
             <input
               type="checkbox"
-              className="w-4 h-4 text-white accent-primary"
+              className="w-4 h-4 text-white from-red-600"
             />
             <p className="font-light dark:text-gray-300">Keep me signed in</p>
           </div>
@@ -56,7 +56,7 @@ function LoginForm() {
         <div className="flex  gap-5 items-center">
           <button
             type="submit"
-            className="flex  justify-center items-center w-40 btn"
+            className="flex hover:bg-red-800 justify-center items-center w-40 btn bg-red-500 "
           >
             {isLoading ? (
               <ClipLoader color="white" size={20} />
@@ -65,8 +65,13 @@ function LoginForm() {
             )}
           </button>
           <Link legacyBehavior href="signin">
-            <a className="flex  justify-center items-center w-40 btn">
+            <a className="flex  hover:bg-red-800 justify-center items-center w-40 btn bg-red-500 ">
               Sign In
+            </a>
+          </Link>
+          <Link legacyBehavior href="signup">
+            <a className="flex hover:bg-red-800 justify-center items-center w-40 btn bg-red-500 ">
+              Sign Up
             </a>
           </Link>
         </div>

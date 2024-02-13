@@ -3,7 +3,7 @@ import { darken, lighten } from 'polished';
 
 export const Container = styled.div`
   height: 56rem;
-  width: 1%
+  width: 100%;
   background-color: #f5f5f5;
   display: flex;
   justify-content: center;
@@ -75,6 +75,7 @@ export const Container = styled.div`
       color: #fff;
       border-radius: 30px;
       margin-bottom: 15px;
+      
 
       &:hover {
         background-color: ${darken(0.08, '#C70039')};

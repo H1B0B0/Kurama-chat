@@ -13,7 +13,7 @@ export default function Home() {
         <div className="flex px-5 pt-16 pb-12 mb-12 lg:px-36 min-h-[calc(100vh-180px)]">
           <div className="flex flex-col gap-8 w-full xl:pr-32 lg:w-1/2">
             <div className="flex flex-col gap-5">
-              <p className=" text-[72px] leading-[70px] lg:text-[90px] text-transparent font-medium lg:leading-[85px] tracking-tight bg-gradient bg-clip-text ">
+              <p className=" text-[72px] leading-[70px] lg:text-[90px] bg-gradient-to-r from-red-600 via-red-200 to-emerald-50 inline-block text-transparent bg-clip-text">
                 Kurama-chat
                 <br /> anytime, anywhere
               </p>

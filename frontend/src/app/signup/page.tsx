@@ -1,5 +1,7 @@
+"use client"
 import React, { useState, FormEvent, useCallback } from 'react';
 import { Container } from './styles';
+import Link from 'next/link'
 
 const SignUp: React.FC = () => {
   const [name, setName] = useState('');

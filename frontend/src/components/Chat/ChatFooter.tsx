@@ -6,9 +6,11 @@ import { BsImage, BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend, IoMdCloseCircle } from "react-icons/io";
 import Picker from "emoji-picker-react";
 import Toast from "../shared/Toast";
-import "react-toastify/dist/ReactToastify.css";
-import { toast, ToastContainer } from "react-toastify";
-import { v4 as uuidv4 } from "uuid";
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
+import { useRoom } from "@/contexts/RoomContext";
+
 
 function ChatFooter({ roomId }: { roomId: string }) {
   const [showListPopup, setShowListPopup] = useState(false);
@@ -16,6 +18,8 @@ function ChatFooter({ roomId }: { roomId: string }) {
   const [message, setMessage] = useState<string>("");
   const { socket } = useSocket();
   const { username } = useUser();
+  const { myRooms, setMyRooms } = useRoom();
+  const [id, setId] = useState<string>("");
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const inputRef = useRef<any | null>(null);
   const fileRef = useRef<any | null>(null);
@@ -33,6 +37,10 @@ function ChatFooter({ roomId }: { roomId: string }) {
       socket.on("roomsList", (roomNames) => {
         const message = roomNames.join(", ");
         toast.info(`Rooms: ${message}`);
+      });
+
+      socket.on('room_created', (room) => {
+        toast.success(`Room created: ${room.name}`);
       });
 
       return () => {
@@ -61,37 +69,45 @@ function ChatFooter({ roomId }: { roomId: string }) {
       case "create":
         if (args.length === 0) {
           console.error("No room name specified.");
-          // Handle the error, e.g., by showing a message to the user
+          toast.error("Please specify a room name.");
         } else {
           const roomName = args.join(" ");
-          const newRoomId = uuidv4();
-          socket?.emit("join_room", { roomId: newRoomId, roomName });
+          const newRoomId = uuidv4();  // Use a constant here
+
+          let newRoom = {
+            title: roomName,
+            id: newRoomId,  // Use the constant
+          };
+          console.log("New room: ", newRoomId);  // Log the constant
+          setMyRooms([...myRooms, newRoom]);
+          toast.info(`Creating room: ${roomName}`);
+          socket?.emit("join_room", newRoomId, roomName);  // Use the constant
         }
-        break;
-      case "delete":
-        socket?.emit("delete", roomId);
-        break;
-      case "join":
-        const joinParam = args.join(" ");
-        socket?.emit("join", joinParam);
-        break;
-      case "quit":
-        const quitParam = args.join(" ");
-        socket?.emit("quit", quitParam);
-        break;
-      case "users":
-        socket?.emit("users");
-        break;
-      case "msg":
-        const msgParam = args.join(" ");
-        socket?.emit("msg", msgParam);
-        break;
-      case "clear":
-        socket.emit("clear", roomId);
-        break;
-      default:
-        console.error("Unknown command.");
-        break;
+      break;
+    case "delete":
+      socket?.emit("delete", roomId);
+      break;
+    case "join":
+      const joinParam = args.join(" ");
+      socket?.emit("join", joinParam);
+      break;
+    case "quit":
+      const quitParam = args.join(" ");
+      socket?.emit("quit", quitParam);
+      break;
+    case "users":
+      socket?.emit("users");
+      break;
+    case "msg":
+      const msgParam = args.join(" ");
+      socket?.emit("msg", msgParam);
+      break;
+    case 'clear':
+      socket.emit('clear' , roomId);
+      break;
+    default:
+      console.error("Unknown command.");
+      break;
     }
   }
 

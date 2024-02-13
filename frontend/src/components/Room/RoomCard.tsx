@@ -3,13 +3,31 @@ import IRoom from "@/interfaces/IRoom";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import Avatar from "react-avatar";
 import { ImExit } from "react-icons/im";
+import { useSocket } from "@/contexts/SocketContext";
+import { useRouter } from "next/navigation";
 
 function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
   const { roomId } = useParams();
   const { myRooms, setMyRooms } = useRoom();
+  const { socket } = useSocket();
+  const username = localStorage.getItem("name");
+  const router = useRouter();
+
+  const handleQuitRoom = () => {
+    socket?.emit("quit_room", { username, roomId: room.id });
+
+    setMyRooms(myRooms.filter((r) => r.id != room.id));
+  };
+
+  useEffect(() => {
+    if (myRooms.find((r) => r.id === roomId) === undefined) {
+      router.push("/chat/1");
+    }
+  }, [myRooms]);
+
   return (
     <Link
       href={`chat/${room.id}`}
@@ -47,7 +65,7 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
         <span
           className="hidden absolute right-3 justify-center items-center p-2 bg-red-500 rounded-full group-hover:flex hover:bg-red-700"
           onClick={() => {
-            setMyRooms(myRooms.filter((r) => r.id != room.id));
+            handleQuitRoom();
           }}
         >
           <ImExit className="text-white" />

@@ -7,11 +7,13 @@ import { useSocket } from "@/contexts/SocketContext";
 import { BiMessageAdd } from "react-icons/bi";
 import AddRoomPanel from "./AddRoomPanel";
 import ThemeSwitcher from "../shared/themeswitcher";
+import { useRouter } from "next/navigation";
 
 function RoomSideBar() {
   const [showAddRoomPanel, setShowAddRoomPanel] = useState(false);
   const { rooms, myRooms, currentRoomId, setCurrentRoomId } = useRoom();
   const { socket, roomUsers } = useSocket();
+  const router = useRouter();
 
   const hideAddRoomPanel = () => setShowAddRoomPanel(false);
 
@@ -22,10 +24,25 @@ function RoomSideBar() {
     setCurrentRoomId(newRoomId);
   };
 
+  const logout = () => {
+    let username = localStorage.getItem("name");
+    socket?.emit("logout", { username, currentRoomId });
+    router.push("/");
+  };
+
   return (
     <div className="overflow-y-scroll w-20 h-screen border-r-2 sm:w-1/4">
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="px-4 pt-1 h-10 text-lg font-semibold text-white rounded-full bg-primary hover:bg-secondary transition duration-300"
+          onClick={logout}
+        >
+          Leave
+        </button>
+      </div>
       <ThemeSwitcher />
-      <p className="px-2 py-5 sm:px-5 h-[56px] text-xl sm:text-2xl font-semibold dark:text-white">
+      <p className="flex flex-col px-2 py-5 sm:px-5 h-[56px] text-xl sm:text-2xl font-semibold dark:text-white">
         Rooms 🌐
       </p>
       {rooms.map((room: IRoom, index) => {
@@ -35,7 +52,7 @@ function RoomSideBar() {
           </div>
         );
       })}
-      <p className="px-2 pt-3 text-lg font-semibold sm:text-xl sm:px-5 dark:text-white">
+      <p className="flex flex-col px-2 pt-3 text-lg font-semibold sm:text-xl sm:px-5 dark:text-white">
         Rooms 🔒
       </p>
       <div className="py-1">

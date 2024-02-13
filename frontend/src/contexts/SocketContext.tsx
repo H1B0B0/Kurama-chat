@@ -42,17 +42,22 @@ export default function SocketProvider({
       router.replace("/");
       return;
     }
-    let socket = socketIO.connect(process.env.NEXT_PUBLIC_BASE_URL!);
-    socket.on("receive_message", (data: IMessage) => {
-      setMessages((prev) => {
-        const newMessages = { ...prev };
-        newMessages[data.roomId] = [...(newMessages[data.roomId] ?? []), data];
-        return newMessages;
+    if (!socket) {
+      let socket = socketIO.connect(process.env.NEXT_PUBLIC_BASE_URL!);
+      socket.on("receive_message", (data: IMessage) => {
+        setMessages((prev) => {
+          const newMessages = { ...prev };
+          newMessages[data.roomId] = [
+            ...(newMessages[data.roomId] ?? []),
+            data,
+          ];
+          return newMessages;
+        });
       });
-    });
-    socket.on("users_response", (data) => setRoomUsers(data));
-    socket?.emit("change_name", username);
-    setSocket(socket);
+      socket.on("users_response", (data) => setRoomUsers(data));
+      socket?.emit("change_name", username);
+      setSocket(socket);
+    }
   }, []);
 
   useEffect(() => {

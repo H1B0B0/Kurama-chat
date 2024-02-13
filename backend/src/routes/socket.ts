@@ -23,6 +23,7 @@ const io = new Server(server, {
   maxHttpBufferSize: 2e7,
 });
 
+let users: { [key: string]: string } = {};
 mongoose
   .connect(
     `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@mongodb:27017/${process.env.MONGO_INITDB_DATABASE}`
@@ -57,13 +58,21 @@ io.on("connection", (socket) => {
 
   socket.on("list", async () => {
     try {
-      const rooms = await Room.find({});
-      socket.emit("roomsList", rooms);
-      console.log("Rooms listed: ", rooms);
+      const rooms = await Room.find({}, 'name');
+      const roomNames = rooms.map(room => room.name);
+      socket.emit("roomsList", roomNames);
+      console.log("Rooms listed: ", roomNames);
     } catch (error) {
       console.log("Failed to list rooms: ", error);
       socket.emit("error", "Failed to list rooms.");
     }
+  });
+
+  //rename the user with the string enter in the input
+  socket.on('nick', (newName) => {
+    users[socket.id] = newName;
+    io.emit('user renamed', { userId: socket.id, newName: newName });
+    console.log("User renamed: ", newName);
   });
 
   io.emit("users_response", roomUsers);

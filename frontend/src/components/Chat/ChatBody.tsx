@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Avatar from "react-avatar";
 import ChatImage from "./ChatImage";
 
+
 function ChatBody({ roomId }: { roomId: string }) {
   const [typing, setTyping] = useState<string>("");
   const lastMessageRef = useRef<HTMLDivElement>(null);
@@ -34,7 +35,7 @@ function ChatBody({ roomId }: { roomId: string }) {
   }
 
   interface TypingResponseEvent {
-    data: any; // Remplacez `any` par le type réel de `data`
+    data: any;
     roomId: string;
   }
 

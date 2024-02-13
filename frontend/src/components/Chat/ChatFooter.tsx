@@ -6,7 +6,9 @@ import { BsImage, BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend, IoMdCloseCircle } from "react-icons/io";
 import Picker from "emoji-picker-react";
 import Toast from "../shared/Toast";
-import toastr from "toastr";
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 
 function ChatFooter({ roomId }: { roomId: string }) {
   const [showListPopup, setShowListPopup] = useState(false);
@@ -27,25 +29,16 @@ function ChatFooter({ roomId }: { roomId: string }) {
   };
 
   useEffect(() => {
-    if (!socket) return;
+    if (socket) {
+      socket.on('roomsList', (roomNames) => {
+        const message = roomNames.join(', ');
+        toast.info(`Rooms: ${message}`);
+      });
 
-    const roomsListed = (data: any) => {
-      setRoomList(data.rooms);
-      setShowListPopup(true);
-    };
-
-    const roomsList = (rooms: any[]) => {
-      let roomsList = rooms.map((room: any) => room._id).join(", ");
-      toastr.info(roomsList, "List of Rooms");
-    };
-
-    socket.on("rooms_listed", roomsListed);
-    socket.on("roomsList", roomsList);
-
-    return () => {
-      socket.off("rooms_listed", roomsListed);
-      socket.off("roomsList", roomsList);
-    };
+      return () => {
+        socket.off('roomsList');
+      };
+    }
   }, [socket]);
 
   function handleCommand(commandString: string, socket: any) {
@@ -54,41 +47,47 @@ function ChatFooter({ roomId }: { roomId: string }) {
     const args = parts.slice(1);
 
     switch (command) {
-      case "nick":
-        const newName = args.join(" ");
-        socket?.emit("nick", newName);
+    case "nick":
+      const newName = args.join(" ");
+      socket?.emit("nick", newName);
+      break;
+    case 'list':
+      socket.emit('list', args.join(" "));  
+      break;
+    case "create":
+        if (args.length === 0) {
+          console.error("No room name specified.");
+          // Handle the error, e.g., by showing a message to the user
+        } else {
+          const roomName = args.join(" ");
+          const newRoomId = uuidv4();
+          socket?.emit("join_room", { roomId: newRoomId, roomName });
+        }
         break;
-      case "list":
-        socket.emit("list", args.join(" "));
-        break;
-      case "create":
-        const createParam = args.join(" ");
-        socket?.emit("create", createParam);
-        break;
-      case "delete":
-        socket?.emit("delete", roomId);
-        break;
-      case "join":
-        const joinParam = args.join(" ");
-        socket?.emit("join", joinParam);
-        break;
-      case "quit":
-        const quitParam = args.join(" ");
-        socket?.emit("quit", quitParam);
-        break;
-      case "users":
-        socket?.emit("users");
-        break;
-      case "msg":
-        const msgParam = args.join(" ");
-        socket?.emit("msg", msgParam);
-        break;
-      case "clear":
-        socket.emit("clear", roomId);
-        break;
-      default:
-        console.error("Unknown command.");
-        break;
+    case "delete":
+      socket?.emit("delete", roomId);
+      break;
+    case "join":
+      const joinParam = args.join(" ");
+      socket?.emit("join", joinParam);
+      break;
+    case "quit":
+      const quitParam = args.join(" ");
+      socket?.emit("quit", quitParam);
+      break;
+    case "users":
+      socket?.emit("users");
+      break;
+    case "msg":
+      const msgParam = args.join(" ");
+      socket?.emit("msg", msgParam);
+      break;
+    case 'clear':
+      socket.emit('clear' , roomId);
+      break;
+    default:
+      console.error("Unknown command.");
+      break;
     }
   }
 
@@ -99,7 +98,6 @@ function ChatFooter({ roomId }: { roomId: string }) {
         // This is a command, handle it
         handleCommand(message, socket);
       } else {
-        // This is a normal message, send it
         socket?.emit("send_message", {
           text: message,
           name: username,
@@ -151,6 +149,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
 
   return (
     <>
+    <ToastContainer position="bottom-left" />
       {showToast && <Toast message={toastMessage} />}
       {image && (
         <div className="relative border border-primary rounded-lg max-w-[6rem] h-24 ml-4 mb-1">

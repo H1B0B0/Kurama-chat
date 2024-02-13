@@ -80,7 +80,7 @@ function ChatBody({ roomId }: { roomId: string }) {
   }, [socket, roomId]);
 
   return (
-    <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2">
+    <div className="basis-[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2 custom-scrollbar">
       {messages[roomId]?.map((message: any, index: number) =>
         message.systemMessage ? (
           <div className="flex self-center" key={index}>

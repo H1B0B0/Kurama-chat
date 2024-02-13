@@ -186,11 +186,11 @@ function ChatFooter({ roomId }: { roomId: string }) {
           <>
             <AiFillPlusCircle
               size={20}
-              className="cursor-pointer text-primary"
+              className="cursor-pointer text-red-600"
             />
             <BsImage
               size={20}
-              className="cursor-pointer text-primary"
+              className="cursor-pointer text-red-600"
               onClick={() => fileRef.current.click()}
             />
             <input
@@ -214,7 +214,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
           </div>
           <BsEmojiSmileFill
             size={20}
-            className="cursor-pointer absolute top-[6px] right-2 text-primary"
+            className="cursor-pointer absolute top-[6px] right-2 text-red-600"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
           />
 
@@ -235,8 +235,8 @@ function ChatFooter({ roomId }: { roomId: string }) {
         {message.length === 0 && !image ? (
           <AiFillLike
             size={28}
-            className="cursor-pointer text-primary"
-            onClick={(e) => handleSendMessage(e, "👍")}
+            className="cursor-pointer text-red-600"
+            onClick={(e) => handleSendMessage(e, "👍 <Bon toutou>")}
           />
         ) : (
           <IoMdSend

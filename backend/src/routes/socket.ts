@@ -9,6 +9,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { User } from "../models/user.js";
 
+
 export const app = express();
 app.use(cors());
 dotenv.config();
@@ -98,7 +99,7 @@ io.on("connection", (socket) => {
     io.emit("users_response", roomUsers);
     log(`User with ID: ${socket.id} joined room: ${roomId}`);
   });
-
+  
   socket.on("send_message", async (data) => {
     io.emit("receive_message", data);
 

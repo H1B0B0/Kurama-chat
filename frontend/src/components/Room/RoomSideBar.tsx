@@ -31,11 +31,11 @@ function RoomSideBar() {
   };
 
   return (
-    <div className="overflow-y-scroll w-20 h-screen border-r-2 sm:w-1/4">
+    <div className="overflow-y-scroll custom-scrollbar w-20 h-screen bg-neutral-800 sm:w-1/4">
       <div className="flex justify-center">
         <button
           type="submit"
-          className="px-4 pt-1 h-10 text-lg font-semibold text-white rounded-full bg-primary hover:bg-secondary transition duration-300"
+          className="px-4 pt-1 h-10 text-lg font-semibold text-white rounded-full bg-red-600 hover:bg-red-300 transition duration-300  "
           onClick={logout}
         >
           Leave

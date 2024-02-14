@@ -17,7 +17,7 @@ export const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.ORIGIN_URL || "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
   maxHttpBufferSize: 2e7,
@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
     try {
       await Room.findByIdAndDelete(roomId);
       io.emit("room_deleted", roomId);
-  
+
       console.log(`Room ${roomId} deleted.`);
     } catch (error) {
       console.error(`Error deleting room ${roomId}: `, error);
@@ -129,9 +129,9 @@ io.on("connection", (socket) => {
     });
 
     // Confirme la jonction à l'utilisateur
-    socket.emit("room_joined", {roomName: room.name, roomId: roomId});
+    socket.emit("room_joined", { roomName: room.name, roomId: roomId });
   });
-  
+
   socket.on("send_message", async (data) => {
     io.emit("receive_message", data);
 

@@ -9,35 +9,35 @@
       ignore_errors: true
 
     - block:
-      - name: Run the equivalent of "apt-get update" as a separate step
-        apt:
-          update_cache: true
-          cache_valid_time: 3600
-      - name: Update all packages to the latest version
-        apt:
-          upgrade: dist
-      - name: Install Docker dependencies
-        apt:
-          name: "{{ item }}"
-          state: latest
-        loop:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg
-          - lsb-release
-      - name: Add Docker's official GPG key
-        shell: sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-      - name: Set up the Docker stable repository
-        apt_repository:
-          repo: deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
-      - name: Update apt packages
-        apt:
-          update_cache: yes
-      - name: Install Docker
-        apt:
-          name: docker-ce
-          state: latest
+        - name: Run the equivalent of "apt-get update" as a separate step
+          apt:
+            update_cache: true
+            cache_valid_time: 3600
+        - name: Update all packages to the latest version
+          apt:
+            upgrade: dist
+        - name: Install Docker dependencies
+          apt:
+            name: "{{ item }}"
+            state: latest
+          loop:
+            - apt-transport-https
+            - ca-certificates
+            - curl
+            - gnupg
+            - lsb-release
+        - name: Add Docker's official GPG key
+          shell: sudo rm -f /usr/share/keyrings/docker-archive-keyring.gpg && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        - name: Set up the Docker stable repository
+          apt_repository:
+            repo: deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
+        - name: Update apt packages
+          apt:
+            update_cache: yes
+        - name: Install Docker
+          apt:
+            name: docker-ce
+            state: latest
       when: docker_installed.rc != 0
 
     - name: Check if Python pip is installed
@@ -126,6 +126,8 @@
           NEXT_PUBLIC_BASE_URL=http://{{ SITE_ADDRESS }}:{{ PORT }}/
           PORT={{ PORT }}
           DEBUG={{ DEBUG }}
+          ORIGIN_URL={{ ORIGIN_URL }}
+          JWT_SECRET={{ JWT_SECRET }}
 
     - name: Check if network web exists
       command: docker network ls --filter name=^web$ --format={{'.Name'}}

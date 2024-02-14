@@ -4,17 +4,24 @@ services:
     image: traefik
     container_name: traefik
     command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.letsencrypt.acme.email=hibobo@kurama-chat.xyz
+      - --certificatesresolvers.letsencrypt.acme.storage=acme/acme.json
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --entryPoints.web.http.redirections.entryPoint.to=websecure
+      - --entryPoints.web.http.redirections.entryPoint.scheme=https
+      - --entryPoints.web.http.redirections.entrypoint.permanent=true
+      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./volumes/traefik/acme:/acme
+      - ./volumes/traefik/logs:/logs
     networks:
       - web
 
@@ -49,6 +56,7 @@ services:
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
       - MONGODB_USER=${MONGODB_USER}
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
+      - ORIGIN_URL=${ORIGIN_URL}
       - PORT=${PORT}
       - DEBUG=${DEBUG}
     ports:
@@ -65,9 +73,9 @@ services:
       - ./frontend:/frontend/src
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.frontend.entrypoints=web,websecure"
-      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - traefik.http.routers.whoami.rule=Host(`kurama-chat.com`)
+      - traefik.http.routers.whoami.entrypoints=websecure
+      - traefik.http.routers.whoami.tls.certresolver=letsencrypt
     networks:
       - web
     environment:

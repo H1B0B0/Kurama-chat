@@ -22,7 +22,7 @@ function Page() {
   }, []);
 
   return (
-    <div className="flex relative flex-col w-full h-screen">
+    <div className="flex relative flex-col w-full h-screen space-x-2 space-y-2">
       <ChatHeader roomId={roomId} />
       <ChatBody roomId={roomId} />
       <ChatFooter roomId={roomId} />

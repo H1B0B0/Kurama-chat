@@ -10,7 +10,7 @@ export default function RoomLayout({
   return (
     <RoomProvider>
       <SocketProvider>
-        <div className="flex h-screen">
+        <div className="flex h-screen space-x-2 space-y-2">
           <RoomSideBar />
           {children}
         </div>

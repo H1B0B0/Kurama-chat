@@ -6,12 +6,11 @@ import { BsImage, BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend, IoMdCloseCircle } from "react-icons/io";
 import Picker from "emoji-picker-react";
 import Toast from "../shared/Toast";
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify';
-import { v4 as uuidv4 } from 'uuid';
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 import { useRoom } from "@/contexts/RoomContext";
 import { useRouter } from "next/navigation";
-
 
 function ChatFooter({ roomId }: { roomId: string }) {
   const [showListPopup, setShowListPopup] = useState(false);
@@ -41,7 +40,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
         toast.info(`Rooms: ${message}`);
       });
 
-      socket.on('room_created', (room) => {
+      socket.on("room_created", (room) => {
         toast.success(`Room created: ${room.name}`);
       });
 
@@ -69,13 +68,16 @@ function ChatFooter({ roomId }: { roomId: string }) {
     if (socket) {
       socket.on("room_joined", (id, username) => {
         toast.success(`Joined room: ${id.roomName}`);
-        setMyRooms((prevRooms) => [...prevRooms, { id: id.roomId, title: id.roomName }]);
+        setMyRooms((prevRooms) => [
+          ...prevRooms,
+          { id: id.roomId, title: id.roomName },
+        ]);
       });
-  
+
       socket.on("join_error", (errorMessage) => {
         toast.error(errorMessage);
       });
-  
+
       return () => {
         socket.off("room_joined");
         socket.off("join_error");
@@ -83,12 +85,10 @@ function ChatFooter({ roomId }: { roomId: string }) {
     }
   }, [socket]);
 
-
   function handleCommand(commandString: string, socket: any) {
     const parts = commandString.substr(1).split(" ");
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
-    
 
     switch (command) {
       case "nick":
@@ -119,39 +119,39 @@ function ChatFooter({ roomId }: { roomId: string }) {
           toast.info(`Creating room: ${roomName}`);
           socket?.emit("join_room", newRoomId, roomName);
         }
-      break;
-    case "delete":
+        break;
+      case "delete":
         socket?.emit("delete_room", roomId);
         toast.info("Deleting room...");
-      break;
+        break;
       case "join":
-      if (args.length === 0) {
-        toast.error("Please specify a room ID to join.");
-      } else {
-        const roomIdToJoin = args[0];
+        if (args.length === 0) {
+          toast.error("Please specify a room ID to join.");
+        } else {
+          const roomIdToJoin = args[0];
+          const username = localStorage.getItem("name");
+          socket.emit("join", roomIdToJoin, username);
+        }
+        break;
+      case "quit":
         const username = localStorage.getItem("name");
-        socket.emit("join", roomIdToJoin, username);
-      }
-      break;
-    case "quit":
-      const username = localStorage.getItem("name");
-      socket?.emit("leave_room", username, roomId);
-      setMyRooms(myRooms.filter((room) => room.id !== roomId));
-      router.push("/chat/1");
-      break;
-    case "users":
-      socket?.emit("users");
-      break;
-    case "msg":
-      const msgParam = args.join(" ");
-      socket?.emit("msg", msgParam);
-      break;
-    case 'clear':
-      socket.emit('clear' , roomId);
-      break;
-    default:
-      console.error("Unknown command.");
-      break;
+        socket?.emit("leave_room", username, roomId);
+        setMyRooms(myRooms.filter((room) => room.id !== roomId));
+        router.push("/chat/1");
+        break;
+      case "users":
+        socket?.emit("users");
+        break;
+      case "msg":
+        const msgParam = args.join(" ");
+        socket?.emit("msg", msgParam);
+        break;
+      case "clear":
+        socket.emit("clear", roomId);
+        break;
+      default:
+        console.error("Unknown command.");
+        break;
     }
   }
 
@@ -225,7 +225,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
           <img src={image} className="w-full h-full object-contain" />
         </div>
       )}
-      <div className="basis-[8%] p-2 flex items-center bg-neutral-800 gap-4">
+      <div className="basis-[8%] p-2 flex items-center bg-neutral-800 gap-4 rounded-lg">
         {message.length === 0 && (
           <>
             <AiFillPlusCircle

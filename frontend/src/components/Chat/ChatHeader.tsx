@@ -26,7 +26,7 @@ function ChatHeader({ roomId }: { roomId: string }) {
   }, [roomId]);
 
   return (
-    <div className="basis-[7%]  flex justify-between items-center p-3 font-medium bg-neutral-800 ">
+    <div className="basis-[7%]  flex justify-between items-center p-3 font-medium bg-neutral-800 rounded-lg">
       <p className="text-xl dark:text-white">{room?.title}</p>
       <button type="submit" className="btn bg-red-600 hover:bg-red-800">
         Copy Room ID

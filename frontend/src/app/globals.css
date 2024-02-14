@@ -26,12 +26,12 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-  width: 6px; /* Ajustez la largeur de la scrollbar */
-  border-radius: 10px; /* Ajustez le rayon de bordure de la scrollbar */
-}
+    width: 6px; /* Ajustez la largeur de la scrollbar */
+    border-radius: 10px; /* Ajustez le rayon de bordure de la scrollbar */
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3); /* Couleur de la scrollbar */
-  border-radius: 10px; /* Rayon de bordure de la scrollbar */
-}
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3); /* Couleur de la scrollbar */
+    border-radius: 10px; /* Rayon de bordure de la scrollbar */
+  }
 }

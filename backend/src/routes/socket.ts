@@ -17,7 +17,7 @@ export const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.ORIGIN_URL || "*",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
   maxHttpBufferSize: 2e7,

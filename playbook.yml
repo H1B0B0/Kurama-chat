@@ -123,7 +123,7 @@
           MONGODB_USER={{ MONGODB_USER }}
           MONGODB_USER_PASSWORD={{ MONGODB_USER_PASSWORD }}
           SITE_ADDRESS={{ SITE_ADDRESS }}
-          NEXT_PUBLIC_BASE_URL=http://{{ SITE_ADDRESS }}:{{ PORT }}/
+          NEXT_PUBLIC_BASE_URL={{ NEXT_PUBLIC_BASE_URL }}
           PORT={{ PORT }}
           DEBUG={{ DEBUG }}
           ORIGIN_URL={{ ORIGIN_URL }}

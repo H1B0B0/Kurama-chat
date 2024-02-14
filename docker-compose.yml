@@ -4,17 +4,14 @@ services:
     image: traefik
     container_name: traefik
     command:
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --certificatesresolvers.letsencrypt.acme.email=hibobo@kurama-chat.xyz
-      - --certificatesresolvers.letsencrypt.acme.storage=acme/acme.json
-      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
-      - --entryPoints.web.http.redirections.entryPoint.to=websecure
-      - --entryPoints.web.http.redirections.entryPoint.scheme=https
-      - --entryPoints.web.http.redirections.entrypoint.permanent=true
-      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=hibobo@kurama-chat.xyz"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/acme/acme.json"
     ports:
       - "80:80"
       - "443:443"

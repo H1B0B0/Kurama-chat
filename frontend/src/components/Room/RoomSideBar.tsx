@@ -38,7 +38,7 @@ function RoomSideBar() {
       <div className="flex justify-center">
         <button
           type="submit"
-          className="px-4 pt-1 h-10 text-lg font-semibold text-white rounded-full bg-red-600 hover:bg-red-300 transition duration-300  "
+          className="px-4 pt-1 h-10 text-lg font-semibold text-white rounded-full mt-5 bg-red-600 hover:bg-red-500 transition duration-300  "
           onClick={logout}
         >
           Leave

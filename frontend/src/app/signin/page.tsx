@@ -2,17 +2,17 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Container } from './styles';
-import Layout from '../layout';
+import { Container } from './styles'
+import Layout from '../layout'
 
 
-export const SignIn: React.FC = () => {
+export default function SignIn() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
  
 
-  // const router = useRouter()
-  // const { signIn } = useAuth()
+  const router = useRouter()
+  const { signIn } = useAuth()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -59,7 +59,5 @@ export const SignIn: React.FC = () => {
     </div>
     </Container>
 
-  );
+  )
 }
-
-export default SignIn

@@ -137,6 +137,11 @@
       shell: docker network create web
       when: web_network.stdout == ""
 
+    - name: Set correct permissions for acme.json
+      file:
+        path: /var/deployment/volumes/traefik/acme/acme.json
+        mode: "0600"
+
     - name: Execute docker-compose for Deployment
       docker_compose:
         project_src: /var/deployment/

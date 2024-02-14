@@ -25,7 +25,6 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
       return;
     }
 
-    // Fetch room data from server
     const response = await fetch(
       process.env.NEXT_PUBLIC_BASE_URL + `rooms/${joinId}`
     );

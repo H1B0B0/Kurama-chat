@@ -39,7 +39,7 @@ export default function SocketProvider({
 
   useEffect(() => {
     if (!username) {
-      router.replace("/");
+      router.push("/");
       return;
     }
     if (!socket) {
@@ -55,7 +55,6 @@ export default function SocketProvider({
         });
       });
       socket.on("users_response", (data) => setRoomUsers(data));
-      socket?.emit("change_name", username);
       setSocket(socket);
     }
   }, []);

@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   traefik:
     image: traefik
@@ -8,8 +8,10 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -49,7 +51,6 @@ services:
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
       - PORT=${PORT}
       - DEBUG=${DEBUG}
-      - ORIGIN_URL=${ORIGIN_URL}
     ports:
       - 4000:4000
 
@@ -65,7 +66,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.entrypoints=web,websecure"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
     networks:
       - web

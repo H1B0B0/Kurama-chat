@@ -9,7 +9,6 @@ import express from "express";
 import dotenv from "dotenv";
 import { User } from "../models/user.js";
 
-
 export const app = express();
 app.use(cors());
 dotenv.config();
@@ -24,7 +23,6 @@ const io = new Server(server, {
   maxHttpBufferSize: 2e7,
 });
 
-let users: { [key: string]: string } = {};
 mongoose
   .connect(
     `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_USER_PASSWORD}@mongodb:27017/${process.env.MONGO_INITDB_DATABASE}`
@@ -38,7 +36,6 @@ let userNames: { [key: string]: string } = {};
 io.on("connection", (socket) => {
   // changer de nom
   socket.on("change_name", ({ newName, OldName, roomId }) => {
-    console.log("User changed name: ", newName);
     userNames[socket.id] = newName;
     socket.emit("name_changed", newName);
 
@@ -80,10 +77,7 @@ io.on("connection", (socket) => {
 
   socket.on("delete_room", async (roomId) => {
     try {
-      // Delete the room from the database
       await Room.findByIdAndDelete(roomId);
-  
-      // Notify all clients that the room has been deleted
       io.emit("room_deleted", roomId);
   
       console.log(`Room ${roomId} deleted.`);
@@ -114,6 +108,29 @@ io.on("connection", (socket) => {
     io.emit("users_response", roomUsers);
     log(`User with ID: ${socket.id} joined room: ${roomId}`);
   });
+
+  socket.on("join", async (roomId, username) => {
+    // Vérifie si la salle existe
+    let room = await Room.findById(roomId);
+    if (!room) {
+      // Si la salle n'existe pas, vous pouvez choisir de la créer ou d'envoyer une erreur
+      socket.emit("join_error", `Room ${roomId} does not exist.`);
+      return;
+    }
+
+    // Rejoint la salle
+    socket.join(roomId);
+    roomUsers[roomId] = [...(roomUsers[roomId] ?? []), socket.id];
+
+    // Informe les autres utilisateurs de la salle
+    socket.to(roomId).emit("receive_message", {
+      text: `${username} has joined the room.`,
+      systemMessage: true,
+    });
+
+    // Confirme la jonction à l'utilisateur
+    socket.emit("room_joined", {roomName: room.name, roomId: roomId});
+  });
   
   socket.on("send_message", async (data) => {
     io.emit("receive_message", data);
@@ -142,7 +159,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("user_joined", ({ username, roomId }) => {
-    socket.to(roomId).emit("receive_message", {
+    io.emit("receive_message", {
       text: username + " joined the room. 🗿",
       socketId: "Kurama-chat",
       roomId: roomId,
@@ -150,7 +167,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("leave_room", ({ username, roomId }) => {
+  socket.on("leave_room", async ({ username, roomId }) => {
     socket.leave(roomId);
     if (roomUsers[roomId]) {
       roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
@@ -163,8 +180,8 @@ io.on("connection", (socket) => {
       systemMessage: true,
     });
 
-    io.emit("users_response", roomUsers);
-    log(`User with ID: ${socket.id} left room: ${roomId}`);
+    socket.to(roomId).emit("users_response", roomUsers);
+    console.log(`User with ID: ${socket.id} left room: ${roomId}`);
   });
 
   socket.on("quit_room", async ({ username, roomId }) => {
@@ -180,7 +197,7 @@ io.on("connection", (socket) => {
       systemMessage: true,
     });
 
-    io.emit("users_response", roomUsers);
+    socket.to(roomId).emit("users_response", roomUsers);
 
     if (roomUsers[roomId] && roomUsers[roomId].length === 0) {
       try {
@@ -194,21 +211,21 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("logout", ({ username, roomId }) => {
-    socket.leave(roomId);
+  socket.on("logout", async ({ username, roomId }) => {
     if (roomUsers[roomId]) {
       roomUsers[roomId] = roomUsers[roomId].filter((id) => id !== socket.id);
     }
 
     io.emit("receive_message", {
-      text: username + " left the room. ➡️🚪",
+      text: username + " disconnect. ❌",
       socketId: "Kurama-chat",
       roomId: roomId,
       systemMessage: true,
     });
 
-    io.emit("users_response", roomUsers);
+    socket.to(roomId).emit("users_response", roomUsers);
     log(`User with ID: ${socket.id} left room: ${roomId}`);
+    socket.leave(roomId);
     delete userNames[socket.id];
   });
 
@@ -223,8 +240,8 @@ io.on("connection", (socket) => {
           roomId: roomId,
           systemMessage: true,
         });
+        socket.to(roomId).emit("users_response", roomUsers);
       }
     }
-    io.emit("users_response", roomUsers);
   });
 });

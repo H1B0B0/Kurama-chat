@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { useRoom } from "@/contexts/RoomContext";
+import { useRouter } from "next/navigation";
 
 
 function ChatFooter({ roomId }: { roomId: string }) {
@@ -26,6 +27,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
   const [image, setImage] = useState<string | null>(null);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>("");
+  const router = useRouter();
   const onEmojiPick = (emojiObj: any) => {
     setMessage((prevInput) => prevInput + emojiObj.emoji);
     inputRef.current.focus();
@@ -63,10 +65,30 @@ function ChatFooter({ roomId }: { roomId: string }) {
     }
   }, [socket, roomId]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("room_joined", (id, username) => {
+        toast.success(`Joined room: ${id.roomName}`);
+        setMyRooms((prevRooms) => [...prevRooms, { id: id.roomId, title: id.roomName }]);
+      });
+  
+      socket.on("join_error", (errorMessage) => {
+        toast.error(errorMessage);
+      });
+  
+      return () => {
+        socket.off("room_joined");
+        socket.off("join_error");
+      };
+    }
+  }, [socket]);
+
+
   function handleCommand(commandString: string, socket: any) {
     const parts = commandString.substr(1).split(" ");
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
+    
 
     switch (command) {
       case "nick":
@@ -90,7 +112,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
 
           let newRoom = {
             title: roomName,
-            id: newRoomId,  // Use the constant
+            id: newRoomId,
           };
           console.log("New room: ", newRoomId);
           setMyRooms([...myRooms, newRoom]);
@@ -102,13 +124,20 @@ function ChatFooter({ roomId }: { roomId: string }) {
         socket?.emit("delete_room", roomId);
         toast.info("Deleting room...");
       break;
-    case "join":
-      const joinParam = args.join(" ");
-      socket?.emit("join", joinParam);
+      case "join":
+      if (args.length === 0) {
+        toast.error("Please specify a room ID to join.");
+      } else {
+        const roomIdToJoin = args[0];
+        const username = localStorage.getItem("name");
+        socket.emit("join", roomIdToJoin, username);
+      }
       break;
     case "quit":
       const username = localStorage.getItem("name");
       socket?.emit("leave_room", username, roomId);
+      setMyRooms(myRooms.filter((room) => room.id !== roomId));
+      router.push("/chat/1");
       break;
     case "users":
       socket?.emit("users");

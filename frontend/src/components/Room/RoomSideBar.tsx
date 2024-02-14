@@ -8,25 +8,28 @@ import { BiMessageAdd } from "react-icons/bi";
 import AddRoomPanel from "./AddRoomPanel";
 import ThemeSwitcher from "../shared/themeswitcher";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
 
 function RoomSideBar() {
   const [showAddRoomPanel, setShowAddRoomPanel] = useState(false);
   const { rooms, myRooms, currentRoomId, setCurrentRoomId } = useRoom();
   const { socket, roomUsers } = useSocket();
   const router = useRouter();
+  const { username } = useUser();
 
   const hideAddRoomPanel = () => setShowAddRoomPanel(false);
 
   const handleRoomClick = (newRoomId: string) => {
-    if (currentRoomId) {
-      socket?.emit("leave_room", currentRoomId);
+    if (currentRoomId !== newRoomId) {
+      socket?.emit("leave_room", { username: username, roomId: currentRoomId });
+    } else {
+      console.log("No current room to leave");
     }
     setCurrentRoomId(newRoomId);
   };
 
   const logout = () => {
-    let username = localStorage.getItem("name");
-    socket?.emit("logout", { username, currentRoomId });
+    socket?.emit("logout", { username: username, roomId: currentRoomId });
     router.push("/");
   };
 

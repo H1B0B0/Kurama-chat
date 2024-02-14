@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { router as roomRoutes } from "./routes/roomRoutes.js";
 import { router as messageRoutes } from "./routes/messageRoutes.js";
 import { router as userRoutes } from "./routes/userRoutes.js";
+import { router as SingleUser } from "./routes/single_user.js";
 import { app, server } from "./routes/socket.js";
 import { log } from "./utils/log.js";
 import cors from "cors";
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 app.use("/rooms", roomRoutes);
 app.use("/messages", messageRoutes);
 app.use("/user", userRoutes);
+app.use("/single_user", SingleUser);
 
 server.listen(process.env.PORT || 4000, () => {
   log("SERVER RUNNING");

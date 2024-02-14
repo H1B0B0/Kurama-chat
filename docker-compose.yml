@@ -70,11 +70,11 @@ services:
       - ./frontend:/frontend/src
     labels:
       - "traefik.enable=true"
-      - traefik.http.routers.frontend.rule=Host(`kurama-chat.com`)
+      - traefik.http.routers.frontend.rule=Host(`kurama-chat.xyz`)
       - traefik.http.routers.frontend.entrypoints=websecure
       - traefik.http.routers.frontend.tls.certresolver=letsencrypt
       - traefik.http.routers.frontend.tls=true
-      - traefik.http.routers.frontend.tls.domains[0].main=kurama-chat.com
+      - traefik.http.routers.frontend.tls.domains[0].main=kurama-chat.xyz
       - traefik.http.services.frontend.loadbalancer.server.port=3000
     networks:
       - web

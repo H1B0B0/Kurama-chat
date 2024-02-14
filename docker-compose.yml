@@ -45,6 +45,7 @@ services:
     command: sh -c "npm install && npm rebuild bcrypt --build-from-source && npx nodemon"
     volumes:
       - ./backend:/backend
+      - ./volumes/traefik/acme:/acme
     networks:
       - web
     environment:

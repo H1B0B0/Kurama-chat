@@ -1,4 +1,5 @@
-import http from "http";
+import fs from "fs";
+import https from "https";
 import cors from "cors";
 import { Server } from "socket.io";
 import { log } from "../utils/log.js";
@@ -13,7 +14,12 @@ export const app = express();
 app.use(cors());
 dotenv.config();
 
-export const server = http.createServer(app);
+const options = {
+  key: fs.readFileSync("/acme/live/kurama-chat.xyz/privkey.pem"),
+  cert: fs.readFileSync("/acme/live/kurama-chat.xyz/fullchain.pem"),
+};
+
+export const server = https.createServer(app);
 
 const io = new Server(server, {
   cors: {

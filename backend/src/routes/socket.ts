@@ -10,10 +10,15 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { User } from "../models/user.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 export const app = express();
 app.use(cors());
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const options = {
   key: fs.readFileSync(path.resolve(__dirname, "../cert/kurama.key")),

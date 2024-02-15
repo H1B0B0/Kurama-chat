@@ -87,6 +87,16 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("users", (roomId) => {
+    if (roomUsers[roomId]) {
+      const userIds = roomUsers[roomId];
+      const userNamesList = userIds.map((userId) => userNames[userId] || 'Anonyme');
+      socket.emit("usersList", userNamesList);
+    } else {
+      socket.emit("error", `Room with ID: ${roomId} does not exist.`);
+    }
+  });
+
   socket.on("delete_room", async (roomId) => {
     try {
       await Room.findByIdAndDelete(roomId);

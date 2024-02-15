@@ -225,7 +225,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
           <img src={image} className="w-full h-full object-contain" />
         </div>
       )}
-      <div className="basis-[8%] p-2 flex items-center bg-neutral-800 gap-4 rounded-lg">
+      <div className="basis-[8%] p-2 flex items-center dark:bg-neutral-800 bg-slate-200  gap-4 rounded-lg">
         {message.length === 0 && (
           <>
             <AiFillPlusCircle

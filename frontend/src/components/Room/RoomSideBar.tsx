@@ -34,7 +34,7 @@ function RoomSideBar() {
   };
 
   return (
-    <div className="overflow-y-scroll custom-scrollbar w-20 h-screen bg-neutral-800 sm:w-1/4 rounded-lg">
+    <div className="overflow-y-scroll custom-scrollbar w-20 h-screen dark:bg-neutral-800 bg-slate-200  sm:w-1/4 rounded-lg">
       <div className="flex justify-center">
         <button
           type="submit"

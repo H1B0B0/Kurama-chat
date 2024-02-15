@@ -58,6 +58,9 @@ export default function SocketProvider({
         });
       });
       socket.on("users_response", (data) => setRoomUsers(data));
+      socket.on("private_message_sent", (data) => {
+        socket.emit("send_message", data);
+      });
       setSocket(socket);
     }
   }, []);

@@ -144,7 +144,45 @@ io.on("connection", (socket) => {
     socket.emit("room_joined", { roomName: room.name, roomId: roomId });
   });
 
+  socket.on(
+    "send_private_message",
+    async (roomId, nickname, username, userid, messageData) => {
+      // Récupérer l'ID du socket associé au surnom
+      const userId = Object.keys(userNames).find(
+        (key) => userNames[key] === nickname
+      );
+
+      let roomName = nickname + "," + username;
+
+      if (userId) {
+        socket?.emit("join_room", roomId, roomName);
+
+        socket.emit("join", roomId);
+        io.to(userId).emit("join", roomId);
+
+        socket.emit("room_joined", { roomName: roomName, roomId: roomId });
+        io.to(userId).emit("room_joined", {
+          roomName: roomName,
+          roomId: roomId,
+        });
+
+        // Envoyez le message à la salle
+        socket.emit("private_message_sent", {
+          text: messageData,
+          name: username,
+          userId: userid,
+          date: new Date(),
+          socketId: socket.id,
+          roomId: roomId,
+        });
+      } else {
+        socket.emit("error", "Nickname not found.");
+      }
+    }
+  );
+
   socket.on("send_message", async (data) => {
+    console.log("Message received: ", data);
     io.emit("receive_message", data);
 
     // Save message to MongoDB

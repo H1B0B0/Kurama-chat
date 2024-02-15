@@ -11,13 +11,14 @@ import { toast, ToastContainer } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { useRoom } from "@/contexts/RoomContext";
 import { useRouter } from "next/navigation";
+import local from "next/font/local";
 
 function ChatFooter({ roomId }: { roomId: string }) {
   const [showListPopup, setShowListPopup] = useState(false);
   const [roomList, setRoomList] = useState([]);
   const [message, setMessage] = useState<string>("");
   const { socket } = useSocket();
-  const { username } = useUser();
+  const { username, setUsername } = useUser();
   const { myRooms, setMyRooms } = useRoom();
   const [id, setId] = useState<string>("");
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
@@ -93,11 +94,13 @@ function ChatFooter({ roomId }: { roomId: string }) {
     switch (command) {
       case "nick":
         const newName = args.join(" ");
+        setUsername(newName);
         socket?.emit("change_name", {
           OldName: localStorage.getItem("name"),
           newName,
           roomId,
         });
+        localStorage.setItem("name", newName);
         break;
       case "list":
         socket.emit("list", args.join(" "));
@@ -129,12 +132,12 @@ function ChatFooter({ roomId }: { roomId: string }) {
           toast.error("Please specify a room ID to join.");
         } else {
           const roomIdToJoin = args[0];
-          const username = localStorage.getItem("name");
-          socket.emit("join", roomIdToJoin, username);
+          const userName = localStorage.getItem("name");
+          socket.emit("join", roomIdToJoin, userName);
         }
         break;
       case "quit":
-        const username = localStorage.getItem("name");
+        const userName = localStorage.getItem("name") || username;
         socket?.emit("leave_room", username, roomId);
         setMyRooms(myRooms.filter((room) => room.id !== roomId));
         router.push("/chat/1");
@@ -143,8 +146,24 @@ function ChatFooter({ roomId }: { roomId: string }) {
         socket?.emit("users");
         break;
       case "msg":
-        const msgParam = args.join(" ");
-        socket?.emit("msg", msgParam);
+        if (args.length < 2) {
+          console.error("Please specify a nickname and a message.");
+          toast.error("Please specify a nickname and a message.");
+        } else {
+          const nickname = args[0];
+          const messageData = args.slice(1).join(" ");
+          const newRoomId = uuidv4(); // Générer un nouvel ID de salle
+
+          // Envoyer le surnom et le message au serveur
+          socket?.emit(
+            "send_private_message",
+            newRoomId,
+            nickname,
+            username,
+            localStorage.getItem("userId"),
+            messageData
+          );
+        }
         break;
       case "clear":
         socket.emit("clear", roomId);
@@ -154,7 +173,6 @@ function ChatFooter({ roomId }: { roomId: string }) {
         break;
     }
   }
-
   const handleSendMessage = (e: React.FormEvent, message: string) => {
     e.preventDefault();
     if (message.trim() || image) {

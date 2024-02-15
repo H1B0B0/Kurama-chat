@@ -20,12 +20,9 @@ function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
     if (name) {
-      let userId = localStorage.getItem("userId");
-      if (!userId) {
-        userId =
-          Math.random().toString(36).substring(2) + Date.now().toString(36);
-        localStorage.setItem("userId", userId);
-      }
+      let userId =
+        Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem("userId", userId);
       localStorage.setItem("name", name);
       setUsername(name);
     }

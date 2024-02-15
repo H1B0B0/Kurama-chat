@@ -90,7 +90,9 @@ io.on("connection", (socket) => {
   socket.on("users", (roomId) => {
     if (roomUsers[roomId]) {
       const userIds = roomUsers[roomId];
-      const userNamesList = userIds.map((userId) => userNames[userId] || 'Anonyme');
+      const userNamesList = userIds.map(
+        (userId) => userNames[userId] || "Anonyme"
+      );
       socket.emit("usersList", userNamesList);
     } else {
       socket.emit("error", `Room with ID: ${roomId} does not exist.`);
@@ -251,7 +253,7 @@ io.on("connection", (socket) => {
     }
 
     io.emit("receive_message", {
-      text: username + " quit the room. ➡️🚪",
+      text: username + " as quit the room. ➡️🚪",
       socketId: "Kurama-chat",
       roomId: roomId,
       systemMessage: true,

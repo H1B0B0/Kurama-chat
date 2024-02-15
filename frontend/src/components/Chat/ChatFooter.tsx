@@ -264,7 +264,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
           <img src={image} className="w-full h-full object-contain" />
         </div>
       )}
-      <div className="basis-[8%] p-2 flex items-center dark:bg-neutral-800 bg-slate-200  gap-4 rounded-lg">
+      <div className="basis_[8%] p-2 flex items-center dark:bg-neutral-800 bg-slate-200 gap-4 rounded-lg bottom-0 w-full ">
         {message.length === 0 && (
           <>
             <AiFillPlusCircle
@@ -319,7 +319,7 @@ function ChatFooter({ roomId }: { roomId: string }) {
           <AiFillLike
             size={28}
             className="cursor-pointer text-red-600"
-            onClick={(e) => handleSendMessage(e, "👍 <Bon toutou>")}
+            onClick={(e) => handleSendMessage(e, "👍")}
           />
         ) : (
           <IoMdSend

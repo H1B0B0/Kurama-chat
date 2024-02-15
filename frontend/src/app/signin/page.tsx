@@ -1,32 +1,50 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useUser } from "@/contexts/UserContext";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Container } from "./styles";
+import ThemeSwitcher from "@/components/shared/themeswitcher";
 import Layout from "../layout";
 
 export default function SignIn() {
-  const [username, setUsername] = useState("");
+  const { username, setUsername } = useUser();
   const [password, setPassword] = useState("");
-
-  const router = useRouter();
-  const { signIn } = useAuth();
+  const router = useRouter(); // Déplacez cette ligne ici
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      await signIn({ username, password });
+    const url = process.env.NEXT_PUBLIC_BASE_URL + "user/login";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+
+    if (response.status === 404) {
+      alert("User not found");
+    } else if (response.status === 401) {
+      alert("Invalid password");
+    } else if (response.status === 200) {
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
       router.push("/chat");
-    } catch (error) {
-      console.error(error);
-      alert("Erreur de connexion, veuillez vérifier vos identifiants.");
+      localStorage.setItem("name", username);
+    } else {
+      throw new Error("Une erreur inattendue s'est produite");
     }
   };
 
   return (
     <Container>
       <div>
+        <ThemeSwitcher />
         <form data-testid="login-form" onSubmit={handleSubmit}>
           <h2>Connectez-vous</h2>
           <p> Connectez-vous pour accéder à votre espace </p>
@@ -56,8 +74,4 @@ export default function SignIn() {
       </div>
     </Container>
   );
-}
-
-function useAuth(): { signIn: any } {
-  throw new Error("Function not implemented.");
 }

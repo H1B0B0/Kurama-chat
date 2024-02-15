@@ -56,11 +56,11 @@ function ChatFooter({ roomId }: { roomId: string }) {
       socket.on("usersList", (userNamesList) => {
         toast.info(`Users in room: ${userNamesList.join(", ")}`);
       });
-  
+
       socket.on("error", (errorMessage) => {
         toast.error(errorMessage);
       });
-  
+
       return () => {
         socket.off("usersList");
         socket.off("error");
@@ -68,7 +68,6 @@ function ChatFooter({ roomId }: { roomId: string }) {
     }
   }, [socket]);
 
-  
   useEffect(() => {
     if (socket) {
       socket.on("room_deleted", (deletedRoomId) => {
@@ -146,33 +145,53 @@ function ChatFooter({ roomId }: { roomId: string }) {
         toast.info("Deleting room...");
         break;
       case "join":
-      if (args.length === 0) {
-        toast.error("Please specify a room ID to join.");
-      } else {
-        const roomIdToJoin = args[0];
-        const username = localStorage.getItem("name");
-        socket.emit("join", roomIdToJoin, username);
-      }
-      break;
-    case "quit":
-      const username = localStorage.getItem("name");
-      socket?.emit("leave_room", username, roomId);
-      setMyRooms(myRooms.filter((room) => room.id !== roomId));
-      router.push("/chat/1");
-      break;
-    case "users":
-      socket?.emit("users", roomId);
-      break;
-    case "msg":
-      const msgParam = args.join(" ");
-      socket?.emit("msg", msgParam);
-      break;
-    case 'clear':
-      socket.emit('clear' , roomId);
-      break;
-    default:
-      console.error("Unknown command.");
-      break;
+        if (args.length === 0) {
+          toast.error("Please specify a room ID to join.");
+        } else {
+          const roomIdToJoin = args[0];
+          const userName = localStorage.getItem("name") || username;
+          socket.emit("join", roomIdToJoin, userName);
+        }
+        break;
+      case "quit":
+        const userName = localStorage.getItem("name") || username;
+        socket?.emit("leave_room", userName, roomId);
+        setMyRooms(myRooms.filter((room) => room.id !== roomId));
+        router.push("/chat/1");
+        break;
+      case "users":
+        socket?.emit("users", roomId);
+        break;
+      case "msg":
+        if (args.length < 2) {
+          console.error("Please specify a nickname and a message.");
+          toast.error("Please specify a nickname and a message.");
+        } else {
+          const nickname = args[0];
+          const messageData = args.slice(1).join(" ");
+          const newRoomId = uuidv4(); // Générer un nouvel ID de salle
+
+          // Envoyer le surnom et le message au serveur
+          socket?.emit(
+            "send_private_message",
+            newRoomId,
+            nickname,
+            username,
+            localStorage.getItem("userId"),
+            messageData
+          );
+        }
+        break;
+      case "clear":
+        if (roomId != "1") {
+          socket.emit("clear", roomId);
+        } else {
+          toast.error("You cannot clear the default room.");
+        }
+        break;
+      default:
+        console.error("Unknown command.");
+        break;
     }
   }
   const handleSendMessage = (e: React.FormEvent, message: string) => {

@@ -15,11 +15,11 @@ app.use(cors());
 dotenv.config();
 
 const options = {
-  key: fs.readFileSync("/acme/live/kurama-chat.xyz/privkey.pem"),
-  cert: fs.readFileSync("/acme/live/kurama-chat.xyz/fullchain.pem"),
+  key: fs.readFileSync("../cert/kurama.key"),
+  cert: fs.readFileSync("../cert/kurama.cert"),
 };
 
-export const server = https.createServer(app);
+export const server = https.createServer(options, app);
 
 const io = new Server(server, {
   cors: {

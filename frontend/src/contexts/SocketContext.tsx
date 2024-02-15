@@ -43,8 +43,9 @@ export default function SocketProvider({
       return;
     }
     if (!socket) {
-      let socket = socketIO.connect(process.env.NEXT_PUBLIC_BASE_URL!, {
-        rejectUnauthorized: false, // Ajoutez cette ligne si vous utilisez un certificat SSL auto-signé
+      let socket = socketIO.connect(process.env.NEXT_PUBLIC_BASE_URL!);
+      socket.on("connect_error", (error) => {
+        console.error("Erreur de connexion :", error);
       });
       socket.on("receive_message", (data: IMessage) => {
         setMessages((prev) => {

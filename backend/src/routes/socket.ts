@@ -8,6 +8,7 @@ import { Room } from "../models/room.js";
 import { Message } from "../models/messages.js";
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
 import { User } from "../models/user.js";
 
 export const app = express();
@@ -15,8 +16,8 @@ app.use(cors());
 dotenv.config();
 
 const options = {
-  key: fs.readFileSync("../cert/kurama.key"),
-  cert: fs.readFileSync("../cert/kurama.cert"),
+  key: fs.readFileSync(path.resolve(__dirname, "../cert/kurama.key")),
+  cert: fs.readFileSync(path.resolve(__dirname, "../cert/kurama.cert")),
 };
 
 export const server = https.createServer(options, app);

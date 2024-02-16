@@ -120,7 +120,8 @@ function ChatFooter({ roomId }: { roomId: string }) {
         localStorage.setItem("name", newName);
         break;
       case "list":
-        socket.emit("list", args.join(" "));
+        const filter = args.join(" ");
+        socket.emit("list", filter);
         break;
       case "create":
         if (args.length === 0) {

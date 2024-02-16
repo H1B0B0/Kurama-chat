@@ -75,12 +75,17 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("list", async () => {
+  socket.on("list", async (filter = "") => {
     try {
-      const rooms = await Room.find({}, "name");
-      const roomNames = rooms.map((room) => room.name);
+      const myRoomsIds = Object.keys(roomUsers).filter(roomId => roomUsers[roomId].includes(socket.id));
+      let rooms = await Room.find({
+        '_id': { $in: myRoomsIds },
+        'name': new RegExp(filter, 'i')
+      }, 'name');
+  
+      const roomNames = rooms.map(room => room.name);
       socket.emit("roomsList", roomNames);
-      console.log("Rooms listed: ", roomNames);
+      console.log("Filtered rooms listed: ", roomNames);
     } catch (error) {
       console.log("Failed to list rooms: ", error);
       socket.emit("error", "Failed to list rooms.");

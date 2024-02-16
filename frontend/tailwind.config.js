@@ -11,7 +11,7 @@ module.exports = {
       colors: {
         primary: "#6C63FF",
         secondary: "rgb(139 132 245)",
-        "custom-gray": "#222222",
+        "custom-gray": "#161616",
       },
       maxWidth: {
         "1/5": "20%",

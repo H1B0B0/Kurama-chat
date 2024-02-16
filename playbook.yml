@@ -142,10 +142,10 @@
         dest: /var/deployment/backend/src/cert/kuramacert.pem
         content: "{{ kuramacert }}"
 
-    - name: kurakey
+    - name: kuramakey
       copy:
-        dest: /var/deployment/backend/src/cert/kurakey.pem
-        content: "{{ kurakey }}"
+        dest: /var/deployment/backend/src/cert/kurama.key
+        content: "{{ kuramakey }}"
 
     - name: Set correct permissions for acme.json
       file:

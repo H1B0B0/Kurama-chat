@@ -3,12 +3,13 @@ import IRoom from "@/interfaces/IRoom";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Avatar from "react-avatar";
 import { ImExit } from "react-icons/im";
 import { useSocket } from "@/contexts/SocketContext";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
+import anime from "animejs";
 
 function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
   const { roomId } = useParams();
@@ -16,6 +17,7 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
   const { socket } = useSocket();
   const { username } = useUser();
   const router = useRouter();
+  const roomRef = useRef<HTMLAnchorElement>(null);
 
   const handleQuitRoom = () => {
     socket?.emit("quit_room", { username, roomId: room.id });
@@ -29,8 +31,25 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
     }
   }, [myRooms]);
 
+  useEffect(() => {
+    if (room.id === roomId) {
+      anime({
+        targets: roomRef.current,
+        scale: [1, 0.97],
+        duration: 500,
+      });
+    } else {
+      anime({
+        targets: roomRef.current,
+        scale: 1,
+        duration: 500,
+      });
+    }
+  }, [roomId]);
+
   return (
     <Link
+      ref={roomRef}
       href={`chat/${room.id}`}
       className={`flex group relative gap-3 items-center p-2 flex-col sm:flex-row ${
         room.id === roomId ? "bg-gray- dark:bg-gray-700" : ""

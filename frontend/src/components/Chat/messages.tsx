@@ -23,12 +23,16 @@ function Message({
     messages && index < messages.length - 1 ? messages[index + 1] : null;
 
   useEffect(() => {
-    anime({
-      targets: messageRef.current,
-      translateY: [-20, 0],
-      opacity: [0, 1],
-      duration: 500,
-    });
+    if (index > messages.length - 20) {
+      const newIndex = 20 - (messages.length - index);
+      anime({
+        targets: messageRef.current,
+        translateY: [-60, 0],
+        opacity: [0, 1],
+        duration: 500,
+        delay: newIndex * 10,
+      });
+    }
   }, [message]);
 
   const showUsername =

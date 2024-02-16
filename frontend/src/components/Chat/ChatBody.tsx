@@ -11,7 +11,7 @@ function ChatBody({ roomId }: { roomId: string }) {
   const { username } = useUser();
 
   useEffect(() => {
-    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    lastMessageRef.current?.scrollIntoView({ behavior: "auto" });
   }, [messages]);
 
   useEffect(() => {

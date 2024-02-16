@@ -37,18 +37,18 @@ function RoomSideBar() {
   };
 
   return (
-    <div className="overflow-y-scroll custom-scrollbar w-20 h-screen dark:bg-neutral-800 bg-slate-200  sm:w-1/4 rounded-lg">
+    <div className="overflow-y-scroll custom-scrollbar w-full sm:w-20 h-screen dark:bg-neutral-800 bg-slate-200 md:w-1/4 rounded-lg">
       <div className="flex justify-center">
         <button
           type="submit"
-          className="px-4 pt-1 h-10 text-lg font-semibold text-white rounded-full mt-5 bg-red-600 hover:bg-red-500 transition duration-300  "
+          className="px-4 pt-1 h-10 text-sm sm:text-lg font-semibold text-white rounded-full mt-5 bg-red-600 hover:bg-red-500 transition duration-300"
           onClick={logout}
         >
           Leave
         </button>
       </div>
       <ThemeSwitcher />
-      <p className="flex flex-col px-2 py-5 sm:px-5 h-[56px] text-xl sm:text-2xl font-semibold dark:text-white">
+      <p className="flex flex-row items-center px-2 py-5 sm:px-15 h-[56px] text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold dark:text-white">
         Rooms 🌐
       </p>
       {rooms.map((room: IRoom, index) => {
@@ -58,7 +58,7 @@ function RoomSideBar() {
           </div>
         );
       })}
-      <p className="flex flex-col px-2 pt-3 text-lg font-semibold sm:text-xl sm:px-5 dark:text-white">
+      <p className="flex flex-row items-center px-2 py-5 sm:px-15 h-[56px] text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold dark:text-white">
         Rooms 🔒
       </p>
       <div className="py-1">

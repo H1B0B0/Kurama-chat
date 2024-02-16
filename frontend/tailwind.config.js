@@ -13,6 +13,9 @@ module.exports = {
         secondary: "rgb(139 132 245)",
         "custom-gray": "#222222",
       },
+      maxWidth: {
+        "1/5": "20%",
+      },
       backgroundImage: {
         gradient:
           "linear-gradient(90deg, #6C63FF 0%, #C100D4 50%, #82ECEE 100%)",

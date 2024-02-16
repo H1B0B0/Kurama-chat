@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import RoomCard from "./RoomCard";
 import IRoom from "@/interfaces/IRoom";
 import { useRoom } from "@/contexts/RoomContext";
@@ -9,6 +9,7 @@ import AddRoomPanel from "./AddRoomPanel";
 import ThemeSwitcher from "../shared/themeswitcher";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
+import anime from "animejs";
 
 function RoomSideBar() {
   const [showAddRoomPanel, setShowAddRoomPanel] = useState(false);
@@ -16,6 +17,7 @@ function RoomSideBar() {
   const { socket, roomUsers } = useSocket();
   const router = useRouter();
   const { username } = useUser();
+  const addRoomPanelRef = useRef<HTMLDivElement>(null);
 
   const hideAddRoomPanel = () => setShowAddRoomPanel(false);
 
@@ -35,6 +37,17 @@ function RoomSideBar() {
     localStorage.removeItem("name");
     router.push("/");
   };
+
+  useEffect(() => {
+    if (showAddRoomPanel) {
+      anime({
+        targets: addRoomPanelRef.current,
+        opacity: [0, 1],
+        translateY: [-100, 0],
+        duration: 1000,
+      });
+    }
+  }, [showAddRoomPanel]);
 
   return (
     <div className="overflow-y-scroll custom-scrollbar w-full sm:w-20 h-screen dark:bg-neutral-800 bg-slate-200 md:w-1/4 rounded-lg">
@@ -79,8 +92,11 @@ function RoomSideBar() {
         <BiMessageAdd size={30} />
       </div>
       {showAddRoomPanel && (
-        <div>
-          <AddRoomPanel hideAddRoomPanel={hideAddRoomPanel} />
+        <div className="fixed top-0 left-0 w-full h-full z-50">
+          <div className="absolute inset-0 backdrop-blur-md"></div>
+          <div ref={addRoomPanelRef}>
+            <AddRoomPanel hideAddRoomPanel={hideAddRoomPanel} />
+          </div>
         </div>
       )}
     </div>

@@ -11,7 +11,6 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setUsername } = useUser();
   const router = useRouter();
-  const { socket } = useSocket();
 
   const handleInputChange = (e: any) => {
     setName(e.target.value);

@@ -42,7 +42,9 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
     setMyRooms([...myRooms, newRoom]);
     hideAddRoomPanel(true);
     socket?.emit("join_room", joinId);
-    router.replace(`/chat/${joinId}`);
+    setTimeout(() => {
+      router.replace(`/chat/${joinId}`);
+    }, 50);
   };
 
   const handleSubmitCreate = (e: any) => {
@@ -58,7 +60,9 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
     setMyRooms([...myRooms, newRoom]);
     hideAddRoomPanel(true);
     socket?.emit("join_room", id, title);
-    router.replace(`/chat/${id}`);
+    setTimeout(() => {
+      router.replace(`/chat/${id}`);
+    }, 50);
   };
 
   return (

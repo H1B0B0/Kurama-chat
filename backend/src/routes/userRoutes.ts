@@ -32,6 +32,7 @@ router.post("/register", async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       createdAt: new Date(),
+      userId: Math.random().toString(36).substring(2) + Date.now().toString(36),
     });
 
     res.status(201).json(newUser);
@@ -80,11 +81,13 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid password" });
     }
     const token = jwt.sign(
-      { id: user?.id, email: user?.username },
+      { id: user?.userId, email: user?.username },
       process.env.JWT_SECRET || "",
       { expiresIn: "7d" }
     );
-    res.status(200).json({ message: "Login successful", token });
+    res
+      .status(200)
+      .json({ message: "Login successful", token, userId: user.userId });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

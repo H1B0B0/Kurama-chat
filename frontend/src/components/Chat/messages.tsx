@@ -1,10 +1,7 @@
-import { useSocket } from "@/contexts/SocketContext";
-import { useUser } from "@/contexts/UserContext";
 import React, { useEffect, useRef, useState } from "react";
 import Avatar from "react-avatar";
 import ChatImage from "./ChatImage";
 import anime from "animejs";
-import { convertToObject } from "typescript";
 
 function Message({
   messages,

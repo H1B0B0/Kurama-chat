@@ -30,6 +30,9 @@ function RoomSideBar() {
 
   const logout = () => {
     socket?.emit("logout", { username: username, roomId: currentRoomId });
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("name");
     router.push("/");
   };
 

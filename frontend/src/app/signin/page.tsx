@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Container } from "./styles";
 import ThemeSwitcher from "@/components/shared/themeswitcher";
-import Layout from "../layout";
+import jwt from "jsonwebtoken";
 
 export default function SignIn() {
   const { username, setUsername } = useUser();
   const [password, setPassword] = useState("");
-  const router = useRouter(); // Déplacez cette ligne ici
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -34,8 +34,10 @@ export default function SignIn() {
     } else if (response.status === 200) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      router.push("/chat");
+      const decodedToken: any = jwt.decode(data.token);
+      localStorage.setItem("userId", decodedToken.userId);
       localStorage.setItem("name", username);
+      router.push("/chat");
     } else {
       throw new Error("Une erreur inattendue s'est produite");
     }

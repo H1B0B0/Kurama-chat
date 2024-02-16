@@ -5,6 +5,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   createdAt: Date;
+  userId: string;
 }
 
 interface IUserModel extends Model<IUser> {
@@ -16,6 +17,7 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+  userId: { type: String, required: true },
 });
 
 userSchema.statics.findAll = function (): Promise<IUser[]> {

@@ -9,3 +9,6 @@
 /front/.DS_Store
 /front/src/.DS_Store
 .DS_Store
+/volumes/
+/volumes/traefik
+/volumes/traefik/acme/acme.json

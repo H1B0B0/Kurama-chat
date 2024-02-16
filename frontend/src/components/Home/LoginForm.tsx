@@ -55,7 +55,7 @@ function LoginForm() {
         <div className="flex  gap-5 items-center">
           <button
             type="submit"
-            className="flex hover:bg-red-800 justify-center items-center w-40 btn bg-red-500 "
+            className="flex hover:bg-red-800 justify-center items-center py-2 w-full sm:w-40 h-auto btn bg-red-500 "
           >
             {isLoading ? (
               <ClipLoader color="white" size={20} />
@@ -64,12 +64,12 @@ function LoginForm() {
             )}
           </button>
           <Link legacyBehavior href="signin">
-            <a className="flex  hover:bg-red-800 justify-center items-center w-40 btn bg-red-500 ">
+            <a className="flex hover:bg-red-800 justify-center items-center py-2 w-full sm:w-40 h-auto btn bg-red-500 ">
               Sign In
             </a>
           </Link>
           <Link legacyBehavior href="signup">
-            <a className="flex hover:bg-red-800 justify-center items-center w-40 btn bg-red-500 ">
+            <a className="flex hover:bg-red-800 justify-center items-center py-2 w-full sm:w-40 h-auto btn bg-red-500 ">
               Sign Up
             </a>
           </Link>

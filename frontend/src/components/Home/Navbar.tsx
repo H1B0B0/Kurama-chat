@@ -30,12 +30,14 @@ function Navbar() {
                 <>
                   <Link
                     id={`${label}${index}`}
-                    className="flex flex-col items-center"
+                    className="flex flex-col items-center dark:text-white"
                     href={link}
                     key={index}
                     target={externalPage ? "_blank" : "_self"}
                   >
-                    {React.createElement(icon, { className: "w-10 h-10" })}
+                    {React.createElement(icon, {
+                      className: "w-10 h-10 dark:text-white",
+                    })}{" "}
                     {label}
                   </Link>
                   {title && (
@@ -81,12 +83,14 @@ function Navbar() {
                   {icon ? (
                     <Link
                       id={`${label}${index}`}
-                      className="flex gap-5 items-center justify-center"
+                      className="flex gap-5 items-center justify-center dark:text-white"
                       href={link}
                       key={index}
                       target={externalPage ? "_blank" : "_self"}
                     >
-                      {React.createElement(icon, { className: "w-6 h-6" })}
+                      {React.createElement(icon, {
+                        className: "w-6 h-6 dark:text-white",
+                      })}{" "}
                       <span className="pt-1">{label}</span>
                     </Link>
                   ) : (

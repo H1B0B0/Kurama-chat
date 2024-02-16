@@ -27,7 +27,10 @@ function Page() {
   }, []);
 
   return (
-    <div className="flex relative flex-col w-full h-screen">
+    <div
+      className="flex relative flex-col w-full h-screen"
+      style={{ height: "calc(100vh - 1rem)" }}
+    >
       <ChatHeader roomId={roomId} />
       <ChatBody roomId={roomId} />
       <ChatFooter roomId={roomId} />

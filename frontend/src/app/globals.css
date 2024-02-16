@@ -17,7 +17,7 @@
 
 @layer utilities {
   body.dark {
-    background-color: #222222; /* same as bg-gray-800 */
+    background-color: #161616; /* same as bg-gray-800 */
   }
 }
 @layer base {

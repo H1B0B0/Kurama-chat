@@ -50,7 +50,10 @@ function RoomSideBar() {
   }, [showAddRoomPanel]);
 
   return (
-    <div className="overflow-y-scroll custom-scrollbar w-full sm:w-20 h-screen dark:bg-neutral-800 bg-slate-200 md:w-1/4 rounded-lg">
+    <div
+      className="overflow-y-scroll custom-scrollbar w-full sm:w-20 h-screen dark:bg-neutral-800 bg-slate-200 md:w-1/4 rounded-lg"
+      style={{ maxWidth: "25vw", height: "calc(100vh - 1rem)" }}
+    >
       <div className="flex justify-center">
         <button
           type="submit"

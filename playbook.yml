@@ -137,6 +137,16 @@
       shell: docker network create web
       when: web_network.stdout == ""
 
+    - name: kuramacert
+      copy:
+        dest: /var/deployment/backend/src/cert/kuramacert.pem
+        content: "{{ kuramacert }}"
+
+    - name: kurakey
+      copy:
+        dest: /var/deployment/backend/src/cert/kurakey.pem
+        content: "{{ kurakey }}"
+
     - name: Set correct permissions for acme.json
       file:
         path: /var/deployment/volumes/traefik/acme/acme.json

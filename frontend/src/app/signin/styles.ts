@@ -9,7 +9,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-image: url("../../images/bg-2.png");
+  background-image: url("../../images/bg-02.png");
   
  
 

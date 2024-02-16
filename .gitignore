@@ -12,3 +12,5 @@
 /volumes/
 /volumes/traefik
 /volumes/traefik/acme/acme.json
+/backend/src/cert/kurama.cert
+/backend/src/cert/kurama.key

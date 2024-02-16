@@ -67,7 +67,7 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
       onClick={() => hideAddRoomPanel(true)}
     >
       <div
-        className="relative w-full bg-white rounded-lg shadow-lg md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-900"
+        className="relative w-full bg-white rounded-lg shadow-lg md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-900 flex flex-col justify-center items-center"
         onClick={(e) => e.stopPropagation()}
       >
         <AiFillCloseCircle
@@ -76,11 +76,11 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
           onClick={() => hideAddRoomPanel(true)}
         />
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-bold tracking-tight leading-tight text-gray-900 md:text-2xl dark:text-gray-300">
+          <h1 className="text-xl font-bold tracking-tight leading-tight text-gray-900 md:text-2xl dark:text-gray-300 flex flex-col justify-center items-center">
             Create or join room
           </h1>
           <div className="flex space-x-4">
-            <form className="space-y-4 md:space-y-6">
+            <form className="flex flex-col justify-between space-y-4 md:space-y-6 h-full">
               <div>
                 <label
                   htmlFor="roomId"
@@ -102,7 +102,7 @@ function AddRoomPanel({ hideAddRoomPanel }: any) {
                 Join Room
               </button>
             </form>
-            <form className="space-y-4 md:space-y-6">
+            <form className="flex flex-col justify-between space-y-4 md:space-y-6 h-full">
               <div>
                 <label
                   htmlFor="title"

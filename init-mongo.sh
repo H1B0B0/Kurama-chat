@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 until mongo --eval "print(\"waited for connection\")"

@@ -119,10 +119,18 @@ function ChatFooter({ roomId }: { roomId: string }) {
         });
         localStorage.setItem("name", newName);
         break;
-      case "list":
-        const filter = args.join(" ");
-        socket.emit("list", filter);
-        break;
+        case "list":
+          const filter = args.join(" ").toLowerCase();
+          const filteredRooms = myRooms.filter(room =>
+              room.title.toLowerCase().includes(filter)
+          );
+          if (filteredRooms.length > 0) {
+              const roomNames = filteredRooms.map(room => room.title).join(", ");
+              toast.info(`Accessible Rooms: ${roomNames}`);
+          } else {
+              toast.info("No accessible rooms found.");
+          }
+          break;
       case "create":
         if (args.length === 0) {
           console.error("No room name specified.");

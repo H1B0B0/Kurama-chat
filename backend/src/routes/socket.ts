@@ -75,23 +75,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("list", async (filter = "") => {
-    try {
-      const myRoomsIds = Object.keys(roomUsers).filter(roomId => roomUsers[roomId].includes(socket.id));
-      let rooms = await Room.find({
-        '_id': { $in: myRoomsIds },
-        'name': new RegExp(filter, 'i')
-      }, 'name');
-  
-      const roomNames = rooms.map(room => room.name);
-      socket.emit("roomsList", roomNames);
-      console.log("Filtered rooms listed: ", roomNames);
-    } catch (error) {
-      console.log("Failed to list rooms: ", error);
-      socket.emit("error", "Failed to list rooms.");
-    }
-  });
-
+  //affiche les users dans la room
   socket.on("users", (roomId) => {
     if (roomUsers[roomId]) {
       const userIds = roomUsers[roomId];
@@ -104,6 +88,7 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Supprime la room
   socket.on("delete_room", async (roomId) => {
     try {
       await Room.findByIdAndDelete(roomId);
@@ -138,33 +123,28 @@ io.on("connection", (socket) => {
     log(`User with ID: ${socket.id} joined room: ${roomId}`);
   });
 
+  // Rejoindre une Room
   socket.on("join", async (roomId, username) => {
     // Vérifie si la salle existe
     let room = await Room.findById(roomId);
     if (!room) {
-      // Si la salle n'existe pas, vous pouvez choisir de la créer ou d'envoyer une erreur
       socket.emit("join_error", `Room ${roomId} does not exist.`);
       return;
     }
 
-    // Rejoint la salle
     socket.join(roomId);
     roomUsers[roomId] = [...(roomUsers[roomId] ?? []), socket.id];
-
-    // Informe les autres utilisateurs de la salle
     socket.to(roomId).emit("receive_message", {
       text: `${username} has joined the room.`,
       systemMessage: true,
     });
 
-    // Confirme la jonction à l'utilisateur
     socket.emit("room_joined", { roomName: room.name, roomId: roomId });
   });
 
   socket.on(
     "send_private_message",
     async (roomId, nickname, username, userid, messageData) => {
-      // Récupérer l'ID du socket associé au surnom
       const userId = Object.keys(userNames).find(
         (key) => userNames[key] === nickname
       );
@@ -182,8 +162,7 @@ io.on("connection", (socket) => {
           roomName: roomName,
           roomId: roomId,
         });
-
-        // Envoyez le message à la salle
+        
         socket.emit("private_message_sent", {
           text: messageData,
           name: username,

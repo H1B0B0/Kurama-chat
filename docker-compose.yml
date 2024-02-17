@@ -1,6 +1,7 @@
 version: "3"
 services:
   traefik:
+    restart: always
     image: traefik
     container_name: traefik
     command:
@@ -23,6 +24,7 @@ services:
       - web
 
   mongodb:
+    restart: always
     image: mongo:4.2.19
     container_name: mongodb
     ports:
@@ -39,6 +41,7 @@ services:
       - web
 
   backend:
+    restart: always
     container_name: backend
     image: node:21
     working_dir: /backend
@@ -61,6 +64,7 @@ services:
       - 4000:4000
 
   frontend:
+    restart: always
     container_name: frontend
     depends_on:
       - traefik

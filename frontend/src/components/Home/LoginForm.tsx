@@ -43,13 +43,6 @@ function LoginForm() {
             maxLength={20}
             required={true}
           />
-          <div className="flex gap-2 p-2">
-            <input
-              type="checkbox"
-              className="w-4 h-4 text-white from-red-600"
-            />
-            <p className="font-light dark:text-gray-300">Keep me signed in</p>
-          </div>
         </div>
         <div className="flex  gap-5 items-center">
           <button

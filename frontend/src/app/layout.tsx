@@ -14,10 +14,10 @@ const calibre = localFont({
   ],
 });
 
-const metadata: Metadata = {
+export const metadata: Metadata = {
   title: "Kurama-chat",
   description: "Kurama-chat - the best way to chat",
-  icons: "/images/logo.png",
+  icons: "/images/Logo.png",
 };
 
 export default function RootLayout({

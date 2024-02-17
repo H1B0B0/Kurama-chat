@@ -32,7 +32,7 @@ const ThemeSwitcher: React.FC = (): JSX.Element => {
   const switcher = useRef<HTMLDivElement | null>(null);
   const switcherButton = useRef<HTMLButtonElement>(null);
 
-  const [activeTheme, setActiveTheme] = useState<string>("light");
+  const [activeTheme, setActiveTheme] = useState<string>("dark");
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
   const dropdownMenuClasses = clsx(

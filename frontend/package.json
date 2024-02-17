@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.12.4",
+    "@splinetool/runtime": "^1.0.53",
     "@tailwindcss/custom-forms": "^0.2.1",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",

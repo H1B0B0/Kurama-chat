@@ -63,18 +63,18 @@ export default function SignUp() {
     });
 
     if (response.status === 400) {
-      alert("Cet utilisateur existe déjà");
+      alert("This user already exists");
     } else if (response.status === 201) {
       router.push("/signin");
     } else {
-      throw new Error("Une erreur inattendue s'est produite");
+      throw new Error("An error as occured");
     }
   };
 
   return (
     <div className="dark:bg-custom-gray flex items-center justify-center min-h-screen relative">
-      <canvas id="canvas3d" ref={canvasRef} className="absolute inset-0" />
       <ThemeSwitcher />
+      <canvas id="canvas3d" ref={canvasRef} className="absolute inset-0" />
       <form className="flex flex-col gap-3 z-10" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">
           <input

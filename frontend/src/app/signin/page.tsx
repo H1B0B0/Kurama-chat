@@ -67,8 +67,8 @@ export default function SignIn() {
 
   return (
     <div className="dark:bg-custom-gray flex items-center justify-center min-h-screen relative">
-      <canvas id="canvas3d" ref={canvasRef} className="absolute inset-0" />
       <ThemeSwitcher />
+      <canvas id="canvas3d" ref={canvasRef} className="absolute inset-0" />
       <form className="flex flex-col gap-3 z-10" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">
           <input

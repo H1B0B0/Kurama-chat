@@ -85,11 +85,12 @@ function ChatBody({ roomId }: { roomId: string }) {
       style={{
         flexGrow: 1,
         overflowY: "auto",
-        overflowX: "auto",
+        overflowX: "hidden",
         height: "calc(100vh - 60px)",
       }}
+      className="scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
     >
-      <div className="basis_[85%] overflow-y-scroll p-5 w-full flex flex-col gap-2 custom-scrollbar rounded-lg">
+      <div className="basis_[85%] p-5 w-full flex flex-col gap-2 rounded-lg">
         {messages[roomId]?.map((message: any, index: number) => (
           <Message
             message={message}

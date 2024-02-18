@@ -48,9 +48,11 @@ export default function SignIn() {
     });
 
     if (response.status === 404) {
+      setIsLoading(false);
       alert("User not found");
       setIsLoading(false);
     } else if (response.status === 401) {
+      setIsLoading(false);
       alert("Invalid password");
       setIsLoading(false);
     } else if (response.status === 200) {
@@ -61,6 +63,7 @@ export default function SignIn() {
       localStorage.setItem("name", username);
       router.push("/chat");
     } else {
+      setIsLoading(false);
       console.log(response);
       alert(response);
     }

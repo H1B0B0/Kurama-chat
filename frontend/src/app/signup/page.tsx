@@ -63,12 +63,15 @@ export default function SignUp() {
     });
 
     if (response.status === 408) {
+      setIsLoading(false);
       alert("This user already exists");
     } else if (response.status === 409) {
+      setIsLoading(false);
       alert("This email already exists");
     } else if (response.status === 201) {
       router.push("/signin");
     } else {
+      setIsLoading(false);
       console.log(response);
       alert(response);
     }

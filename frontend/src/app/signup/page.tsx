@@ -124,9 +124,7 @@ export default function SignUp() {
             {isLoading ? <ClipLoader color="white" size={20} /> : "Sign Up"}
           </button>
           <div className="flex flex-row">
-            <span className="dark:text-white">
-              you have already an account ?
-            </span>
+            <span className="text-white">you have already an account ?</span>
             <Link legacyBehavior href="/signin">
               <a className="text-red-700 ml-2"> Sign in</a>
             </Link>

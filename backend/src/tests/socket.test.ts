@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Message } from "../models/messages";
+import { Message } from "../models/messages.js";
 
 describe("Socket Routes", () => {
   describe("Message", () => {

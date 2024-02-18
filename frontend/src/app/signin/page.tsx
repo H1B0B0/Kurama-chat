@@ -17,7 +17,12 @@ export default function SignIn() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    if (canvasRef.current) {
+    // Check if the user is on a mobile device
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(
+      window.navigator.userAgent
+    );
+
+    if (canvasRef.current && !isMobile) {
       const app = new Application(canvasRef.current);
       app.load("https://prod.spline.design/hnkOtrqss6sQ-wLy/scene.splinecode");
     }
@@ -94,7 +99,7 @@ export default function SignIn() {
             {isLoading ? <ClipLoader color="white" size={20} /> : "Sign In"}
           </button>
           <div className="flex flex-row">
-            <span className="text-white">Don't have an account ?</span>
+            <span className="dark:text-white">Don't have an account ?</span>
             <Link legacyBehavior href="/signup">
               <a className="text-red-700 ml-2"> Sign up</a>
             </Link>

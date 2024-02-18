@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Room } from "../models/room";
+import { Room } from "../models/room.js";
 
 describe("Room Model", () => {
   describe("Instantiation", () => {
@@ -7,7 +7,7 @@ describe("Room Model", () => {
       const data = {
         _id: "1",
         name: "Global Chatroom",
-        userId: "user123"
+        userId: "user123",
       };
 
       const room = new Room(data);

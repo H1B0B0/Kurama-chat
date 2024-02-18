@@ -29,6 +29,6 @@ This README outlines the core functionalities and commands supported by the IRC 
 
 # Installation : 
 
-Open a terminal in the project and use : 
+Open a terminal at the root of the project and use : 
 
 ```docker compose up -d```

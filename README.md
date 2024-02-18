@@ -1,4 +1,4 @@
-# Project README: Kurama-Chat
+# Kurama-Chat
 
 ## Overview :
 This project involves the development of an Internet Relay Chat (IRC) client and server using NodeJS + ExpressJS for the server and ReactJS for the client. The system is designed to handle multiple simultaneous connections, allowing users to join, create, rename, and delete channels. Additionally, it supports real-time messaging within channels, including notifications when users join or leave a channel.

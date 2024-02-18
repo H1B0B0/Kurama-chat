@@ -7,6 +7,8 @@ const intialData: IRoomContext = {
   rooms: [],
   myRooms: [],
   setMyRooms: () => {},
+  currentRoomId: "1", // Add this line
+  setCurrentRoomId: () => {}, // Add this line
 };
 
 const RoomContext = createContext<IRoomContext>(intialData);
@@ -22,6 +24,7 @@ export default function RoomProvider({
 }) {
   const [rooms, setRooms] = useState<IRoom[]>([]);
   const [myRooms, setMyRooms] = useState<IRoom[]>([]);
+  const [currentRoomId, setCurrentRoomId] = useState<string | null>(null); // Add this line
 
   useEffect(() => {
     fetchRoomsfromServer();
@@ -49,7 +52,11 @@ export default function RoomProvider({
   }
 
   return (
-    <RoomContext.Provider value={{ rooms, myRooms, setMyRooms }}>
+    <RoomContext.Provider
+      value={{ rooms, myRooms, setMyRooms, currentRoomId, setCurrentRoomId }}
+    >
+      {" "}
+      // Add currentRoomId and setCurrentRoomId here
       {children}
     </RoomContext.Provider>
   );

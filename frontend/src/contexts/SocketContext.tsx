@@ -5,6 +5,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import * as socketIO from "socket.io-client";
 import { useUser } from "./UserContext";
 import { useRouter } from "next/navigation";
+import Toast from "../components/shared/Toast";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const intialData: ISocketContext = {
   socket: undefined,
@@ -25,6 +28,10 @@ export function useSocket() {
   return useContext(SocketContext);
 }
 
+function notify(message: IMessage, roomName: string) {
+  toast.info(`${message.name} sent a message in ${roomName}`);
+}
+
 export default function SocketProvider({
   children,
 }: {
@@ -33,7 +40,6 @@ export default function SocketProvider({
   const [roomUsers, setRoomUsers] = useState({});
   const [socket, setSocket] = useState<socketIO.Socket>();
   const [messages, setMessages] = useState<{ [key: string]: IMessage[] }>({});
-
   const { username } = useUser();
   const router = useRouter();
 
@@ -47,7 +53,7 @@ export default function SocketProvider({
       socket.on("connect_error", (error) => {
         console.error("Erreur de connexion :", error);
       });
-      socket.on("receive_message", (data: IMessage) => {
+      socket.on("receive_message", async (data: IMessage) => {
         setMessages((prev) => {
           const newMessages = { ...prev };
           newMessages[data.roomId] = [
@@ -56,6 +62,20 @@ export default function SocketProvider({
           ];
           return newMessages;
         });
+        console.log(data);
+        if (
+          data.name !== username &&
+          data.roomId !== localStorage.getItem("currentRoomId") &&
+          data.roomId !== "1" &&
+          data.systemMessage !== true
+        ) {
+          // Remplacez 'http://localhost:5000' par l'URL de votre serveur
+          const response = await fetch(
+            process.env.NEXT_PUBLIC_BASE_URL + `rooms/${data.roomId}`
+          );
+          const room = await response.json();
+          notify(data, room.name);
+        }
       });
       socket.on("users_response", (data) => setRoomUsers(data));
       socket.on("private_message_sent", (data) => {
@@ -63,7 +83,7 @@ export default function SocketProvider({
       });
       setSocket(socket);
     }
-  }, []);
+  });
 
   useEffect(() => {
     if (socket) {

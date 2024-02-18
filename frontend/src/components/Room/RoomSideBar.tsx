@@ -28,6 +28,7 @@ function RoomSideBar() {
       console.log("No current room to leave");
     }
     setCurrentRoomId(newRoomId);
+    localStorage.setItem("currentRoomId", newRoomId);
   };
 
   const logout = () => {

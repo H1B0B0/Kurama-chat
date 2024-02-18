@@ -9,7 +9,6 @@ import { Message } from "../models/messages.js";
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
-import { User } from "../models/user.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -162,7 +161,7 @@ io.on("connection", (socket) => {
           roomName: roomName,
           roomId: roomId,
         });
-        
+
         socket.emit("private_message_sent", {
           text: messageData,
           name: username,

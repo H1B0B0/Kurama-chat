@@ -3,7 +3,7 @@ import IRoom from "./IRoom";
 export default interface IRoomContext {
   rooms: IRoom[];
   myRooms: IRoom[];
-  currentRoomId: string;
+  currentRoomId: string | null;
   setMyRooms: React.Dispatch<React.SetStateAction<IRoom[]>>;
-  setCurrentRoomId: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentRoomId: React.Dispatch<React.SetStateAction<string | null>>;
 }

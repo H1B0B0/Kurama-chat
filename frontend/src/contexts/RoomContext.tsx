@@ -24,7 +24,9 @@ export default function RoomProvider({
 }) {
   const [rooms, setRooms] = useState<IRoom[]>([]);
   const [myRooms, setMyRooms] = useState<IRoom[]>([]);
-  const [currentRoomId, setCurrentRoomId] = useState("");
+  const [currentRoomId, setCurrentRoomId] = useState<string | null>(
+    localStorage.getItem("currentRoomId")
+  );
 
   useEffect(() => {
     fetchRoomsfromServer();

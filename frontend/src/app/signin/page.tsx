@@ -49,16 +49,21 @@ export default function SignIn() {
 
     if (response.status === 404) {
       setIsLoading(false);
+      alert("User not found");
     } else if (response.status === 401) {
       setIsLoading(false);
       alert("Invalid password");
-    } else {
+    } else if (response.status === 200) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       const decodedToken: any = jwt.decode(data.token);
-      localStorage.setItem("userId", decodedToken.userId);
+      localStorage.setItem("userId", decodedToken.id);
       localStorage.setItem("name", username);
       router.push("/chat");
+    } else {
+      setIsLoading(false);
+      console.log(response.status);
+      alert(response);
     }
   };
 

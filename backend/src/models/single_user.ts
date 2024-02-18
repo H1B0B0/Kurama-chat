@@ -7,6 +7,7 @@ interface ISingleUser extends Document {
 
 interface ISingleUserModel extends Model<ISingleUser> {
   findAll(): Promise<ISingleUser[]>;
+  findOneByUsername(socketId: string): Promise<ISingleUser | null>;
 }
 
 const singleUserSchema = new Schema<ISingleUser>({

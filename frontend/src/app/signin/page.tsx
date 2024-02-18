@@ -64,7 +64,7 @@ export default function SignIn() {
       router.push("/chat");
     } else {
       setIsLoading(false);
-      console.log(response);
+      console.log(response.status);
       alert(response);
     }
   };

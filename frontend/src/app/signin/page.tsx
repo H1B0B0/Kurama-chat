@@ -56,8 +56,7 @@ export default function SignIn() {
     } else {
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      const decodedToken: any = jwt.decode(data.token);
-      localStorage.setItem("userId", decodedToken.id);
+      localStorage.setItem("userId", data.userId);
       localStorage.setItem("name", username);
       router.push("/chat");
     }

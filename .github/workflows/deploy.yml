@@ -17,17 +17,14 @@ jobs:
         with:
           node-version: "21"
 
-      - name: go to backend folder
-        run: cd backend
-
       - name: Install dependencies
-        run: npm install
+        run: cd backend && npm install
 
       - name: Run pretests
-        run: npm run pretest
+        run: cd backend && npm run pretest
 
       - name: Run tests
-        run: npm run test
+        run: cd backend && npm run test
 
   # format:
   #   runs-on: ubuntu-latest

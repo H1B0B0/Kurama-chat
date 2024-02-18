@@ -61,7 +61,8 @@ export default function SignIn() {
       localStorage.setItem("name", username);
       router.push("/chat");
     } else {
-      throw new Error("Une erreur inattendue s'est produite");
+      console.log(response);
+      alert(response);
     }
   };
 

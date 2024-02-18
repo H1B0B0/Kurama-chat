@@ -11,11 +11,10 @@ import { toast, ToastContainer } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { useRoom } from "@/contexts/RoomContext";
 import { useRouter } from "next/navigation";
-import local from "next/font/local";
 
 function ChatFooter({ roomId }: { roomId: string }) {
-  const [showListPopup, setShowListPopup] = useState(false);
-  const [roomList, setRoomList] = useState([]);
+  const [typedCommand, setTypedCommand] = useState<string>("");
+  const [showCommands, setShowCommands] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const { socket } = useSocket();
   const { username, setUsername } = useUser();
@@ -28,11 +27,21 @@ function ChatFooter({ roomId }: { roomId: string }) {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>("");
   const router = useRouter();
+
   const onEmojiPick = (emojiObj: any) => {
     setMessage((prevInput) => prevInput + emojiObj.emoji);
     inputRef.current.focus();
     setShowEmojiPicker(false);
   };
+
+  useEffect(() => {
+    if (message.startsWith("/")) {
+      setShowCommands(true);
+      setTypedCommand(message.slice(1));
+    } else {
+      setShowCommands(false);
+    }
+  }, [message]);
 
   useEffect(() => {
     if (socket) {
@@ -119,18 +128,18 @@ function ChatFooter({ roomId }: { roomId: string }) {
         });
         localStorage.setItem("name", newName);
         break;
-        case "list":
-          const filter = args.join(" ").toLowerCase();
-          const filteredRooms = myRooms.filter(room =>
-              room.title.toLowerCase().includes(filter)
-          );
-          if (filteredRooms.length > 0) {
-              const roomNames = filteredRooms.map(room => room.title).join(", ");
-              toast.info(`Accessible Rooms: ${roomNames}`);
-          } else {
-              toast.info("No accessible rooms found.");
-          }
-          break;
+      case "list":
+        const filter = args.join(" ").toLowerCase();
+        const filteredRooms = myRooms.filter((room) =>
+          room.title.toLowerCase().includes(filter)
+        );
+        if (filteredRooms.length > 0) {
+          const roomNames = filteredRooms.map((room) => room.title).join(", ");
+          toast.info(`Accessible Rooms: ${roomNames}`);
+        } else {
+          toast.info("No accessible rooms found.");
+        }
+        break;
       case "create":
         if (args.length === 0) {
           console.error("No room name specified.");
@@ -259,6 +268,30 @@ function ChatFooter({ roomId }: { roomId: string }) {
     reader.readAsDataURL(data);
   };
 
+  useEffect(() => {
+    if (message.startsWith("/")) {
+      setShowCommands(true);
+    } else {
+      setShowCommands(false);
+    }
+  }, [message]);
+
+  const commands = [
+    "nick nickname",
+    "list [string]",
+    "create channel",
+    "delete channel",
+    "join channel",
+    "quit channel",
+    "users",
+    "msg nickname message",
+    "clear",
+  ];
+
+  const filteredCommands = commands.filter((command) =>
+    command.startsWith(typedCommand)
+  );
+
   return (
     <>
       <ToastContainer position="bottom-left" />
@@ -309,7 +342,13 @@ function ChatFooter({ roomId }: { roomId: string }) {
             className="cursor-pointer absolute top-[6px] right-2 text-red-600"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
           />
-
+          {showCommands && (
+            <div className="commands-popup dark:text-white">
+              {filteredCommands.map((command, index) => (
+                <p key={index}>/{command}</p>
+              ))}
+            </div>
+          )}
           <form onSubmit={(e) => handleSendMessage(e, message)}>
             <input
               ref={inputRef}

@@ -62,12 +62,15 @@ export default function SignUp() {
       }),
     });
 
-    if (response.status === 400) {
+    if (response.status === 408) {
       alert("This user already exists");
+    } else if (response.status === 409) {
+      alert("This email already exists");
     } else if (response.status === 201) {
       router.push("/signin");
     } else {
-      throw new Error("An error as occured");
+      console.log(response);
+      alert(response);
     }
   };
 

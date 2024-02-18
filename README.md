@@ -11,8 +11,8 @@ This project involves the development of an Internet Relay Chat (IRC) client and
 Persistence
 - **5.** Channels and messages are persistently stored using a chosen method (file, database, etc.).
 - **6.** User Interaction
-**- 7.** Users must set a nickname to use the application. No authentication system is required, but adding one is a bonus.
-**- 8.** The client and server communicate using a chosen protocol.
+- **7.** Users must set a nickname to use the application. No authentication system is required, but adding one is a bonus.
+- **8.** The client and server communicate using a chosen protocol.
 
 ## Commands :
 - /nick: Set user nickname.

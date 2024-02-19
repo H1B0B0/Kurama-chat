@@ -27,8 +27,6 @@ services:
     restart: always
     image: mongo:4.2.19
     container_name: mongodb
-    ports:
-      - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
@@ -91,8 +89,6 @@ services:
       - MONGODB_USER_PASSWORD=${MONGODB_USER_PASSWORD}
       - BROWSER=none
       - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
-    ports:
-      - 3000:3000
 
 networks:
   web:

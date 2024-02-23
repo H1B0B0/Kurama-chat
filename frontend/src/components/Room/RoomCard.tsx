@@ -73,7 +73,7 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
           />
         )}
       </div>
-      <div className="hidden sm:block">
+      <div className="sm:block">
         <p className="font-medium line-clamp-1  text-gray-900 dark:text-gray-100">
           {room.title}
         </p>
@@ -83,7 +83,7 @@ function RoomCard({ room, users }: { room: IRoom; users: string[] }) {
       </div>
       {room.id !== "1" && (
         <span
-          className="hidden absolute right-3 justify-center items-center p-2 bg-red-500 rounded-full group-hover:flex hover:bg-red-700"
+          className="absolute right-3 justify-center items-center p-2 bg-red-500 rounded-full group-hover:flex hover:bg-red-700"
           onClick={() => {
             handleQuitRoom();
           }}

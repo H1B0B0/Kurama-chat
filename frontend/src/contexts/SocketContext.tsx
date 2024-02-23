@@ -69,7 +69,6 @@ export default function SocketProvider({
           data.roomId !== "1" &&
           data.systemMessage !== true
         ) {
-          // Remplacez 'http://localhost:5000' par l'URL de votre serveur
           const response = await fetch(
             process.env.NEXT_PUBLIC_BASE_URL + `rooms/${data.roomId}`
           );
